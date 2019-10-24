@@ -1,0 +1,33 @@
+{
+  "name": "b13/menus",
+  "type": "typo3-cms-extension",
+  "description": "Easy and fast menus for TYPO3 Frontends",
+  "require": {
+    "php": "^7.2",
+    "typo3/cms-core": "^9.5",
+    "typo3/cms-frontend": "^9.5"
+  },
+  "require-dev": {
+  },
+  "config": {
+    "vendor-dir": "build/vendor"
+  },
+  "extra": {
+    "typo3/cms": {
+      "extension-key": "menus",
+      "cms-package-dir": "{$vendor-dir}/typo3/cms",
+      "app-dir": "build",
+      "web-dir": "build/public"
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "B13\\Menus\\": "Classes/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "B13\\Menus\\Tests\\": "Tests/"
+    }
+  }
+}
