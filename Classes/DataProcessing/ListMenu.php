@@ -10,25 +10,25 @@ namespace B13\Menus\DataProcessing;
  * of the License, or any later version.
  */
 
-use B13\Menus\Compiler\TreeMenuCompiler;
+use B13\Menus\Compiler\ListMenuCompiler;
 use B13\Menus\PageStateMarker;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
 
 /**
- * DataProcessor to render a tree-based menu of pages and subpages.
+ * DataProcessor to retrieve a list of pages.
  */
-class TreeMenuDataProcessor implements DataProcessorInterface
+class ListMenu implements DataProcessorInterface
 {
     /**
      * @inheritDoc
      */
     public function process(ContentObjectRenderer $cObj, array $contentObjectConfiguration, array $processorConfiguration, array $processedData)
     {
-        $pages = GeneralUtility::makeInstance(TreeMenuCompiler::class)->compile($cObj, $processorConfiguration);
+        $pages = GeneralUtility::makeInstance(ListMenuCompiler::class)->compile($cObj, $processorConfiguration);
         foreach ($pages as &$page) {
-            PageStateMarker::markStatesRecursively($page, 1);
+            PageStateMarker::markStates($page);
         }
         $targetVariableName = $cObj->stdWrapValue('as', $processorConfiguration);
         $processedData[$targetVariableName] = $pages;

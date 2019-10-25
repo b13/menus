@@ -82,7 +82,7 @@ Pure TypoScript-based solution:
 Fluid-based solution:
 
     page.10 = FLUIDTEMPLATE
-    page.10.dataProcessors.10 = B13\Menus\DataProcessing\TreeMenuDataProcessor
+    page.10.dataProcessors.10 = B13\Menus\DataProcessing\TreeMenu
     page.10.dataProcessors.10.entryPoints = 23,13
     page.10.dataProcessors.10.depth = 3
     page.10.dataProcessors.10.excludePages = 4,51
@@ -122,7 +122,7 @@ The stdWrap `data` is the information of the current page plus the information m
 Fluid-based solution:
 
     page.10 = FLUIDTEMPLATE
-    page.10.dataProcessors.10 = B13\Menus\DataProcessing\LanguageMenuProcessor
+    page.10.dataProcessors.10 = B13\Menus\DataProcessing\LanguageMenu
     page.10.dataProcessors.10.excludeLanguages = de,en
     page.10.dataProcessors.10.as = languageswitcher
 
@@ -147,7 +147,7 @@ Pure TypoScript-based solution:
 Fluid-based solution:
 
     page.10 = FLUIDTEMPLATE
-    page.10.dataProcessors.10 = B13\Menus\DataProcessing\ListMenuDataProcessor
+    page.10.dataProcessors.10 = B13\Menus\DataProcessing\ListMenu
     page.10.dataProcessors.10.pages = 13,14,15
     page.10.dataProcessors.10.as = footerlinks
 
@@ -172,7 +172,7 @@ Usage in Fluid:
 Fluid-based solution:
 
     page.10 = FLUIDTEMPLATE
-    page.10.dataProcessors.10 = B13\Menus\DataProcessing\BreadcrumbsDataProcessor
+    page.10.dataProcessors.10 = B13\Menus\DataProcessing\BreadcrumbsMenu
     page.10.dataProcessors.10.as = breadcrumbs
 
 Usage in Fluid:
@@ -205,6 +205,11 @@ The extension is licensed under GPL v2+, same as the TYPO3 Core. For details see
 ## Open Issues
 
 If you find an issue, feel free to create an issue on GitHub or a pull request.
+
+### ToDos
+- add `includeSpacer` option
+- add `if.` functionality
+- extract stdWrap functionality out of caching parameters
 
 ### Credits
 

@@ -47,30 +47,26 @@ class MenuRepository
     public function getBreadcrumbsMenu(array $originalRootLine): array
     {
         $pages = [];
-        $languageAspect = $this->context->getPropertyFromAspect('language');
+        $languageAspect = $this->context->getAspect('language');
         foreach ($originalRootLine as $pageInRootLine) {
             $page = $this->pageRepository->getPage((int)$pageInRootLine['uid']);
             if (!$this->pageRepository->isPageSuitableForLanguage($page, $languageAspect)) {
                 continue;
             }
-            if ((int)$page['doktype'] === PageRepository::DOKTYPE_SPACER) {
-                $page['isSpacer'] = true;
-            }
+            $this->populateAdditionalKeysForPage($page);
             $pages[] = $page;
         }
-        return $pages;
+        return array_reverse($pages);
     }
 
     public function getPage(int $pageId, array $configuration): array
     {
         $page = $this->pageRepository->getPage($pageId);
-        $languageAspect = $this->context->getPropertyFromAspect('language');
+        $languageAspect = $this->context->getAspect('language');
         if (!$this->pageRepository->isPageSuitableForLanguage($page, $languageAspect)) {
             return [];
         }
-        if ((int)$page['doktype'] === PageRepository::DOKTYPE_SPACER) {
-            $page['isSpacer'] = true;
-        }
+        $this->populateAdditionalKeysForPage($page);
         return $page;
     }
     public function getPageInLanguage(int $pageId, LanguageAspect $languageAspect): array
@@ -79,24 +75,19 @@ class MenuRepository
         if (!$this->pageRepository->isPageSuitableForLanguage($page, $languageAspect)) {
             return [];
         }
-        if ((int)$page['doktype'] === PageRepository::DOKTYPE_SPACER) {
-            $page['isSpacer'] = true;
-        }
+        $this->populateAdditionalKeysForPage($page);
         return $page;
     }
 
     public function getPageTree(int $startPageId, int $depth, array $configuration): array
     {
         $page = $this->pageRepository->getPage($startPageId);
-        $languageAspect = $this->context->getPropertyFromAspect('language');
+        $languageAspect = $this->context->getAspect('language');
         if (!$this->pageRepository->isPageSuitableForLanguage($page, $languageAspect)) {
             return [];
         }
         $page['subpages'] = $this->getSubPagesOfPage((int)$page['uid'], $depth, $configuration);
-        $page['hasSubpages'] = !empty($page['subpages']);
-        if ((int)$page['doktype'] === PageRepository::DOKTYPE_SPACER) {
-            $page['isSpacer'] = true;
-        }
+        $this->populateAdditionalKeysForPage($page);
         return $page;
     }
 
@@ -116,27 +107,29 @@ class MenuRepository
             $pageId,
             '*',
             'sorting',
-            'AND doktype NOT IN (' . $excludedDoktypes . ') AND nav_hide=0 ' . $whereClause
+            'AND doktype NOT IN (' . implode(',', $excludedDoktypes) . ') AND nav_hide=0 ' . $whereClause
         );
         /** @var LanguageAspect $languageAspect */
-        $languageAspect = $this->context->getPropertyFromAspect('language');
+        $languageAspect = $this->context->getAspect('language');
         foreach ($pageTree as $k => &$page) {
             if (!$this->pageRepository->isPageSuitableForLanguage($page, $languageAspect)) {
                 unset($pageTree[$k]);
                 continue;
             }
-            $page['hasSubpages'] = false;
-            if ((int)$page['doktype'] === PageRepository::DOKTYPE_SPACER) {
-                $page['isSpacer'] = true;
-                continue;
-            }
             if ($depth > 0) {
                 $page['subpages'] = $this->getSubPagesOfPage((int)$page['uid'], $depth-1, $configuration);
-                if (!empty($page['subpages'])) {
-                    $page['hasSubpages'] = true;
-                }
             }
+            $this->populateAdditionalKeysForPage($page);
         }
         return $pageTree;
+    }
+
+    protected function populateAdditionalKeysForPage(array &$page): void
+    {
+        $page['hasSubpages'] = !empty($page['subpages']);
+        if ((int)$page['doktype'] === PageRepository::DOKTYPE_SPACER) {
+            $page['isSpacer'] = true;
+        }
+        $page['nav_title'] = $page['nav_title'] ?: $page['title'];
     }
 }

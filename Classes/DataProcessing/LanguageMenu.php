@@ -20,7 +20,7 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
 /**
  * DataProcessor to retrieve a list of a all available languages.
  */
-class LanguageMenuDataProcessor implements DataProcessorInterface
+class LanguageMenu implements DataProcessorInterface
 {
     /**
      * @inheritDoc

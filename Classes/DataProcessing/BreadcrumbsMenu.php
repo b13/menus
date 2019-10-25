@@ -19,7 +19,7 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
 /**
  * DataProcessor to retrieve a list of all pages of the current rootline to build a breadcrumb menu.
  */
-class BreadcrumbsMenuDataProcessor implements DataProcessorInterface
+class BreadcrumbsMenu implements DataProcessorInterface
 {
     /**
      * @var MenuRepository
@@ -41,7 +41,7 @@ class BreadcrumbsMenuDataProcessor implements DataProcessorInterface
         foreach ($pages as $page) {
             PageStateMarker::markStates($page, $rootLevelCount--);
         }
-        $targetVariableName = $cObj->stdWrapValue('as', $processorConfiguration);
+        $targetVariableName = $cObj->stdWrapValue('as', $processorConfiguration, 'breadcrumbs');
         $processedData[$targetVariableName] = $pages;
         return $processedData;
     }
