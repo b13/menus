@@ -1,7 +1,7 @@
 {
   "name": "b13/menus",
   "type": "typo3-cms-extension",
-	"license": "GPL-2.0-or-later",
+  "license": "GPL-2.0-or-later",
   "description": "Easy and fast menus for TYPO3 Frontends",
   "require": {
     "php": "^7.2",
