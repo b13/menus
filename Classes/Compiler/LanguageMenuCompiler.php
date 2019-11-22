@@ -45,6 +45,7 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
                     $pages[] = $page;
                 }
             }
+            return $pages;
         });
     }
 }

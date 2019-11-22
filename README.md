@@ -70,7 +70,7 @@ Pure TypoScript-based solution:
     page.10 = TREEMENU
     # a list of page IDs, rootpageID is used if none given
     page.10.entryPoints = 23,13
-    # the number of levels to fetch from the database
+    # the number of levels to fetch from the database (1 if empty)
     page.10.depth = 3
     page.10.excludePages = 4,51
     page.10.renderObj.level1 = TEXT
@@ -208,7 +208,6 @@ If you find an issue, feel free to create an issue on GitHub or a pull request.
 
 ### ToDos
 - add `includeSpacer` option
-- add `if.` functionality
 - extract stdWrap functionality out of caching parameters
 
 ### Credits

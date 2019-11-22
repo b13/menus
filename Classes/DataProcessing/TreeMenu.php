@@ -14,24 +14,32 @@ use B13\Menus\Compiler\TreeMenuCompiler;
 use B13\Menus\PageStateMarker;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
-use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
+
 
 /**
  * DataProcessor to render a tree-based menu of pages and subpages.
  */
-class TreeMenu implements DataProcessorInterface
+class TreeMenu extends AbstractMenu
 {
+
     /**
      * @inheritDoc
      */
     public function process(ContentObjectRenderer $cObj, array $contentObjectConfiguration, array $processorConfiguration, array $processedData)
     {
+        if (isset($processorConfiguration['if.']) && !$cObj->checkIf($processorConfiguration['if.'])) {
+            return $processedData;
+        }
         $pages = GeneralUtility::makeInstance(TreeMenuCompiler::class)->compile($cObj, $processorConfiguration);
         foreach ($pages as &$page) {
             PageStateMarker::markStatesRecursively($page, 1);
+        }
+        foreach ($pages as &$page) {
+            $this->processAdditionalDataProcessors($page, $processorConfiguration);
         }
         $targetVariableName = $cObj->stdWrapValue('as', $processorConfiguration);
         $processedData[$targetVariableName] = $pages;
         return $processedData;
     }
+
 }

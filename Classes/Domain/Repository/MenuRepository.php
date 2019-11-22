@@ -107,7 +107,8 @@ class MenuRepository
             $pageId,
             '*',
             'sorting',
-            'AND doktype NOT IN (' . implode(',', $excludedDoktypes) . ') AND nav_hide=0 ' . $whereClause
+            'AND doktype NOT IN (' . implode(',', $excludedDoktypes) . ') AND nav_hide=0 ' . $whereClause,
+            false
         );
         /** @var LanguageAspect $languageAspect */
         $languageAspect = $this->context->getAspect('language');

@@ -19,16 +19,23 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
 /**
  * DataProcessor to retrieve a list of pages.
  */
-class ListMenu implements DataProcessorInterface
+class ListMenu extends AbstractMenu
 {
     /**
      * @inheritDoc
      */
     public function process(ContentObjectRenderer $cObj, array $contentObjectConfiguration, array $processorConfiguration, array $processedData)
     {
+        if (isset($processorConfiguration['if.']) && !$cObj->checkIf($processorConfiguration['if.'])) {
+            return $processedData;
+        }
+
         $pages = GeneralUtility::makeInstance(ListMenuCompiler::class)->compile($cObj, $processorConfiguration);
         foreach ($pages as &$page) {
             PageStateMarker::markStates($page);
+        }
+        foreach ($pages as &$page) {
+            $this->processAdditionalDataProcessors($page, $processorConfiguration);
         }
         $targetVariableName = $cObj->stdWrapValue('as', $processorConfiguration);
         $processedData[$targetVariableName] = $pages;
