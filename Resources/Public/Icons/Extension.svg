@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 256 256" style="enable-background:new 0 0 256 256;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#CC6633;}
+	.st1{fill:#FFFFFF;}
+	.st2{opacity:0.3;fill:#CC6633;}
+</style>
+<rect y="0" class="st0" width="256" height="256"/>
+<circle class="st1" cx="128" cy="129.7" r="95.8"/>
+<title>EXT:menus</title>
+<rect x="106" y="120" class="st0" width="75.7" height="15.9"/>
+<rect x="106" y="84" class="st0" width="75.7" height="15.9"/>
+<rect x="106" y="155" class="st0" width="75.7" height="15.9"/>
+<rect x="74.2" y="84" class="st0" width="15.9" height="15.9"/>
+<rect x="74.2" y="120" class="st0" width="15.9" height="15.9"/>
+<rect x="74.2" y="155" class="st0" width="15.9" height="15.9"/>
+<path class="st2" d="M74.2,84l-10,10v11.5c0,2.5,2,4.4,4.4,4.4h11.5l10-10L74.2,84z"/>
+<path class="st2" d="M181.8,100L106,84L96,94v11.5c0,2.5,2,4.4,4.4,4.4h71.3L181.8,100z"/>
+<path class="st2" d="M74.2,120l-10,10v11.5c0,2.5,2,4.4,4.4,4.4h11.5l10-10L74.2,120z"/>
+<path class="st2" d="M181.8,136L106,120l-10,10v11.5c0,2.5,2,4.4,4.4,4.4h71.3L181.8,136z"/>
+<path class="st2" d="M74.2,155l-10,10v11.5c0,2.5,2,4.4,4.4,4.4h11.5l10-10L74.2,155z"/>
+<path class="st2" d="M181.8,171L106,155l-10,10v11.5c0,2.5,2,4.4,4.4,4.4h71.3L181.8,171z"/>
+</svg>
