@@ -15,7 +15,6 @@ use B13\Menus\PageStateMarker;
 use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
-use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
 
 /**
  * DataProcessor to retrieve a list of a all available languages.
@@ -46,8 +45,11 @@ class LanguageMenu extends AbstractMenu
         return $processedData;
     }
 
+    /**
+     * @return null|SiteLanguage
+     */
     protected function getCurrentSiteLanguage(): ?SiteLanguage
     {
-        $GLOBALS['TYPO3_REQUEST']->getAttribute('language');
+        return $GLOBALS['TYPO3_REQUEST']->getAttribute('language');
     }
 }
