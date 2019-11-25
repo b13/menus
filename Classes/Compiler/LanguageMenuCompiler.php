@@ -10,6 +10,7 @@ namespace B13\Menus\Compiler;
  * of the License, or any later version.
  */
 
+use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspectFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -29,6 +30,7 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
             $targetPage = (int)$targetPage;
 
             $site = $this->getCurrentSite();
+            $context = GeneralUtility::makeInstance(Context::class);
             $pages = [];
             foreach ($site->getLanguages() as $language) {
                 if (in_array($language->getTwoLetterIsoCode(), $excludedLanguages, true)) {
@@ -38,10 +40,10 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
                     continue;
                 }
                 $languageAspect = LanguageAspectFactory::createFromSiteLanguage($language);
-                $page = $this->menuRepository->getPageInLanguage($targetPage, $languageAspect);
+                $context->setAspect('language', $languageAspect);
+                $page = $this->menuRepository->getPageInLanguage($targetPage, $context);
                 if (!empty($page)) {
-                    // @todo: we need to have this prefixed with "language_"
-                    $page = array_merge($page, $language->toArray());
+                    $page['language'] = $language->toArray();
                     $pages[] = $page;
                 }
             }
