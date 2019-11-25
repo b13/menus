@@ -68,8 +68,11 @@ abstract class AbstractMenuCompiler
     {
         $groupIds = $this->context->getAspect('frontend.user')->getGroupIds();
         $language = $this->context->getAspect('language')->getId();
-        return $prefix . '-language-' . $language . '-groups-' . implode('_', $groupIds) . '-' . GeneralUtility::shortMD5(json_encode($configuration));
+        $root = $this->getCurrentSite()->getRootPageId();
+        $identifier = $prefix . '-root-' . $root . '-language-' . $language . '-groups-' . implode('_', $groupIds) . '-' . GeneralUtility::shortMD5(json_encode($configuration));
+        return $identifier;
     }
+    
 
     protected function getCurrentSite(): ?SiteInterface
     {

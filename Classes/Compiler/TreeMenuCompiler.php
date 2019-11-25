@@ -21,11 +21,15 @@ class TreeMenuCompiler extends AbstractMenuCompiler
     public function compile(ContentObjectRenderer $contentObjectRenderer, array $configuration): array
     {
         $cacheIdentifier = $this->generateCacheIdentifierForMenu('tree', $configuration);
-        return $this->cache->get($cacheIdentifier, function() use ($contentObjectRenderer, $configuration) {
-            $includeStartPageIds = $contentObjectRenderer->stdWrap($configuration['includeRootPages'] ?? false, $configuration['includeRootPages.']);
-            $startPageIds = $contentObjectRenderer->stdWrap($configuration['entryPoints'] ?? $this->getCurrentSite()->getRootPageId(), $configuration['entryPoints.']);
-            $startPageIds = GeneralUtility::intExplode(',', $startPageIds);
-            $depth = (int)$contentObjectRenderer->stdWrap($configuration['depth'] ?? 1, $configuration['depth.']);
+
+        $includeStartPageIds = $contentObjectRenderer->stdWrap($configuration['includeRootPages'] ?? false, $configuration['includeRootPages.']);
+        $startPageIds = $contentObjectRenderer->stdWrap($configuration['entryPoints'] ?? $this->getCurrentSite()->getRootPageId(), $configuration['entryPoints.']);
+        $startPageIds = GeneralUtility::intExplode(',', $startPageIds);
+        $depth = (int)$contentObjectRenderer->stdWrap($configuration['depth'] ?? 1, $configuration['depth.']);
+
+        $cacheIdentifier .= '-' . GeneralUtility::shortMD5(json_encode([$includeStartPageIds, $startPageIds, $depth]));
+
+        return $this->cache->get($cacheIdentifier, function() use ($contentObjectRenderer, $configuration, $includeStartPageIds, $startPageIds, $depth) {
 
             $tree = [];
             foreach ($startPageIds as $startPageId) {

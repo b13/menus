@@ -10,6 +10,7 @@ namespace B13\Menus\Compiler;
  * of the License, or any later version.
  */
 
+use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspectFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -22,13 +23,18 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
     public function compile(ContentObjectRenderer $contentObjectRenderer, array $configuration): array
     {
         $cacheIdentifier = $this->generateCacheIdentifierForMenu('list', $configuration);
-        return $this->cache->get($cacheIdentifier, function() use ($contentObjectRenderer, $configuration) {
-            $excludedLanguages = $contentObjectRenderer->stdWrap($configuration['excludeLanguages'] ?? '', $configuration['excludeLanguages.']);
-            $excludedLanguages = GeneralUtility::trimExplode(',', $excludedLanguages);
-            $targetPage = $contentObjectRenderer->stdWrap($configuration['pointToPage'] ?? $GLOBALS['TSFE']->id, $configuration['pointToPage.']);
-            $targetPage = (int)$targetPage;
+
+        $excludedLanguages = $contentObjectRenderer->stdWrap($configuration['excludeLanguages'] ?? '', $configuration['excludeLanguages.']);
+        $excludedLanguages = GeneralUtility::trimExplode(',', $excludedLanguages);
+        $targetPage = $contentObjectRenderer->stdWrap($configuration['pointToPage'] ?? $GLOBALS['TSFE']->id, $configuration['pointToPage.']);
+        $targetPage = (int)$targetPage;
+
+        $cacheIdentifier .= '-' . GeneralUtility::shortMD5(json_encode([$excludedLanguages, $targetPage]));
+
+        return $this->cache->get($cacheIdentifier, function() use ($contentObjectRenderer, $configuration, $excludedLanguages, $targetPage) {
 
             $site = $this->getCurrentSite();
+            $context = GeneralUtility::makeInstance(Context::class);
             $pages = [];
             foreach ($site->getLanguages() as $language) {
                 if (in_array($language->getTwoLetterIsoCode(), $excludedLanguages, true)) {
@@ -38,13 +44,17 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
                     continue;
                 }
                 $languageAspect = LanguageAspectFactory::createFromSiteLanguage($language);
-                $page = $this->menuRepository->getPageInLanguage($targetPage, $languageAspect);
+                $context->setAspect('language', $languageAspect);
+                $page = $this->menuRepository->getPageInLanguage($targetPage, $context);
                 if (!empty($page)) {
-                    // @todo: we need to have this prefixed with "language_"
-                    $page = array_merge($page, $language->toArray());
+                    $page['language'] = $language->toArray();
+                    if (!empty($page['_PAGES_OVERLAY']) && $page['_PAGES_OVERLAY'] === true) {
+                        $page['uid'] = $page['_PAGES_OVERLAY_UID'];
+                    }
                     $pages[] = $page;
                 }
             }
+            return $pages;
         });
     }
 }

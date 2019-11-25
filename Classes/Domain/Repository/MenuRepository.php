@@ -69,10 +69,13 @@ class MenuRepository
         $this->populateAdditionalKeysForPage($page);
         return $page;
     }
-    public function getPageInLanguage(int $pageId, LanguageAspect $languageAspect): array
+
+
+    public function getPageInLanguage(int $pageId, Context $context): array
     {
-        $page = $this->pageRepository->getPage($pageId);
-        if (!$this->pageRepository->isPageSuitableForLanguage($page, $languageAspect)) {
+        $pageRepository = GeneralUtility::makeInstance(PageRepository::class, $context);
+        $page = $pageRepository->getPage($pageId);
+        if (!$pageRepository->isPageSuitableForLanguage($page, $context->getAspect('language'))) {
             return [];
         }
         $this->populateAdditionalKeysForPage($page);
@@ -81,6 +84,7 @@ class MenuRepository
 
     public function getPageTree(int $startPageId, int $depth, array $configuration): array
     {
+
         $page = $this->pageRepository->getPage($startPageId);
         $languageAspect = $this->context->getAspect('language');
         if (!$this->pageRepository->isPageSuitableForLanguage($page, $languageAspect)) {
@@ -107,7 +111,8 @@ class MenuRepository
             $pageId,
             '*',
             'sorting',
-            'AND doktype NOT IN (' . implode(',', $excludedDoktypes) . ') AND nav_hide=0 ' . $whereClause
+            'AND doktype NOT IN (' . implode(',', $excludedDoktypes) . ') AND nav_hide=0 ' . $whereClause,
+            false
         );
         /** @var LanguageAspect $languageAspect */
         $languageAspect = $this->context->getAspect('language');

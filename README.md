@@ -70,7 +70,7 @@ Pure TypoScript-based solution:
     page.10 = TREEMENU
     # a list of page IDs, rootpageID is used if none given
     page.10.entryPoints = 23,13
-    # the number of levels to fetch from the database
+    # the number of levels to fetch from the database (1 if empty)
     page.10.depth = 3
     page.10.excludePages = 4,51
     page.10.renderObj.level1 = TEXT
@@ -92,11 +92,11 @@ Usage in Fluid:
 
     <nav>
         <f:for each="{mobilemenu}" as="page">
-            <f:link.page pageUid="{page.uid}">{page.title}</f:link.page>
+            <f:link.page pageUid="{page.uid}">{page.nav_title}</f:link.page>
             <f:if condition="{page.hasSubpages} && {page.isInRootLine}">
                 <ul>
                     <f:for each="{page.subpages}" as="subpage">
-                        <li><f:link.page pageUid="{subpage.uid}">{subpage.title}</f:link.page>
+                        <li><f:link.page pageUid="{subpage.uid}">{subpage.nav_title}</f:link.page>
                     </f:for>
                 </ul>
             </f:if>
@@ -130,9 +130,11 @@ Usage in Fluid:
 
     <nav>
         <f:for each="{languageMenu}" as="item">
-            <f:link.page pageUid="{item.page.uid}">{item.language.title}</f:link.page>
+            <f:link.page pageUid="{item.uid}">{item.language.title}</f:link.page>
         </f:for>
     </nav>
+    
+Note: the languageMenu hold the siteLanguage on each item in the `language` property as an array    
 
 ### List Menu
 
@@ -155,7 +157,7 @@ Usage in Fluid:
 
     <nav>
         <f:for each="{footerlinks}" as="page">
-            <f:link.page pageUid="{page.uid}">{page.title}</f:link.page>
+            <f:link.page pageUid="{page.uid}">{page.nav_title}</f:link.page>
         </f:for>
     </nav>
 
@@ -179,7 +181,7 @@ Usage in Fluid:
 
     <nav>
         <f:for each="{breadcrumbs}" as="page">
-            <f:link.page pageUid="{page.uid}">{page.title}</f:link.page>
+            <f:link.page pageUid="{page.uid}">{page.nav_title}</f:link.page>
             <f:if condition="{page.isCurrentPage} == false"> &nbsp; </f:if>
         </f:for>
     </nav>
@@ -208,7 +210,6 @@ If you find an issue, feel free to create an issue on GitHub or a pull request.
 
 ### ToDos
 - add `includeSpacer` option
-- add `if.` functionality
 - extract stdWrap functionality out of caching parameters
 
 ### Credits
