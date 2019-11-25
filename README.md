@@ -92,11 +92,11 @@ Usage in Fluid:
 
     <nav>
         <f:for each="{mobilemenu}" as="page">
-            <f:link.page pageUid="{page.uid}">{page.title}</f:link.page>
+            <f:link.page pageUid="{page.uid}">{page.nav_title}</f:link.page>
             <f:if condition="{page.hasSubpages} && {page.isInRootLine}">
                 <ul>
                     <f:for each="{page.subpages}" as="subpage">
-                        <li><f:link.page pageUid="{subpage.uid}">{subpage.title}</f:link.page>
+                        <li><f:link.page pageUid="{subpage.uid}">{subpage.nav_title}</f:link.page>
                     </f:for>
                 </ul>
             </f:if>
@@ -155,7 +155,7 @@ Usage in Fluid:
 
     <nav>
         <f:for each="{footerlinks}" as="page">
-            <f:link.page pageUid="{page.uid}">{page.title}</f:link.page>
+            <f:link.page pageUid="{page.uid}">{page.nav_title}</f:link.page>
         </f:for>
     </nav>
 
@@ -179,7 +179,7 @@ Usage in Fluid:
 
     <nav>
         <f:for each="{breadcrumbs}" as="page">
-            <f:link.page pageUid="{page.uid}">{page.title}</f:link.page>
+            <f:link.page pageUid="{page.uid}">{page.nav_title}</f:link.page>
             <f:if condition="{page.isCurrentPage} == false"> &nbsp; </f:if>
         </f:for>
     </nav>
