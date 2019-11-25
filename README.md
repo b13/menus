@@ -130,9 +130,11 @@ Usage in Fluid:
 
     <nav>
         <f:for each="{languageMenu}" as="item">
-            <f:link.page pageUid="{item.page.uid}">{item.language.title}</f:link.page>
+            <f:link.page pageUid="{item.uid}">{item.language.title}</f:link.page>
         </f:for>
     </nav>
+    
+Note: the languageMenu hold the siteLanguage on each item in the `language` property as an array    
 
 ### List Menu
 
