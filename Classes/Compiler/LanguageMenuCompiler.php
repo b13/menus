@@ -44,6 +44,9 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
                 $page = $this->menuRepository->getPageInLanguage($targetPage, $context);
                 if (!empty($page)) {
                     $page['language'] = $language->toArray();
+                    if (!empty($page['_PAGES_OVERLAY']) && $page['_PAGES_OVERLAY'] === true) {
+                        $page['uid'] = $page['_PAGES_OVERLAY_UID'];
+                    }
                     $pages[] = $page;
                 }
             }
