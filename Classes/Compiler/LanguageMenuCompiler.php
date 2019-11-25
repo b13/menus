@@ -23,11 +23,15 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
     public function compile(ContentObjectRenderer $contentObjectRenderer, array $configuration): array
     {
         $cacheIdentifier = $this->generateCacheIdentifierForMenu('list', $configuration);
-        return $this->cache->get($cacheIdentifier, function() use ($contentObjectRenderer, $configuration) {
-            $excludedLanguages = $contentObjectRenderer->stdWrap($configuration['excludeLanguages'] ?? '', $configuration['excludeLanguages.']);
-            $excludedLanguages = GeneralUtility::trimExplode(',', $excludedLanguages);
-            $targetPage = $contentObjectRenderer->stdWrap($configuration['pointToPage'] ?? $GLOBALS['TSFE']->id, $configuration['pointToPage.']);
-            $targetPage = (int)$targetPage;
+
+        $excludedLanguages = $contentObjectRenderer->stdWrap($configuration['excludeLanguages'] ?? '', $configuration['excludeLanguages.']);
+        $excludedLanguages = GeneralUtility::trimExplode(',', $excludedLanguages);
+        $targetPage = $contentObjectRenderer->stdWrap($configuration['pointToPage'] ?? $GLOBALS['TSFE']->id, $configuration['pointToPage.']);
+        $targetPage = (int)$targetPage;
+
+        $cacheIdentifier .= '-' . GeneralUtility::shortMD5(json_encode([$excludedLanguages, $targetPage]));
+
+        return $this->cache->get($cacheIdentifier, function() use ($contentObjectRenderer, $configuration, $excludedLanguages, $targetPage) {
 
             $site = $this->getCurrentSite();
             $context = GeneralUtility::makeInstance(Context::class);
