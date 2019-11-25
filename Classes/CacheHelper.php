@@ -73,7 +73,7 @@ class CacheHelper implements SingletonInterface
         foreach ($pages as $page) {
             $pageIds[] = (int)$page['uid'];
             if (!empty($page['subpages'])) {
-                $pageIds[] = array_replace($pageIds, $this->getAllPageIdsFromItems($page['subpages']));
+                $pageIds = array_merge($pageIds, $this->getAllPageIdsFromItems($page['subpages']));
             }
         }
         return $pageIds;
