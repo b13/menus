@@ -34,8 +34,7 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
         return $this->cache->get($cacheIdentifier, function() use ($contentObjectRenderer, $configuration, $excludedLanguages, $targetPage) {
 
             $site = $this->getCurrentSite();
-            $context = GeneralUtility::makeInstance(Context::class);
-            $backupLanguageAspect = $context->getAspect('language');
+            $context = clone GeneralUtility::makeInstance(Context::class);
             $pages = [];
             foreach ($site->getLanguages() as $language) {
                 if (in_array($language->getTwoLetterIsoCode(), $excludedLanguages, true)) {
@@ -55,7 +54,6 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
                     $pages[] = $page;
                 }
             }
-            $context->setAspect('language', $backupLanguageAspect);
             return $pages;
         });
     }
