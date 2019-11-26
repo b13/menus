@@ -103,6 +103,8 @@ Usage in Fluid:
         </f:for>
     </nav>
 
+**Note**: nav_title is title if Database-Record nav_title is empty.
+
 ### Language Menu
 
 Building a language switcher can be achieved by a few lines of code:
@@ -134,7 +136,7 @@ Usage in Fluid:
         </f:for>
     </nav>
     
-Note: the languageMenu hold the siteLanguage on each item in the `language` property as an array    
+**Note**: the languageMenu hold the siteLanguage on each item in the `language` property as an array
 
 ### List Menu
 
