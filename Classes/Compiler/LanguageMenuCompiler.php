@@ -35,6 +35,7 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
 
             $site = $this->getCurrentSite();
             $context = GeneralUtility::makeInstance(Context::class);
+            $backupLanguageAspect = $context->getAspect('language');
             $pages = [];
             foreach ($site->getLanguages() as $language) {
                 if (in_array($language->getTwoLetterIsoCode(), $excludedLanguages, true)) {
@@ -54,6 +55,7 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
                     $pages[] = $page;
                 }
             }
+            $context->setAspect('language', $backupLanguageAspect);
             return $pages;
         });
     }
