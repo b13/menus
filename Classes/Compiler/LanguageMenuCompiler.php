@@ -31,8 +31,7 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
 
         $cacheIdentifier .= '-' . GeneralUtility::shortMD5(json_encode([$excludedLanguages, $targetPage]));
 
-        return $this->cache->get($cacheIdentifier, function() use ($contentObjectRenderer, $configuration, $excludedLanguages, $targetPage) {
-
+        return $this->cache->get($cacheIdentifier, function () use ($contentObjectRenderer, $configuration, $excludedLanguages, $targetPage) {
             $site = $this->getCurrentSite();
             $context = clone GeneralUtility::makeInstance(Context::class);
             $pages = [];

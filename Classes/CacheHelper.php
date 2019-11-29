@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types = 1);
 namespace B13\Menus;
 
@@ -53,7 +54,7 @@ class CacheHelper implements SingletonInterface
 
         // Calculate tags + lifetime
         $usedPageIds = $this->getAllPageIdsFromItems($pages);
-        $tags = array_map(function($pageId) {
+        $tags = array_map(function ($pageId) {
             return 'pageId_' . $pageId;
         }, $usedPageIds);
         $maximumLifeTime = $this->getMaxLifetimeOfPages($pages, $GLOBALS['TSFE']->get_cache_timeout());

@@ -51,7 +51,7 @@ abstract class AbstractMenuCompiler
      * @param array $configuration
      * @return array
      */
-    abstract function compile(ContentObjectRenderer $contentObjectRenderer, array $configuration): array;
+    abstract public function compile(ContentObjectRenderer $contentObjectRenderer, array $configuration): array;
 
     /**
      * Create a cache identifier for the cache entry, so this is unique based on
@@ -72,7 +72,6 @@ abstract class AbstractMenuCompiler
         $identifier = $prefix . '-root-' . $root . '-language-' . $language . '-groups-' . implode('_', $groupIds) . '-' . GeneralUtility::shortMD5(json_encode($configuration));
         return $identifier;
     }
-    
 
     protected function getCurrentSite(): ?SiteInterface
     {
