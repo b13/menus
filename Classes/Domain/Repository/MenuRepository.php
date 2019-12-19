@@ -53,6 +53,9 @@ class MenuRepository
             if (!$this->pageRepository->isPageSuitableForLanguage($page, $languageAspect)) {
                 continue;
             }
+            if (!isset($page['doktype']) || in_array($page['doktype'], $this->excludedDoktypes)) {
+                continue;
+            }
             $this->populateAdditionalKeysForPage($page);
             $pages[] = $page;
         }
