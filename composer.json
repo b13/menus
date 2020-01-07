@@ -5,8 +5,8 @@
   "description": "Easy and fast menus for TYPO3 Frontends",
   "require": {
     "php": "^7.2",
-    "typo3/cms-core": "^9.5",
-    "typo3/cms-frontend": "^9.5"
+    "typo3/cms-core": "^9.5 || ^10",
+    "typo3/cms-frontend": "^9.5 || ^10"
   },
   "require-dev": {
   },
