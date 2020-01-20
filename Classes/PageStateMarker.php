@@ -20,11 +20,10 @@ class PageStateMarker
         $page['level'] = $level;
         if (!empty($page['subpages'])) {
             foreach ($page['subpages'] as &$subPage) {
-                self::markStates($subPage, $level+1);
+                self::markStatesRecursively($subPage, $level+1);
             }
         }
-        $page['isInRootLine'] = self::isPageInCurrentRootLine((int)$page['uid']);
-        $page['isCurrentPage'] = self::isCurrentPage((int)$page['uid']);
+        self::markStates($page, $level);
     }
 
     public static function markStates(array &$page, int $level = null): void
