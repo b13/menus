@@ -26,20 +26,21 @@ class TreeMenuCompiler extends AbstractMenuCompiler
         $startPageIds = $contentObjectRenderer->stdWrap($configuration['entryPoints'] ?? $this->getCurrentSite()->getRootPageId(), $configuration['entryPoints.']);
         $startPageIds = GeneralUtility::intExplode(',', $startPageIds);
         $depth = (int)$contentObjectRenderer->stdWrap($configuration['depth'] ?? 1, $configuration['depth.']);
+        $excludePages = $this->parseStdWrap($configuration['entryPoints'], $configuration['entryPoints.']);
 
-        $cacheIdentifier .= '-' . GeneralUtility::shortMD5(json_encode([$includeStartPageIds, $startPageIds, $depth]));
+        $cacheIdentifier .= '-' . GeneralUtility::shortMD5(json_encode([$includeStartPageIds, $startPageIds, $depth, $excludePages]));
 
-        return $this->cache->get($cacheIdentifier, function() use ($contentObjectRenderer, $configuration, $includeStartPageIds, $startPageIds, $depth) {
+        return $this->cache->get($cacheIdentifier, function() use ($contentObjectRenderer, $configuration, $includeStartPageIds, $startPageIds, $depth, $excludePages) {
 
             $tree = [];
             foreach ($startPageIds as $startPageId) {
                 if ($includeStartPageIds) {
-                    $page = $this->menuRepository->getPageTree($startPageId, $depth, $configuration);
+                    $page = $this->menuRepository->getPageTree($startPageId, $depth, $configuration, $excludePages);
                     if (!empty($page)) {
                         $tree[] = $page;
                     }
                 } else {
-                    $pages = $this->menuRepository->getSubPagesOfPage($startPageId, $depth-1, $configuration);
+                    $pages = $this->menuRepository->getSubPagesOfPage($startPageId, $depth-1, $configuration, $excludePages);
                     if (!empty($pages)) {
                         $tree = array_merge($tree, $pages);
                     }

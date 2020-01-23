@@ -13,7 +13,6 @@ namespace B13\Menus\Domain\Repository;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Page\PageRepository;
 
 /**
@@ -86,7 +85,7 @@ class MenuRepository
         return $page;
     }
 
-    public function getPageTree(int $startPageId, int $depth, array $configuration): array
+    public function getPageTree(int $startPageId, int $depth, array $configuration, string $excludePages): array
     {
 
         $page = $this->pageRepository->getPage($startPageId);
@@ -94,12 +93,12 @@ class MenuRepository
         if (!$this->pageRepository->isPageSuitableForLanguage($page, $languageAspect)) {
             return [];
         }
-        $page['subpages'] = $this->getSubPagesOfPage((int)$page['uid'], $depth, $configuration);
+        $page['subpages'] = $this->getSubPagesOfPage((int)$page['uid'], $depth, $configuration, $excludePages);
         $this->populateAdditionalKeysForPage($page);
         return $page;
     }
 
-    public function getSubPagesOfPage(int $pageId, int $depth, array $configuration)
+    public function getSubPagesOfPage(int $pageId, int $depth, array $configuration, string $excludePages)
     {
         $whereClause = '';
         if (!empty($configuration['excludeDoktypes'])) {
@@ -107,10 +106,9 @@ class MenuRepository
         } else {
             $excludedDoktypes = $this->excludedDoktypes;
         }
-        $excludedPages = GeneralUtility::makeInstance(ContentObjectRenderer::class)->stdWrap($configuration['excludePages'], $configuration['excludePages.']);
-        if (!empty($excludedPages)) {
-            $excludedPages = GeneralUtility::intExplode(',', $excludedPages);
-            $whereClause .= ' AND uid NOT IN (' . implode(',', $excludedPages) . ')';
+        if (!empty($excludePages)) {
+            $excludedPagesArray = GeneralUtility::intExplode(',', $excludePages);
+            $whereClause .= ' AND uid NOT IN (' . implode(',', $excludedPagesArray) . ')';
         }
         $pageTree = $this->pageRepository->getMenu(
             $pageId,
@@ -127,7 +125,7 @@ class MenuRepository
                 continue;
             }
             if ($depth > 0) {
-                $page['subpages'] = $this->getSubPagesOfPage((int)$page['uid'], $depth-1, $configuration);
+                $page['subpages'] = $this->getSubPagesOfPage((int)$page['uid'], $depth-1, $configuration, $excludePages);
             }
             $this->populateAdditionalKeysForPage($page);
         }
