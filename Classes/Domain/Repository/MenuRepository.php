@@ -13,6 +13,7 @@ namespace B13\Menus\Domain\Repository;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Page\PageRepository;
 
 /**
@@ -106,8 +107,9 @@ class MenuRepository
         } else {
             $excludedDoktypes = $this->excludedDoktypes;
         }
-        if (!empty($configuration['excludePages'])) {
-            $excludedPages = GeneralUtility::intExplode(',', $configuration['excludePages']);
+        $excludedPages = GeneralUtility::makeInstance(ContentObjectRenderer::class)->stdWrap($configuration['excludePages'], $configuration['excludePages.']);
+        if (!empty($excludedPages)) {
+            $excludedPages = GeneralUtility::intExplode(',', $excludedPages);
             $whereClause .= ' AND uid NOT IN (' . implode(',', $excludedPages) . ')';
         }
         $pageTree = $this->pageRepository->getMenu(
