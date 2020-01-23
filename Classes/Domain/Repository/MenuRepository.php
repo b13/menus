@@ -107,8 +107,8 @@ class MenuRepository
             $excludedDoktypes = $this->excludedDoktypes;
         }
         if (!empty($configuration['excludePages'])) {
-            $excludedPages = GeneralUtility::intExplode(',', $configuration['excludePages']);
-            $whereClause .= ' AND uid NOT IN (' . implode(',', $excludedPages) . ')';
+            $excludedPagesArray = GeneralUtility::intExplode(',', $configuration['excludePages']);
+            $whereClause .= ' AND uid NOT IN (' . implode(',', $excludedPagesArray) . ')';
         }
         $pageTree = $this->pageRepository->getMenu(
             $pageId,

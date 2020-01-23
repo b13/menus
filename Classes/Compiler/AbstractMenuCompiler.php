@@ -78,4 +78,21 @@ abstract class AbstractMenuCompiler
     {
         return $GLOBALS['TYPO3_REQUEST']->getAttribute('site');
     }
+
+    /**
+     * Function to parse typoscript config with stdWrap
+     * @param string $content
+     * @param string $configuration
+     *
+     * @return string
+     */
+    public function parseStdWrap($content, $configuration): string
+    {
+        $return = GeneralUtility::makeInstance(ContentObjectRenderer::class)->stdWrap($content, $configuration);
+        if ($return !== null) {
+            return $return;
+        }
+
+        return '';
+    }
 }
