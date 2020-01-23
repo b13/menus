@@ -85,7 +85,7 @@ class MenuRepository
         return $page;
     }
 
-    public function getPageTree(int $startPageId, int $depth, array $configuration, string $excludePages): array
+    public function getPageTree(int $startPageId, int $depth, array $configuration): array
     {
 
         $page = $this->pageRepository->getPage($startPageId);
@@ -93,12 +93,12 @@ class MenuRepository
         if (!$this->pageRepository->isPageSuitableForLanguage($page, $languageAspect)) {
             return [];
         }
-        $page['subpages'] = $this->getSubPagesOfPage((int)$page['uid'], $depth, $configuration, $excludePages);
+        $page['subpages'] = $this->getSubPagesOfPage((int)$page['uid'], $depth, $configuration);
         $this->populateAdditionalKeysForPage($page);
         return $page;
     }
 
-    public function getSubPagesOfPage(int $pageId, int $depth, array $configuration, string $excludePages)
+    public function getSubPagesOfPage(int $pageId, int $depth, array $configuration)
     {
         $whereClause = '';
         if (!empty($configuration['excludeDoktypes'])) {
@@ -106,8 +106,8 @@ class MenuRepository
         } else {
             $excludedDoktypes = $this->excludedDoktypes;
         }
-        if (!empty($excludePages)) {
-            $excludedPagesArray = GeneralUtility::intExplode(',', $excludePages);
+        if (!empty($configuration['excludePages'])) {
+            $excludedPagesArray = GeneralUtility::intExplode(',', $configuration['excludePages']);
             $whereClause .= ' AND uid NOT IN (' . implode(',', $excludedPagesArray) . ')';
         }
         $pageTree = $this->pageRepository->getMenu(
@@ -125,7 +125,7 @@ class MenuRepository
                 continue;
             }
             if ($depth > 0) {
-                $page['subpages'] = $this->getSubPagesOfPage((int)$page['uid'], $depth-1, $configuration, $excludePages);
+                $page['subpages'] = $this->getSubPagesOfPage((int)$page['uid'], $depth-1, $configuration);
             }
             $this->populateAdditionalKeysForPage($page);
         }
