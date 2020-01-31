@@ -10,11 +10,10 @@ namespace B13\Menus\DataProcessing;
  * of the License, or any later version.
  */
 
-
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
-use TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor;
 
 /**
  * DataProcessor to render a tree-based menu of pages and subpages.

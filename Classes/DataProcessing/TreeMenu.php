@@ -15,7 +15,6 @@ use B13\Menus\PageStateMarker;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
-
 /**
  * DataProcessor to render a tree-based menu of pages and subpages.
  */
@@ -41,5 +40,4 @@ class TreeMenu extends AbstractMenu
         $processedData[$targetVariableName] = $pages;
         return $processedData;
     }
-
 }

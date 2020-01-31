@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace B13\Menus\Domain\Repository;
 
 /*
@@ -73,7 +73,6 @@ class MenuRepository
         return $page;
     }
 
-
     public function getPageInLanguage(int $pageId, Context $context): array
     {
         $pageRepository = GeneralUtility::makeInstance(PageRepository::class, $context);
@@ -87,7 +86,6 @@ class MenuRepository
 
     public function getPageTree(int $startPageId, int $depth, array $configuration): array
     {
-
         $page = $this->pageRepository->getPage($startPageId);
         $languageAspect = $this->context->getAspect('language');
         if (!$this->pageRepository->isPageSuitableForLanguage($page, $languageAspect)) {

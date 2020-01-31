@@ -31,8 +31,7 @@ class TreeMenuCompiler extends AbstractMenuCompiler
 
         $cacheIdentifier .= '-' . GeneralUtility::shortMD5(json_encode([$includeStartPageIds, $startPageIds, $depth, $excludePages]));
 
-        return $this->cache->get($cacheIdentifier, function() use ($contentObjectRenderer, $configuration, $includeStartPageIds, $startPageIds, $depth) {
-
+        return $this->cache->get($cacheIdentifier, function () use ($contentObjectRenderer, $configuration, $includeStartPageIds, $startPageIds, $depth) {
             $tree = [];
             foreach ($startPageIds as $startPageId) {
                 if ($includeStartPageIds) {

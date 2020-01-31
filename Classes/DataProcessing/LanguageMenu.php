@@ -46,7 +46,7 @@ class LanguageMenu extends AbstractMenu
     }
 
     /**
-     * @return null|SiteLanguage
+     * @return SiteLanguage|null
      */
     protected function getCurrentSiteLanguage(): ?SiteLanguage
     {
