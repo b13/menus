@@ -41,7 +41,7 @@ class BreadcrumbsContentObject extends AbstractContentObject
      */
     public function render($conf = [])
     {
-        $pages = $this->menuRepository->getBreadcrumbsMenu($GLOBALS['TSFE']->rootLine);
+        $pages = $this->menuRepository->getBreadcrumbsMenu($GLOBALS['TSFE']->rootLine, $conf);
         $content = '';
         $cObjForItems = GeneralUtility::makeInstance(ContentObjectRenderer::class);
         $rootLevelCount = count($pages);

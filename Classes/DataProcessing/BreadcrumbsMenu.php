@@ -40,7 +40,7 @@ class BreadcrumbsMenu extends AbstractMenu
         if (isset($processorConfiguration['if.']) && !$cObj->checkIf($processorConfiguration['if.'])) {
             return $processedData;
         }
-        $pages = $this->menuRepository->getBreadcrumbsMenu($GLOBALS['TSFE']->rootLine);
+        $pages = $this->menuRepository->getBreadcrumbsMenu($GLOBALS['TSFE']->rootLine, $processorConfiguration);
         $rootLevelCount = count($pages);
         foreach ($pages as &$page) {
             PageStateMarker::markStates($page, $rootLevelCount--);

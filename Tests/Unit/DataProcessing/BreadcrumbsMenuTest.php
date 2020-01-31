@@ -38,7 +38,7 @@ class BreadcrumbsMenuTest extends UnitTestCase
         ];
         $GLOBALS['TSFE']->id = 2;
         $menuRepository = $this->prophesize(MenuRepository::class);
-        $menuRepository->getBreadcrumbsMenu($GLOBALS['TSFE']->rootLine)->willReturn($pages);
+        $menuRepository->getBreadcrumbsMenu($GLOBALS['TSFE']->rootLine, [])->willReturn($pages);
         $contentDataProcessor = $this->prophesize(ContentDataProcessor::class);
         $contentObjectRenderer = $this->prophesize(ContentObjectRenderer::class);
         $breadcrumbsMenuDataProcessor = $this->getMockBuilder(BreadcrumbsMenu::class)

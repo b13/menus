@@ -67,4 +67,29 @@ class MenuRepositoryTest extends UnitTestCase
             ->getMock();
         $menuRepository->getSubPagesOfPage(1, 1, ['excludeDoktypes' => 99]);
     }
+
+    /**
+     * @test
+     */
+    public function getBreadcrumbsMenuRespectConfiguredExcludeDoktypes(): void
+    {
+        $rootLine = [
+            ['uid' => 1, 'doktype' => 99],
+            ['uid' => 2, 'doktype' => 98]
+        ];
+        $context = $this->prophesize(Context::class);
+        #$languageAspect = $this->prophesize(LanguageAspect::class)->reveal();
+        $context->getAspect('language')->willReturn($this->prophesize(LanguageAspect::class)->reveal());
+        $pageRepository = $this->prophesize(PageRepository::class);
+        $pageRepository->getPage(1)->willReturn($rootLine[0]);
+        $pageRepository->getPage(2)->willReturn($rootLine[1]);
+        $pageRepository->isPageSuitableForLanguage(Argument::any(), Argument::any())->willReturn(true);
+        $menuRepository = $this->getMockBuilder(MenuRepository::class)
+            ->setMethods(['foo'])
+            ->setConstructorArgs([$context->reveal(), $pageRepository->reveal()])
+            ->getMock();
+        $breadcrumbs = $menuRepository->getBreadcrumbsMenu($rootLine, ['excludeDoktypes' => 99]);
+        $this->assertSame(1, count($breadcrumbs));
+
+    }
 }
