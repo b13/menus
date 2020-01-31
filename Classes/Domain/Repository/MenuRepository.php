@@ -100,7 +100,7 @@ class MenuRepository
     {
         $whereClause = '';
         if (!empty($configuration['excludeDoktypes'])) {
-            $excludedDoktypes = array_replace($this->excludedDoktypes, GeneralUtility::intExplode(',', $configuration['excludeDoktypes']));
+            $excludedDoktypes = array_unique(array_merge($this->excludedDoktypes, GeneralUtility::intExplode(',', $configuration['excludeDoktypes'])));
         } else {
             $excludedDoktypes = $this->excludedDoktypes;
         }
