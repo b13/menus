@@ -24,14 +24,14 @@ abstract class AbstractMenu implements DataProcessorInterface
     /**
      * @var ContentDataProcessor
      */
-    protected $contentDataProcessor;
+    protected $contentDataProcessor = null;
 
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct(ContentDataProcessor $contentDataProcessor = null)
     {
-        $this->contentDataProcessor = GeneralUtility::makeInstance(ContentDataProcessor::class);
+        $this->contentDataProcessor = $contentDataProcessor ?? GeneralUtility::makeInstance(ContentDataProcessor::class);
     }
 
     /**

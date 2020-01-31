@@ -38,10 +38,10 @@ class MenuRepository
         PageRepository::DOKTYPE_SYSFOLDER
     ];
 
-    public function __construct(Context $context = null)
+    public function __construct(Context $context = null, PageRepository $pageRepository = null)
     {
         $this->context = $context ?? GeneralUtility::makeInstance(Context::class);
-        $this->pageRepository = GeneralUtility::makeInstance(PageRepository::class, $this->context);
+        $this->pageRepository = $pageRepository ?? GeneralUtility::makeInstance(PageRepository::class, $this->context);
     }
 
     public function getBreadcrumbsMenu(array $originalRootLine): array
