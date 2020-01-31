@@ -42,7 +42,7 @@ class BreadcrumbsMenu extends AbstractMenu
         }
         $pages = $this->menuRepository->getBreadcrumbsMenu($GLOBALS['TSFE']->rootLine);
         $rootLevelCount = count($pages);
-        foreach ($pages as $page) {
+        foreach ($pages as &$page) {
             PageStateMarker::markStates($page, $rootLevelCount--);
         }
         foreach ($pages as &$page) {
