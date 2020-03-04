@@ -38,22 +38,23 @@ class MenuRepository
         PageRepository::DOKTYPE_SYSFOLDER
     ];
 
-    public function __construct(Context $context = null)
+    public function __construct(Context $context = null, PageRepository $pageRepository = null)
     {
         $this->context = $context ?? GeneralUtility::makeInstance(Context::class);
-        $this->pageRepository = GeneralUtility::makeInstance(PageRepository::class, $this->context);
+        $this->pageRepository = $pageRepository ?? GeneralUtility::makeInstance(PageRepository::class, $this->context);
     }
 
-    public function getBreadcrumbsMenu(array $originalRootLine): array
+    public function getBreadcrumbsMenu(array $originalRootLine, array $configuration): array
     {
         $pages = [];
         $languageAspect = $this->context->getAspect('language');
+        $excludeDoktypes = $this->getExcludeDoktypes($configuration);
         foreach ($originalRootLine as $pageInRootLine) {
             $page = $this->pageRepository->getPage((int)$pageInRootLine['uid']);
             if (!$this->pageRepository->isPageSuitableForLanguage($page, $languageAspect)) {
                 continue;
             }
-            if (!isset($page['doktype']) || in_array($page['doktype'], $this->excludedDoktypes)) {
+            if (!isset($page['doktype']) || in_array($page['doktype'], $excludeDoktypes)) {
                 continue;
             }
             $this->populateAdditionalKeysForPage($page);
@@ -96,18 +97,29 @@ class MenuRepository
         return $page;
     }
 
-    public function getSubPagesOfPage(int $pageId, int $depth, array $configuration)
+    /**
+     * @param array $configurtion
+     * @return array
+     */
+    protected function getExcludeDoktypes(array $configuration): array
     {
-        $whereClause = '';
         if (!empty($configuration['excludeDoktypes'])) {
             $excludedDoktypes = array_unique(array_merge($this->excludedDoktypes, GeneralUtility::intExplode(',', $configuration['excludeDoktypes'])));
         } else {
             $excludedDoktypes = $this->excludedDoktypes;
         }
+        return $excludedDoktypes;
+    }
+
+    public function getSubPagesOfPage(int $pageId, int $depth, array $configuration)
+    {
+        $whereClause = '';
+
         if (!empty($configuration['excludePages'])) {
             $excludedPagesArray = GeneralUtility::intExplode(',', $configuration['excludePages']);
             $whereClause .= ' AND uid NOT IN (' . implode(',', $excludedPagesArray) . ')';
         }
+        $excludedDoktypes = $this->getExcludeDoktypes($configuration);
         $pageTree = $this->pageRepository->getMenu(
             $pageId,
             '*',

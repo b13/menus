@@ -1,0 +1,49 @@
+base: 'http://localhost/'
+baseVariants: {  }
+errorHandling: {  }
+languages:
+  -
+    title: english
+    enabled: true
+    base: /
+    typo3Language: default
+    locale: en_US.UTF-8
+    iso-639-1: en
+    navigationTitle: ''
+    hreflang: ''
+    direction: ''
+    flag: global
+    languageId: '0'
+    websiteTitle: ''
+  -
+    title: 'german'
+    enabled: true
+    base: /de/
+    typo3Language: de
+    locale: de_DE.UTF-8
+    iso-639-1: de
+    navigationTitle: ''
+    hreflang: ''
+    direction: ''
+    fallbackType: strict
+    fallbacks: ''
+    flag: de
+    languageId: '1'
+  -
+    title: france
+    enabled: true
+    base: /fr/
+    typo3Language: fr
+    locale: fr_FR.UTF-8
+    iso-639-1: fr
+    websiteTitle: ''
+    navigationTitle: ''
+    hreflang: ''
+    direction: ''
+    fallbackType: fallback
+    fallbacks: '0'
+    flag: fr
+    languageId: '2'
+rootPageId: 1
+routes: {  }
+websiteTitle: 'Testing'

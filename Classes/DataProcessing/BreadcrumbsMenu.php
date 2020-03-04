@@ -14,6 +14,7 @@ use B13\Menus\Domain\Repository\MenuRepository;
 use B13\Menus\PageStateMarker;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor;
 
 /**
  * DataProcessor to retrieve a list of all pages of the current rootline to build a breadcrumb menu.
@@ -23,12 +24,12 @@ class BreadcrumbsMenu extends AbstractMenu
     /**
      * @var MenuRepository
      */
-    protected $menuRepository;
+    protected $menuRepository = null;
 
-    public function __construct()
+    public function __construct(ContentDataProcessor $contentDataProcessor = null, MenuRepository $menuRepository = null)
     {
-        parent::__construct();
-        $this->menuRepository = GeneralUtility::makeInstance(MenuRepository::class);
+        parent::__construct($contentDataProcessor);
+        $this->menuRepository = $menuRepository ?? GeneralUtility::makeInstance(MenuRepository::class);
     }
 
     /**
@@ -39,7 +40,7 @@ class BreadcrumbsMenu extends AbstractMenu
         if (isset($processorConfiguration['if.']) && !$cObj->checkIf($processorConfiguration['if.'])) {
             return $processedData;
         }
-        $pages = $this->menuRepository->getBreadcrumbsMenu($GLOBALS['TSFE']->rootLine);
+        $pages = $this->menuRepository->getBreadcrumbsMenu($GLOBALS['TSFE']->rootLine, $processorConfiguration);
         $rootLevelCount = count($pages);
         foreach ($pages as &$page) {
             PageStateMarker::markStates($page, $rootLevelCount--);
