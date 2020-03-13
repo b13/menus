@@ -10,7 +10,7 @@ namespace B13\Menus\ContentObject;
  * of the License, or any later version.
  */
 
-use B13\Menus\Domain\Repository\MenuRepository;
+use B13\Menus\Compiler\BreadcrumbsCompiler;
 use B13\Menus\PageStateMarker;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\AbstractContentObject;
@@ -21,19 +21,6 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  */
 class BreadcrumbsContentObject extends AbstractContentObject
 {
-    /**
-     * @var MenuRepository
-     */
-    protected $menuRepository;
-
-    /**
-     * @param ContentObjectRenderer $cObj
-     */
-    public function __construct(ContentObjectRenderer $cObj)
-    {
-        $this->menuRepository = GeneralUtility::makeInstance(MenuRepository::class);
-        parent::__construct($cObj);
-    }
 
     /**
      * @param array $conf
@@ -41,7 +28,7 @@ class BreadcrumbsContentObject extends AbstractContentObject
      */
     public function render($conf = [])
     {
-        $pages = $this->menuRepository->getBreadcrumbsMenu($GLOBALS['TSFE']->rootLine, $conf);
+        $pages = GeneralUtility::makeInstance(BreadcrumbsCompiler::class)->compile($this->cObj, $conf);
         $content = '';
         $cObjForItems = GeneralUtility::makeInstance(ContentObjectRenderer::class);
         $rootLevelCount = count($pages);
@@ -52,4 +39,5 @@ class BreadcrumbsContentObject extends AbstractContentObject
         }
         return $this->cObj->stdWrap($content, $conf);
     }
+  
 }

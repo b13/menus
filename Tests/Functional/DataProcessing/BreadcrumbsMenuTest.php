@@ -63,7 +63,20 @@ class BreadcrumbsMenuTest extends DataProcessingTest
                         'isCurrentPage' => false
                     ]
                 ]
-            ]
+            ],
+            [
+                'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2]]],
+                'configuration' => ['excludePages' => 1],
+                'expected' => [
+                    [
+                        'uid' => 2,
+                        'hasSubpages' => false,
+                        'level' => 1,
+                        'isInRootLine' => true,
+                        'isCurrentPage' => true
+                    ]
+                ]
+            ]            
         ];
     }
 
