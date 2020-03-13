@@ -39,5 +39,4 @@ class BreadcrumbsContentObject extends AbstractContentObject
         }
         return $this->cObj->stdWrap($content, $conf);
     }
-  
 }

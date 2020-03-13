@@ -24,7 +24,7 @@ abstract class AbstractMenu implements DataProcessorInterface
     /**
      * @var ContentDataProcessor
      */
-    protected $contentDataProcessor = null;
+    protected $contentDataProcessor;
 
     /**
      * Constructor

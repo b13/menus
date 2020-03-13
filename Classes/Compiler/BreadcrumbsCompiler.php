@@ -10,8 +10,6 @@ namespace B13\Menus\Compiler;
  * of the License, or any later version.
  */
 
-use TYPO3\CMS\Core\Context\Context;
-use TYPO3\CMS\Core\Context\LanguageAspectFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
@@ -26,11 +24,10 @@ class BreadcrumbsCompiler extends AbstractMenuCompiler
 
         $excludePages = $contentObjectRenderer->stdWrap($configuration['excludePages'] ?? '', $configuration['excludePages.']);
         $excludePages = GeneralUtility::trimExplode(',', $excludePages);
-        
+
         $cacheIdentifier .= '-' . GeneralUtility::shortMD5(json_encode([$excludePages]));
 
         return $this->cache->get($cacheIdentifier, function () use ($contentObjectRenderer, $configuration, $excludePages) {
-
             $pages = $this->menuRepository->getBreadcrumbsMenu($GLOBALS['TSFE']->rootLine, $configuration);
             return $pages;
         });
