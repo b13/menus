@@ -2,41 +2,41 @@ Migrate TypoScript for Fluid-based solution
 -------------------------------------------
 
 general Menu
-    
-    -            dataProcessors.10 = TYPO3\CMS\Frontend\DataProcessing\MenuProcessor
-    -            dataProcessors.10.level = 2
-    +            dataProcessors.10 = B13\Menus\DataProcessing\TreeMenu
-    +            dataProcessors.10.depth = 2
-    
+
+    -            dataProcessing.10 = TYPO3\CMS\Frontend\DataProcessing\MenuProcessor
+    -            dataProcessing.10.level = 2
+    +            dataProcessing.10 = B13\Menus\DataProcessing\TreeMenu
+    +            dataProcessing.10.depth = 2
+
 special directory
 
-    -            dataProcessors.10 = TYPO3\CMS\Frontend\DataProcessing\MenuProcessor
-    -            dataProcessors.special = directory
-    -            dataProcessors.special.value = 34
-    +            dataProcessors.dataProcessors.10 = B13\Menus\DataProcessing\TreeMenu
-    +            dataProcessors.entryPoints = 34
-    
+    -            dataProcessing.10 = TYPO3\CMS\Frontend\DataProcessing\MenuProcessor
+    -            dataProcessing.special = directory
+    -            dataProcessing.special.value = 34
+    +            dataProcessing.10 = B13\Menus\DataProcessing\TreeMenu
+    +            dataProcessing.entryPoints = 34
+
 special list
 
-    -            dataProcessors.10 = TYPO3\CMS\Frontend\DataProcessing\MenuProcessor
-    -            dataProcessors.special = list
-    -            dataProcessors.special.value = 34,22
-    +            dataProcessors.10 = B13\Menus\DataProcessing\ListMenu
-    +            dataProcessors.pages = 34,22
+    -            dataProcessing.10 = TYPO3\CMS\Frontend\DataProcessing\MenuProcessor
+    -            dataProcessing.special = list
+    -            dataProcessing.special.value = 34,22
+    +            dataProcessing.10 = B13\Menus\DataProcessing\ListMenu
+    +            dataProcessing.pages = 34,22
 
 special language
 
-    -            dataProcessors.10 = TYPO3\CMS\Frontend\DataProcessing\MenuProcessor
-    -            dataProcessors.special = language
-    +            dataProcessors.10 = B13\Menus\DataProcessing\LanguageMenu
-    
+    -            dataProcessing.10 = TYPO3\CMS\Frontend\DataProcessing\MenuProcessor
+    -            dataProcessing.special = language
+    +            dataProcessing.10 = B13\Menus\DataProcessing\LanguageMenu
+
 special breadcrumbs
 
-    -            dataProcessors.10 = TYPO3\CMS\Frontend\DataProcessing\MenuProcessor
-    -            dataProcessors.10.special = rootline
-    +            dataProcessors.10 = B13\Menus\DataProcessing\BreadcrumbsMenu
-    
-    
+    -            dataProcessing.10 = TYPO3\CMS\Frontend\DataProcessing\MenuProcessor
+    -            dataProcessing.10.special = rootline
+    +            dataProcessing.10 = B13\Menus\DataProcessing\BreadcrumbsMenu
+
+
 Migrate Templates for Fluid-based solution
 -------------------------------------------
 
@@ -48,4 +48,4 @@ Migrate Templates for Fluid-based solution
 * menuItem.active -> menuItem.isInRootLine
 * menuItem.title -> menuItem.nav_title
 
-    
+

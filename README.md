@@ -82,11 +82,11 @@ Pure TypoScript-based solution:
 Fluid-based solution:
 
     page.10 = FLUIDTEMPLATE
-    page.10.dataProcessors.10 = B13\Menus\DataProcessing\TreeMenu
-    page.10.dataProcessors.10.entryPoints = 23,13
-    page.10.dataProcessors.10.depth = 3
-    page.10.dataProcessors.10.excludePages = 4,51
-    page.10.dataProcessors.10.as = mobilemenu
+    page.10.dataProcessing.10 = B13\Menus\DataProcessing\TreeMenu
+    page.10.dataProcessing.10.entryPoints = 23,13
+    page.10.dataProcessing.10.depth = 3
+    page.10.dataProcessing.10.excludePages = 4,51
+    page.10.dataProcessing.10.as = mobilemenu
 
 Usage in Fluid:
 
@@ -124,9 +124,9 @@ The stdWrap `data` is the information of the current page plus the information m
 Fluid-based solution:
 
     page.10 = FLUIDTEMPLATE
-    page.10.dataProcessors.10 = B13\Menus\DataProcessing\LanguageMenu
-    page.10.dataProcessors.10.excludeLanguages = de,en
-    page.10.dataProcessors.10.as = languageswitcher
+    page.10.dataProcessing.10 = B13\Menus\DataProcessing\LanguageMenu
+    page.10.dataProcessing.10.excludeLanguages = de,en
+    page.10.dataProcessing.10.as = languageswitcher
 
 Usage in Fluid:
 
@@ -135,7 +135,7 @@ Usage in Fluid:
             <f:link.page pageUid="{item.uid}">{item.language.title}</f:link.page>
         </f:for>
     </nav>
-    
+
 **Note**: the languageMenu hold the siteLanguage on each item in the `language` property as an array
 
 ### List Menu
@@ -151,9 +151,9 @@ Pure TypoScript-based solution:
 Fluid-based solution:
 
     page.10 = FLUIDTEMPLATE
-    page.10.dataProcessors.10 = B13\Menus\DataProcessing\ListMenu
-    page.10.dataProcessors.10.pages = 13,14,15
-    page.10.dataProcessors.10.as = footerlinks
+    page.10.dataProcessing.10 = B13\Menus\DataProcessing\ListMenu
+    page.10.dataProcessing.10.pages = 13,14,15
+    page.10.dataProcessing.10.as = footerlinks
 
 Usage in Fluid:
 
@@ -177,9 +177,9 @@ Usage in Fluid:
 Fluid-based solution:
 
     page.10 = FLUIDTEMPLATE
-    page.10.dataProcessors.10 = B13\Menus\DataProcessing\BreadcrumbsMenu
-    page.10.dataProcessors.10.excludePages = 4,51
-    page.10.dataProcessors.10.as = breadcrumbs
+    page.10.dataProcessing.10 = B13\Menus\DataProcessing\BreadcrumbsMenu
+    page.10.dataProcessing.10.excludePages = 4,51
+    page.10.dataProcessing.10.as = breadcrumbs
 
 Usage in Fluid:
 
