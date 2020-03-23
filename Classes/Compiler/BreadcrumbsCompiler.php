@@ -20,7 +20,7 @@ class BreadcrumbsCompiler extends AbstractMenuCompiler
      */
     public function compile(ContentObjectRenderer $contentObjectRenderer, array $configuration): array
     {
-        $cacheIdentifier = $this->generateCacheIdentifierForMenu('list', $configuration);
+        $cacheIdentifier = $this->generateCacheIdentifierForMenu('breadcrumb', $configuration);
 
         $excludePages = $contentObjectRenderer->stdWrap($configuration['excludePages'] ?? '', $configuration['excludePages.']);
         $excludePages = GeneralUtility::trimExplode(',', $excludePages);
