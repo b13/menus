@@ -8,3 +8,6 @@ $GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'] = array_merge($GLOBALS['TYPO
     'LANGUAGEMENU' => \B13\Menus\ContentObject\LanguageMenuContentObject::class,
     'BREADCRUMBS' => \B13\Menus\ContentObject\BreadcrumbsContentObject::class
 ]);
+
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc']['tx-menus'] =
+    \B13\Menus\Hooks\DataHandlerHook::class . '->clearMenuCaches';

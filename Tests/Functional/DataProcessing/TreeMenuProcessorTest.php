@@ -12,6 +12,7 @@ namespace B13\Menus\Tests\Functional\DataProcessing;
 
 
 use B13\Menus\DataProcessing\TreeMenu;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Site\Entity\NullSite;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -146,5 +147,29 @@ class TreeMenuProcessorTest extends DataProcessingTest
         $treeMenu = $treeMenuProccessor->process($contentObjectRenderer, [], $configuration, []);
         $this->reduceResultsRecursive($treeMenu['my-tree']);
         $this->assertSame($expected, $treeMenu['my-tree']);
+    }
+
+    /**
+     * @test
+     */
+    public function menuIdTagsAreAddedToPageCache(): void
+    {
+        $site = GeneralUtility::makeInstance(NullSite::class);
+        $request = GeneralUtility::makeInstance(ServerRequest::class);
+        $request = $request->withAttribute('site', $site);
+        $GLOBALS['TYPO3_REQUEST'] = $request;
+
+        $GLOBALS['TSFE'] = GeneralUtility::makeInstance(TypoScriptFrontendController::class, null, $site, $site->getLanguageById(0));
+        $GLOBALS['TSFE']->rootLine = [['uid' => 1], ['uid' => 2], ['uid' => 3]];
+        $GLOBALS['TSFE']->id = 2;
+        $configuration = ['as' => 'my-tree', 'entryPoints' => 1, 'depth' => 2];
+
+        $treeMenuProccessor = GeneralUtility::makeInstance(TreeMenu::class);
+        $contentObjectRenderer = GeneralUtility::makeInstance(ContentObjectRenderer::class);
+        $treeMenuProccessor->process($contentObjectRenderer, [], $configuration, []);
+        $pageCacheTags = $GLOBALS['TSFE']->getPageCacheTags();
+        $this->assertTrue(in_array('menuId_2', $pageCacheTags, true));
+        $this->assertTrue(in_array('menuId_3', $pageCacheTags, true));
+        $this->assertTrue(in_array('menuId_4', $pageCacheTags, true));
     }
 }
