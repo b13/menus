@@ -15,6 +15,7 @@ use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * This is a helper class and a wrapper around "cache_hash".
@@ -46,6 +47,7 @@ class CacheHelper implements SingletonInterface
     {
         $pages = $this->cache->get($cacheIdentifier);
         if (is_array($pages)) {
+            $this->buildTagsAndAddThemToPageCache($pages);
             return $pages;
         }
 
@@ -53,13 +55,24 @@ class CacheHelper implements SingletonInterface
         $pages = $loader();
 
         // Calculate tags + lifetime
-        $usedPageIds = $this->getAllPageIdsFromItems($pages);
-        $tags = array_map(function ($pageId) {
-            return 'pageId_' . $pageId;
-        }, $usedPageIds);
-        $maximumLifeTime = $this->getMaxLifetimeOfPages($pages, $GLOBALS['TSFE']->get_cache_timeout());
+        $tags = $this->buildTagsAndAddThemToPageCache($pages);
+        $maximumLifeTime = $this->getMaxLifetimeOfPages($pages, $this->getFrontendController()->get_cache_timeout());
         $this->cache->set($cacheIdentifier, $pages, $tags, $maximumLifeTime);
         return $pages;
+    }
+
+    /**
+     * @param mixed[] $pages
+     * @return string[]
+     */
+    protected function buildTagsAndAddThemToPageCache(array $pages): array
+    {
+        $usedPageIds = $this->getAllPageIdsFromItems($pages);
+        $tags = array_map(function ($pageId) {
+            return 'menuId_' . $pageId;
+        }, $usedPageIds);
+        $this->getFrontendController()->addCacheTags($tags);
+        return $tags;
     }
 
     /**
@@ -102,5 +115,13 @@ class CacheHelper implements SingletonInterface
             }
         }
         return $maxLifetime;
+    }
+
+    /**
+     * @return TypoScriptFrontendController
+     */
+    protected function getFrontendController(): TypoScriptFrontendController
+    {
+        return $GLOBALS['TSFE'];
     }
 }
