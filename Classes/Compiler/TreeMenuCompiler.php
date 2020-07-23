@@ -47,6 +47,6 @@ class TreeMenuCompiler extends AbstractMenuCompiler
                 }
             }
             return $tree;
-        }, $contentObjectRenderer);
+        });
     }
 }

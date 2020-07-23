@@ -15,7 +15,7 @@ use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * This is a helper class and a wrapper around "cache_hash".
@@ -43,11 +43,11 @@ class CacheHelper implements SingletonInterface
      * @param callable $loader
      * @return array
      */
-    public function get(string $cacheIdentifier, callable $loader, ContentObjectRenderer $contentObjectRenderer): array
+    public function get(string $cacheIdentifier, callable $loader): array
     {
         $pages = $this->cache->get($cacheIdentifier);
         if (is_array($pages)) {
-            $this->buildTagsAndAddThemToPageCache($pages, $contentObjectRenderer);
+            $this->buildTagsAndAddThemToPageCache($pages);
             return $pages;
         }
 
@@ -55,24 +55,23 @@ class CacheHelper implements SingletonInterface
         $pages = $loader();
 
         // Calculate tags + lifetime
-        $tags = $this->buildTagsAndAddThemToPageCache($pages, $contentObjectRenderer);
-        $maximumLifeTime = $this->getMaxLifetimeOfPages($pages, $GLOBALS['TSFE']->get_cache_timeout());
+        $tags = $this->buildTagsAndAddThemToPageCache($pages);
+        $maximumLifeTime = $this->getMaxLifetimeOfPages($pages, $this->getFrontendController()->get_cache_timeout());
         $this->cache->set($cacheIdentifier, $pages, $tags, $maximumLifeTime);
         return $pages;
     }
 
     /**
      * @param mixed[] $pages
-     * @param ContentObjectRenderer $contentObjectRenderer
      * @return string[]
      */
-    protected function buildTagsAndAddThemToPageCache(array $pages, ContentObjectRenderer $contentObjectRenderer): array
+    protected function buildTagsAndAddThemToPageCache(array $pages): array
     {
         $usedPageIds = $this->getAllPageIdsFromItems($pages);
         $tags = array_map(function ($pageId) {
             return 'menuId_' . $pageId;
         }, $usedPageIds);
-        $contentObjectRenderer->stdWrap_addPageCacheTags('', ['addPageCacheTags' => implode(',', $tags)]);
+        $this->getFrontendController()->addCacheTags($tags);
         return $tags;
     }
 
@@ -116,5 +115,13 @@ class CacheHelper implements SingletonInterface
             }
         }
         return $maxLifetime;
+    }
+
+    /**
+     * @return TypoScriptFrontendController
+     */
+    protected function getFrontendController(): TypoScriptFrontendController
+    {
+        return $GLOBALS['TSFE'];
     }
 }
