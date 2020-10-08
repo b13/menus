@@ -13,9 +13,11 @@ namespace B13\Menus;
 
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use TYPO3\CMS\Core\Context\Context;
 
 /**
  * This is a helper class and a wrapper around "cache_hash".
@@ -30,9 +32,22 @@ class CacheHelper implements SingletonInterface
      */
     protected $cache;
 
-    public function __construct(FrontendInterface $cache = null)
+    /**
+     * @var int
+     */
+    protected $workspaceId = 0;
+
+    public function __construct(FrontendInterface $cache = null, Context $context = null)
     {
         $this->cache = $cache ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('cache_hash');
+        if ($context === null) {
+            $context = GeneralUtility::makeInstance(Context::class);
+        }
+        try {
+            $this->workspaceId = (int)$context->getPropertyFromAspect('workspace', 'id');
+        } catch (AspectNotFoundException $e) {
+            
+        }
     }
 
     /**
@@ -45,6 +60,9 @@ class CacheHelper implements SingletonInterface
      */
     public function get(string $cacheIdentifier, callable $loader): array
     {
+        if ($this->workspaceId > 0) {
+            return $loader();
+        }
         $pages = $this->cache->get($cacheIdentifier);
         if (is_array($pages)) {
             $this->buildTagsAndAddThemToPageCache($pages);
