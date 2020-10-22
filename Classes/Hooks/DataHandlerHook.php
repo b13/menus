@@ -14,14 +14,15 @@ namespace B13\Menus\Hooks;
 
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * This is a helper class and a wrapper around "cache_hash".
+ * This hook is triggered before caches for a page get flushed.
  *
- * The pure joy of this class is the get() method, which calculates tags and max lifetime based on the fetched
- * records. If found in cache, fetched directly.
+ * Ideally this should not trigger the cache flush but only allow to add tags.
  */
 class DataHandlerHook
 {
@@ -45,16 +46,35 @@ class DataHandlerHook
 
     public function clearMenuCaches(array $params, DataHandler $dataHandler): void
     {
-        if ($params['table'] !== 'pages' || empty($params['tags'])) {
+        if ($params['table'] !== 'pages' || empty($params['uid_page'])) {
             return;
         }
-        $menuTags = [];
-        foreach ($params['tags'] as $tag => $_) {
-            if (strpos($tag, 'pageId_') === 0) {
-                $menuTags[] = str_replace('pageId_', 'menuId_', $tag);
-            }
+        $pageId = (int)$params['uid_page'];
+        // If the current page has subpages, it can be flushed directly
+        if ($this->hasSubpages($pageId)) {
+            $menuTag = 'menuId_' . $pageId;
+        } else {
+            // Page is a "leave" in the tree, so flush the menu ID of the parent page
+            $parentPageId = $dataHandler->getPID('pages', $pageId);
+            $menuTag = 'menuId_' . $parentPageId;
         }
-        $this->cacheHash->flushByTags($menuTags);
-        $this->cachePages->flushByTags($menuTags);
+        $this->cacheHash->flushByTag($menuTag);
+        $this->cachePages->flushByTag($menuTag);
+    }
+
+    protected function hasSubpages(int $pageId): bool
+    {
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
+        $queryBuilder->getRestrictions()
+            ->removeAll()
+            ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+        $result = $queryBuilder
+            ->select('uid')
+            ->from('pages')
+            ->where($queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($pageId, \PDO::PARAM_INT)))
+            ->setMaxResults(1)
+            ->execute()
+            ->fetch();
+        return !(empty($result));
     }
 }

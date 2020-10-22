@@ -46,7 +46,7 @@ class CacheHelper implements SingletonInterface
         try {
             $this->workspaceId = (int)$context->getPropertyFromAspect('workspace', 'id');
         } catch (AspectNotFoundException $e) {
-            
+
         }
     }
 
@@ -96,6 +96,9 @@ class CacheHelper implements SingletonInterface
     /**
      * Fetch all IDs of a tree recursively, in order to tag the cache entries properly.
      *
+     * Only pages which have subpages are included, as the "leave pages" are detected on cache flush.
+     * This is reduces the amount of tags in the cache.
+     *
      * @param array $pages
      * @return int[] a flat array with only the IDs (as integer)
      */
@@ -103,8 +106,8 @@ class CacheHelper implements SingletonInterface
     {
         $pageIds = [];
         foreach ($pages as $page) {
-            $pageIds[] = (int)$page['uid'];
             if (!empty($page['subpages'])) {
+                $pageIds[] = (int)$page['uid'];
                 $pageIds = array_merge($pageIds, $this->getAllPageIdsFromItems($page['subpages']));
             }
         }
