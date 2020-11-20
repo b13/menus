@@ -51,7 +51,7 @@ class MenuRepository
         $excludeDoktypes = $this->getExcludeDoktypes($configuration);
         foreach ($originalRootLine as $pageInRootLine) {
             $page = $this->pageRepository->getPage((int)$pageInRootLine['uid']);
-            if (!$this->pageRepository->isPageSuitableForLanguage($page, $languageAspect)) {
+            if (!$this->isPageSuitableForLanguage($page, $languageAspect)) {
                 continue;
             }
             if (!isset($page['doktype']) || in_array($page['doktype'], $excludeDoktypes)) {
@@ -67,7 +67,7 @@ class MenuRepository
     {
         $page = $this->pageRepository->getPage($pageId);
         $languageAspect = $this->context->getAspect('language');
-        if (!$this->pageRepository->isPageSuitableForLanguage($page, $languageAspect)) {
+        if (!$this->isPageSuitableForLanguage($page, $languageAspect)) {
             return [];
         }
         $this->populateAdditionalKeysForPage($page);
@@ -78,7 +78,7 @@ class MenuRepository
     {
         $pageRepository = GeneralUtility::makeInstance(PageRepository::class, $context);
         $page = $pageRepository->getPage($pageId);
-        if (!$pageRepository->isPageSuitableForLanguage($page, $context->getAspect('language'))) {
+        if ((int)$page['nav_hide'] === 1 || !$pageRepository->isPageSuitableForLanguage($page, $context->getAspect('language'))) {
             return [];
         }
         $this->populateAdditionalKeysForPage($page);
@@ -89,7 +89,7 @@ class MenuRepository
     {
         $page = $this->pageRepository->getPage($startPageId);
         $languageAspect = $this->context->getAspect('language');
-        if (!$this->pageRepository->isPageSuitableForLanguage($page, $languageAspect)) {
+        if (!$this->isPageSuitableForLanguage($page, $languageAspect)) {
             return [];
         }
         $page['subpages'] = $this->getSubPagesOfPage((int)$page['uid'], $depth, $configuration);
@@ -124,13 +124,13 @@ class MenuRepository
             $pageId,
             '*',
             'sorting',
-            'AND doktype NOT IN (' . implode(',', $excludedDoktypes) . ') AND nav_hide=0 ' . $whereClause,
+            'AND doktype NOT IN (' . implode(',', $excludedDoktypes) . ') ' . $whereClause,
             false
         );
         /** @var LanguageAspect $languageAspect */
         $languageAspect = $this->context->getAspect('language');
         foreach ($pageTree as $k => &$page) {
-            if (!$this->pageRepository->isPageSuitableForLanguage($page, $languageAspect)) {
+            if (!$this->isPageSuitableForLanguage($page, $languageAspect)) {
                 unset($pageTree[$k]);
                 continue;
             }
@@ -140,6 +140,11 @@ class MenuRepository
             $this->populateAdditionalKeysForPage($page);
         }
         return $pageTree;
+    }
+
+    protected function isPageSuitableForLanguage(array $page, LanguageAspect $languageAspect): bool
+    {
+        return (int)$page['nav_hide'] !== 1 && $this->pageRepository->isPageSuitableForLanguage($page, $languageAspect);
     }
 
     protected function populateAdditionalKeysForPage(array &$page): void
