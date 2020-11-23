@@ -85,7 +85,7 @@ class CacheHelper implements SingletonInterface
      */
     protected function buildTagsAndAddThemToPageCache(array $pages): array
     {
-        $usedPageIds = $this->getAllPageIdsFromItems($pages);
+        $usedPageIds = array_unique($this->getAllPageIdsFromItems($pages));
         $tags = array_map(function ($pageId) {
             return 'menuId_' . $pageId;
         }, $usedPageIds);
@@ -109,6 +109,8 @@ class CacheHelper implements SingletonInterface
             if (!empty($page['subpages'])) {
                 $pageIds[] = (int)$page['uid'];
                 $pageIds = array_merge($pageIds, $this->getAllPageIdsFromItems($page['subpages']));
+            } else {
+                $pageIds[] = (int)$page['pid'];
             }
         }
         return $pageIds;

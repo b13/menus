@@ -10,14 +10,7 @@ namespace B13\Menus\Tests\Functional\DataProcessing;
  * of the License, or any later version.
  */
 
-
-use B13\Menus\DataProcessing\BreadcrumbsMenu;
-use B13\Menus\Domain\Repository\MenuRepository;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor;
-use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
-
 
 abstract class DataProcessingTest extends FunctionalTestCase
 {

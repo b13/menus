@@ -146,13 +146,56 @@ class TreeMenuProcessorTest extends DataProcessingTest
         $contentObjectRenderer = GeneralUtility::makeInstance(ContentObjectRenderer::class);
         $treeMenu = $treeMenuProccessor->process($contentObjectRenderer, [], $configuration, []);
         $this->reduceResultsRecursive($treeMenu['my-tree']);
-        $this->assertSame($expected, $treeMenu['my-tree']);
+        self::assertSame($expected, $treeMenu['my-tree']);
+    }
+
+    /**
+     * @return array
+     */
+    public function cacheDataProvider()
+    {
+        return [
+            # entry point 2
+            [
+                'tsfe' => ['id' => 1, 'rootLine' => [['uid' => 1]]],
+                'entryPoints' => 2,
+                'expectedTags' => ['menuId_2']
+            ],
+            [
+                'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2]]],
+                'entryPoints' => 2,
+                'expectedTags' => ['menuId_2']
+            ],
+            [
+                'tsfe' => ['id' => 3, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 3]]],
+                'entryPoints' => 2,
+                'expectedTags' => ['menuId_2']
+            ],
+            # entry point 1
+            [
+                'tsfe' => ['id' => 1, 'rootLine' => [['uid' => 1]]],
+                'entryPoints' => 1,
+                'expectedTags' => ['menuId_1', 'menuId_2']
+            ],
+            [
+                'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2]]],
+                'entryPoints' => 1,
+                'expectedTags' => ['menuId_1', 'menuId_2']
+            ],
+            [
+                'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 3]]],
+                'entryPoints' => 1,
+                'expectedTags' => ['menuId_1', 'menuId_2']
+            ]
+            # menuId_3 and menuId_4 are never added to tags, because they are leaves
+        ];
     }
 
     /**
      * @test
+     * @dataProvider cacheDataProvider
      */
-    public function menuIdTagsAreAddedToPageCache(): void
+    public function menuIdTagsAreAddedToPageCache(array $tsfe, int $entryPoints, array $expectedTags): void
     {
         $site = GeneralUtility::makeInstance(NullSite::class);
         $request = GeneralUtility::makeInstance(ServerRequest::class);
@@ -160,16 +203,17 @@ class TreeMenuProcessorTest extends DataProcessingTest
         $GLOBALS['TYPO3_REQUEST'] = $request;
 
         $GLOBALS['TSFE'] = GeneralUtility::makeInstance(TypoScriptFrontendController::class, null, $site, $site->getLanguageById(0));
-        $GLOBALS['TSFE']->rootLine = [['uid' => 1], ['uid' => 2], ['uid' => 3]];
-        $GLOBALS['TSFE']->id = 2;
-        $configuration = ['as' => 'my-tree', 'entryPoints' => 1, 'depth' => 2];
+        $GLOBALS['TSFE']->rootLine = $tsfe['rootLine'];
+        $GLOBALS['TSFE']->id = $tsfe['id'];
+        $configuration = ['as' => 'my-tree', 'entryPoints' => $entryPoints, 'depth' => 2];
 
         $treeMenuProccessor = GeneralUtility::makeInstance(TreeMenu::class);
         $contentObjectRenderer = GeneralUtility::makeInstance(ContentObjectRenderer::class);
         $treeMenuProccessor->process($contentObjectRenderer, [], $configuration, []);
         $pageCacheTags = $GLOBALS['TSFE']->getPageCacheTags();
-        $this->assertTrue(in_array('menuId_2', $pageCacheTags, true));
-        $this->assertTrue(in_array('menuId_3', $pageCacheTags, true));
-        $this->assertTrue(in_array('menuId_4', $pageCacheTags, true));
+        self::assertSame(count($expectedTags), count($pageCacheTags));
+        foreach ($expectedTags as $expectedTag) {
+            self::assertTrue(in_array($expectedTag, $pageCacheTags, true));
+        }
     }
 }
