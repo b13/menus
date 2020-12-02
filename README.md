@@ -132,7 +132,7 @@ Usage in Fluid:
 
     <nav>
         <f:for each="{languageMenu}" as="item">
-            <f:link.page pageUid="{item.uid}">{item.language.title}</f:link.page>
+            <f:link.page pageUid="{item.uid}" language="{item.language.languageId}">{item.language.title}</f:link.page>
         </f:for>
     </nav>
 
