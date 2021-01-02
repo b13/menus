@@ -35,7 +35,7 @@ class TreeMenuContentObject extends AbstractContentObject
     protected function renderItems(array $pages, int $level, array $renderConfiguration): string
     {
         // No definition for this level
-        if (!empty($renderConfiguration['level' . $level])) {
+        if (empty($renderConfiguration['level' . $level])) {
             return '';
         }
         $content = '';
