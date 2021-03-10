@@ -188,6 +188,17 @@ Usage in Fluid:
         </f:for>
     </nav>
 
+### Dynamic configuration values for the menu (stdWrap)
+
+If you want to get a menu of the direct siblings of a page, no matter what page you have selected, you can use the stdWrap functions built into each property:
+
+	9999 = B13\Menus\DataProcessing\TreeMenu
+	9999 {
+		entryPoints.data = page:pid
+		as = listOfJobPages
+	}
+    
+By using the `.data` property of the entryPointy attribute we can access each property of the currently build page. And so we can render the siblings of the page.
 
 ## Technical Details
 
