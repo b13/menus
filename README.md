@@ -48,7 +48,7 @@ The extension ships TypoScript cObjects and TypoScript DataProcessors for Fluid-
 
 ### Common Options for all menus
 
-* excludePages - a list of page IDs (and their subpages if Tree Menu is used) to exclude from the page
+* excludePages - a list of page IDs (and their subpages if Tree Menu or Breadcrumbs is used) to exclude from the page
 * excludeDoktypes - a list of doktypes that are not rendered. BE_USER_SECTIONs are excluded by default. SYS_FOLDERs are queried (for subpages etc) but never rendered.
 
 ### Common options for items
@@ -167,6 +167,7 @@ Usage in Fluid:
 ### Breadcrumb Menu (a.k.a. Rootline Menu)
 
     page.10 = BREADCRUMBS
+    page.10.excludePages = 4,51
     page.10.wrap = <ul> | </ul>
     page.10.renderObj = TEXT
     page.10.renderObj.typolink.parameter.data = field:uid
@@ -177,6 +178,7 @@ Fluid-based solution:
 
     page.10 = FLUIDTEMPLATE
     page.10.dataProcessing.10 = B13\Menus\DataProcessing\BreadcrumbsMenu
+    page.10.dataProcessors.10.excludePages = 4,51
     page.10.dataProcessing.10.as = breadcrumbs
 
 Usage in Fluid:
