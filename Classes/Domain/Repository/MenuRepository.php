@@ -49,7 +49,12 @@ class MenuRepository
         $pages = [];
         $languageAspect = $this->context->getAspect('language');
         $excludeDoktypes = $this->getExcludeDoktypes($configuration);
+        $excludedPagesArray = $this->getExcludePages($configuration);
         foreach ($originalRootLine as $pageInRootLine) {
+            // check for excluded page before useless retrieving page record
+            if ($excludedPagesArray && in_array((int)$pageInRootLine['uid'], $excludedPagesArray)) {
+                continue;
+            }
             $page = $this->pageRepository->getPage((int)$pageInRootLine['uid']);
             if (!$this->isPageSuitableForLanguage($page, $languageAspect)) {
                 continue;
@@ -109,6 +114,19 @@ class MenuRepository
             $excludedDoktypes = $this->excludedDoktypes;
         }
         return $excludedDoktypes;
+    }
+
+    /**
+     * @param array $configuration
+     * @return array
+     */
+    protected function getExcludePages(array $configuration): ?array
+    {
+        $excludePages = null;
+        if (!empty($configuration['excludePages'])) {
+            $excludePages = array_unique(GeneralUtility::intExplode(',', $configuration['excludePages']));
+        }
+        return empty($excludePages) ? null : $excludePages;
     }
 
     public function getSubPagesOfPage(int $pageId, int $depth, array $configuration)
