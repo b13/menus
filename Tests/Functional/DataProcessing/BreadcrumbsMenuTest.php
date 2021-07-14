@@ -10,11 +10,9 @@ namespace B13\Menus\Tests\Functional\DataProcessing;
  * of the License, or any later version.
  */
 
-
 use B13\Menus\DataProcessing\BreadcrumbsMenu;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
-
 
 class BreadcrumbsMenuTest extends DataProcessingTest
 {
@@ -63,6 +61,19 @@ class BreadcrumbsMenuTest extends DataProcessingTest
                         'isCurrentPage' => false
                     ]
                 ]
+            ],
+            [
+                'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2]]],
+                'configuration' => ['excludePages' => 1],
+                'expected' => [
+                    [
+                        'uid' => 2,
+                        'hasSubpages' => false,
+                        'level' => 1,
+                        'isInRootLine' => true,
+                        'isCurrentPage' => true
+                    ]
+                ]
             ]
         ];
     }
@@ -79,8 +90,8 @@ class BreadcrumbsMenuTest extends DataProcessingTest
         $breadcrumbsMenuProcessor = GeneralUtility::makeInstance(BreadcrumbsMenu::class);
         $contentObjectRenderer = GeneralUtility::makeInstance(ContentObjectRenderer::class);
         $breadcrumbs = $breadcrumbsMenuProcessor->process($contentObjectRenderer, [], $configuration, []);
-        $this->assertIsArray($breadcrumbs['breadcrumbs']);
+        self::assertIsArray($breadcrumbs['breadcrumbs']);
         $reduced = $this->reduceResults($breadcrumbs['breadcrumbs']);
-        $this->assertSame($expected, $reduced);
+        self::assertSame($expected, $reduced);
     }
 }
