@@ -12,7 +12,6 @@ namespace B13\Menus\Tests\Functional\DataProcessing;
 
 
 use B13\Menus\DataProcessing\TreeMenu;
-use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Site\Entity\NullSite;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -29,7 +28,7 @@ class TreeMenuProcessorTest extends DataProcessingTest
     {
         return [
             [
-                'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 3]]],
+                'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2]]],
                 'configuration' => ['as' => 'my-tree', 'entryPoints' => 1, 'depth' => 2],
                 'expected' => [
                     [
@@ -43,7 +42,7 @@ class TreeMenuProcessorTest extends DataProcessingTest
                                 'uid' => 3,
                                 'hasSubpages' => false,
                                 'level' => 2,
-                                'isInRootLine' => true,
+                                'isInRootLine' => false,
                                 'isCurrentPage' => false
                             ]
                         ]
@@ -58,7 +57,7 @@ class TreeMenuProcessorTest extends DataProcessingTest
                 ]
             ],
             [
-                'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 3]]],
+                'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2]]],
                 'configuration' => ['as' => 'my-tree', 'entryPoints' => 1, 'depth' => 0, 'includeRootPages' => true],
                 'expected' => [
                     [
@@ -87,7 +86,7 @@ class TreeMenuProcessorTest extends DataProcessingTest
                 ]
             ],
             [
-                'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 3]]],
+                'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2]]],
                 'configuration' => ['as' => 'my-tree', 'entryPoints' => 1, 'depth' => 2, 'includeRootPages' => true],
                 'expected' => [
                     [
@@ -108,7 +107,7 @@ class TreeMenuProcessorTest extends DataProcessingTest
                                         'uid' => 3,
                                         'hasSubpages' => false,
                                         'level' => 3,
-                                        'isInRootLine' => true,
+                                        'isInRootLine' => false,
                                         'isCurrentPage' => false
                                     ]
                                 ]
@@ -119,6 +118,271 @@ class TreeMenuProcessorTest extends DataProcessingTest
                                 'level' => 2,
                                 'isInRootLine' => false,
                                 'isCurrentPage' => false
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'tsfe' => ['id' => 5, 'rootLine' => [['uid' => 1], ['uid' => 2],['uid' => 5]]],
+                'configuration' => ['as' => 'my-tree', 'entryPoints' => 1, 'depth' => 2],
+                'expected' => [
+                    [
+                        'uid' => 2,
+                        'hasSubpages' => true,
+                        'level' => 1,
+                        'isInRootLine' => true,
+                        'isCurrentPage' => false,
+                        'subpages' => [
+                            [
+                                'uid' => 3,
+                                'hasSubpages' => false,
+                                'level' => 2,
+                                'isInRootLine' => false,
+                                'isCurrentPage' => false
+                            ]
+                        ]
+                    ],
+                    [
+                        'uid' => 4,
+                        'hasSubpages' => false,
+                        'level' => 1,
+                        'isInRootLine' => false,
+                        'isCurrentPage' => false
+                    ]
+                ]
+            ],
+            # includeNotInMenu option tests
+            [
+                'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2]]],
+                'configuration' => ['as' => 'my-tree', 'entryPoints' => 1, 'depth' => 2, 'includeNotInMenu' => 1],
+                'expected' => [
+                    [
+                        'uid' => 2,
+                        'hasSubpages' => true,
+                        'level' => 1,
+                        'isInRootLine' => true,
+                        'isCurrentPage' => true,
+                        'subpages' => [
+                            [
+                                'uid' => 3,
+                                'hasSubpages' => false,
+                                'level' => 2,
+                                'isInRootLine' => false,
+                                'isCurrentPage' => false
+                            ],
+                            [
+                                'uid' => 5,
+                                'hasSubpages' => false,
+                                'level' => 2,
+                                'isInRootLine' => false,
+                                'isCurrentPage' => false
+                            ]
+                        ]
+                    ],
+                    [
+                        'uid' => 4,
+                        'hasSubpages' => false,
+                        'level' => 1,
+                        'isInRootLine' => false,
+                        'isCurrentPage' => false
+                    ],
+                    [
+                        'uid' => 6,
+                        'hasSubpages' => false,
+                        'level' => 1,
+                        'isInRootLine' => false,
+                        'isCurrentPage' => false
+                    ]
+                ]
+            ],
+            [
+                'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2]]],
+                'configuration' => ['as' => 'my-tree', 'entryPoints' => 1, 'depth' => 0, 'includeRootPages' => true, 'includeNotInMenu' => 1],
+                'expected' => [
+                    [
+                        'uid' => 1,
+                        'hasSubpages' => true,
+                        'level' => 1,
+                        'isInRootLine' => true,
+                        'isCurrentPage' => false,
+                        'subpages' => [
+                            [
+                                'uid' => 2,
+                                'hasSubpages' => false,
+                                'level' => 2,
+                                'isInRootLine' => true,
+                                'isCurrentPage' => true
+                            ],
+                            [
+                                'uid' => 4,
+                                'hasSubpages' => false,
+                                'level' => 2,
+                                'isInRootLine' => false,
+                                'isCurrentPage' => false
+                            ],
+                            [
+                                'uid' => 6,
+                                'hasSubpages' => false,
+                                'level' => 2,
+                                'isInRootLine' => false,
+                                'isCurrentPage' => false
+                            ]
+                        ]
+                    ]
+                ],
+            ],
+            [
+                'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2]]],
+                'configuration' => ['as' => 'my-tree', 'entryPoints' => 1, 'depth' => 2, 'includeRootPages' => true, 'includeNotInMenu' => 1],
+                'expected' => [
+                    [
+                        'uid' => 1,
+                        'hasSubpages' => true,
+                        'level' => 1,
+                        'isInRootLine' => true,
+                        'isCurrentPage' => false,
+                        'subpages' => [
+                            [
+                                'uid' => 2,
+                                'hasSubpages' => true,
+                                'level' => 2,
+                                'isInRootLine' => true,
+                                'isCurrentPage' => true,
+                                'subpages' => [
+                                    [
+                                        'uid' => 3,
+                                        'hasSubpages' => false,
+                                        'level' => 3,
+                                        'isInRootLine' => false,
+                                        'isCurrentPage' => false
+                                    ],
+                                    [
+                                        'uid' => 5,
+                                        'hasSubpages' => false,
+                                        'level' => 3,
+                                        'isInRootLine' => false,
+                                        'isCurrentPage' => false
+                                    ]
+                                ]
+                            ],
+                            [
+                                'uid' => 4,
+                                'hasSubpages' => false,
+                                'level' => 2,
+                                'isInRootLine' => false,
+                                'isCurrentPage' => false
+                            ],
+                            [
+                                'uid' => 6,
+                                'hasSubpages' => false,
+                                'level' => 2,
+                                'isInRootLine' => false,
+                                'isCurrentPage' => false
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'tsfe' => ['id' => 5, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 5]]],
+                'configuration' => ['as' => 'my-tree', 'entryPoints' => 1, 'depth' => 2, 'includeRootPages' => true, 'includeNotInMenu' => 1],
+                'expected' => [
+                    [
+                        'uid' => 1,
+                        'hasSubpages' => true,
+                        'level' => 1,
+                        'isInRootLine' => true,
+                        'isCurrentPage' => false,
+                        'subpages' => [
+                            [
+                                'uid' => 2,
+                                'hasSubpages' => true,
+                                'level' => 2,
+                                'isInRootLine' => true,
+                                'isCurrentPage' => false,
+                                'subpages' => [
+                                    [
+                                        'uid' => 3,
+                                        'hasSubpages' => false,
+                                        'level' => 3,
+                                        'isInRootLine' => false,
+                                        'isCurrentPage' => false
+                                    ],
+                                    [
+                                        'uid' => 5,
+                                        'hasSubpages' => false,
+                                        'level' => 3,
+                                        'isInRootLine' => true,
+                                        'isCurrentPage' => true
+                                    ]
+                                ]
+                            ],
+                            [
+                                'uid' => 4,
+                                'hasSubpages' => false,
+                                'level' => 2,
+                                'isInRootLine' => false,
+                                'isCurrentPage' => false
+                            ],
+                            [
+                                'uid' => 6,
+                                'hasSubpages' => false,
+                                'level' => 2,
+                                'isInRootLine' => false,
+                                'isCurrentPage' => false
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'tsfe' => ['id' => 6, 'rootLine' => [['uid' => 1], ['uid' => 6]]],
+                'configuration' => ['as' => 'my-tree', 'entryPoints' => 1, 'depth' => 2, 'includeRootPages' => true, 'includeNotInMenu' => 1],
+                'expected' => [
+                    [
+                        'uid' => 1,
+                        'hasSubpages' => true,
+                        'level' => 1,
+                        'isInRootLine' => true,
+                        'isCurrentPage' => false,
+                        'subpages' => [
+                            [
+                                'uid' => 2,
+                                'hasSubpages' => true,
+                                'level' => 2,
+                                'isInRootLine' => false,
+                                'isCurrentPage' => false,
+                                'subpages' => [
+                                    [
+                                        'uid' => 3,
+                                        'hasSubpages' => false,
+                                        'level' => 3,
+                                        'isInRootLine' => false,
+                                        'isCurrentPage' => false
+                                    ],
+                                    [
+                                        'uid' => 5,
+                                        'hasSubpages' => false,
+                                        'level' => 3,
+                                        'isInRootLine' => false,
+                                        'isCurrentPage' => false
+                                    ]
+                                ]
+                            ],
+                            [
+                                'uid' => 4,
+                                'hasSubpages' => false,
+                                'level' => 2,
+                                'isInRootLine' => false,
+                                'isCurrentPage' => false
+                            ],
+                            [
+                                'uid' => 6,
+                                'hasSubpages' => false,
+                                'level' => 2,
+                                'isInRootLine' => true,
+                                'isCurrentPage' => true
                             ]
                         ]
                     ]

@@ -8,7 +8,10 @@
     <pages>
         <uid>1</uid>
         <pid>0</pid>
+        <sys_language_uid>0</sys_language_uid>
         <title>page-1</title>
+        <l10n_parent>0</l10n_parent>
+        <nav_hide>0</nav_hide>
     </pages>
     <pages>
         <uid>2</uid>
@@ -18,5 +21,4 @@
         <l10n_parent>1</l10n_parent>
         <nav_hide>1</nav_hide>
     </pages>
-
 </dataset>

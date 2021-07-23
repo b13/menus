@@ -74,6 +74,111 @@ class BreadcrumbsMenuTest extends DataProcessingTest
                         'isCurrentPage' => true
                     ]
                 ]
+            ],
+            [
+                'tsfe' => ['id' => 5, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 5]]],
+                'configuration' => [],
+                'expected' => [
+                    [
+                        'uid' => 2,
+                        'hasSubpages' => false,
+                        'level' => 2,
+                        'isInRootLine' => true,
+                        'isCurrentPage' => false
+                    ],
+                    [
+                        'uid' => 1,
+                        'hasSubpages' => false,
+                        'level' => 1,
+                        'isInRootLine' => true,
+                        'isCurrentPage' => false
+                    ]
+                ]
+            ],
+            [
+                'tsfe' => ['id' => 5, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 5]]],
+                'configuration' => ['includeNotInMenu' => 1],
+                'expected' => [
+                    [
+                        'uid' => 5,
+                        'hasSubpages' => false,
+                        'level' => 3,
+                        'isInRootLine' => true,
+                        'isCurrentPage' => true
+                    ],
+                    [
+                        'uid' => 2,
+                        'hasSubpages' => false,
+                        'level' => 2,
+                        'isInRootLine' => true,
+                        'isCurrentPage' => false
+                    ],
+                    [
+                        'uid' => 1,
+                        'hasSubpages' => false,
+                        'level' => 1,
+                        'isInRootLine' => true,
+                        'isCurrentPage' => false
+                    ]
+                ]
+            ],
+            [
+                'tsfe' => ['id' => 5, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 5]]],
+                'configuration' => ['includeNotInMenu' => 1, 'excludePages' => '1'],
+                'expected' => [
+                    [
+                        'uid' => 5,
+                        'hasSubpages' => false,
+                        'level' => 2,
+                        'isInRootLine' => true,
+                        'isCurrentPage' => true
+                    ],
+                    [
+                        'uid' => 2,
+                        'hasSubpages' => false,
+                        'level' => 1,
+                        'isInRootLine' => true,
+                        'isCurrentPage' => false
+                    ]
+                ]
+            ],
+            [
+                'tsfe' => ['id' => 5, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 5]]],
+                'configuration' => ['includeNotInMenu' => 1, 'excludeDoktypes' => 99],
+                'expected' => [
+                    [
+                        'uid' => 5,
+                        'hasSubpages' => false,
+                        'level' => 2,
+                        'isInRootLine' => true,
+                        'isCurrentPage' => true
+                    ],
+                    [
+                        'uid' => 1,
+                        'hasSubpages' => false,
+                        'level' => 1,
+                        'isInRootLine' => true,
+                        'isCurrentPage' => false
+                    ]
+                ]
+            ],
+            [
+                'tsfe' => ['id' => 5, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 5]]],
+                'configuration' => ['includeNotInMenu' => 1, 'excludeDoktypes' => 99, 'excludePages' => '1'],
+                'expected' => [
+                    [
+                        'uid' => 5,
+                        'hasSubpages' => false,
+                        'level' => 1,
+                        'isInRootLine' => true,
+                        'isCurrentPage' => true
+                    ]
+                ]
+            ],
+            [
+                'tsfe' => ['id' => 5, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 5]]],
+                'configuration' => ['excludeDoktypes' => 99, 'excludePages' => '1'],
+                'expected' => []
             ]
         ];
     }

@@ -56,7 +56,7 @@ class MenuRepository
                 continue;
             }
             $page = $this->pageRepository->getPage((int)$pageInRootLine['uid']);
-            if (!$this->isPageSuitableForLanguage($page, $languageAspect)) {
+            if (!$this->isPageSuitableForLanguage($page, $languageAspect, $configuration)) {
                 continue;
             }
             if (!isset($page['doktype']) || in_array($page['doktype'], $excludeDoktypes)) {
@@ -72,18 +72,18 @@ class MenuRepository
     {
         $page = $this->pageRepository->getPage($pageId);
         $languageAspect = $this->context->getAspect('language');
-        if (!$this->isPageSuitableForLanguage($page, $languageAspect)) {
+        if (!$this->isPageSuitableForLanguage($page, $languageAspect, $configuration)) {
             return [];
         }
         $this->populateAdditionalKeysForPage($page);
         return $page;
     }
 
-    public function getPageInLanguage(int $pageId, Context $context): array
+    public function getPageInLanguage(int $pageId, Context $context, array $configuration): array
     {
         $pageRepository = GeneralUtility::makeInstance(PageRepository::class, $context);
         $page = $pageRepository->getPage($pageId);
-        if ((int)$page['nav_hide'] === 1 || !$pageRepository->isPageSuitableForLanguage($page, $context->getAspect('language'))) {
+        if (!$this->isPageIncludable($page, $configuration) || !$pageRepository->isPageSuitableForLanguage($page, $context->getAspect('language'))) {
             return [];
         }
         $this->populateAdditionalKeysForPage($page);
@@ -94,7 +94,7 @@ class MenuRepository
     {
         $page = $this->pageRepository->getPage($startPageId);
         $languageAspect = $this->context->getAspect('language');
-        if (!$this->isPageSuitableForLanguage($page, $languageAspect)) {
+        if (!$this->isPageSuitableForLanguage($page, $languageAspect, $configuration)) {
             return [];
         }
         $page['subpages'] = $this->getSubPagesOfPage((int)$page['uid'], $depth, $configuration);
@@ -129,6 +129,15 @@ class MenuRepository
         return empty($excludePages) ? null : $excludePages;
     }
 
+    /**
+     * @param array $configuration
+     * @return bool
+     */
+    protected function getIncludeNotInMenu(array $configuration): bool
+    {
+        return 1 === (int)($configuration['includeNotInMenu'] ?? 0);
+    }
+
     public function getSubPagesOfPage(int $pageId, int $depth, array $configuration)
     {
         $whereClause = '';
@@ -148,7 +157,7 @@ class MenuRepository
         /** @var LanguageAspect $languageAspect */
         $languageAspect = $this->context->getAspect('language');
         foreach ($pageTree as $k => &$page) {
-            if (!$this->isPageSuitableForLanguage($page, $languageAspect)) {
+            if (!$this->isPageSuitableForLanguage($page, $languageAspect, $configuration)) {
                 unset($pageTree[$k]);
                 continue;
             }
@@ -160,9 +169,14 @@ class MenuRepository
         return $pageTree;
     }
 
-    protected function isPageSuitableForLanguage(array $page, LanguageAspect $languageAspect): bool
+    protected function isPageSuitableForLanguage(array $page, LanguageAspect $languageAspect, array $configuration): bool
     {
-        return (int)$page['nav_hide'] !== 1 && $this->pageRepository->isPageSuitableForLanguage($page, $languageAspect);
+        return $this->isPageIncludable($page, $configuration) && $this->pageRepository->isPageSuitableForLanguage($page, $languageAspect);
+    }
+
+    protected function isPageIncludable(array $page, array $configuration): bool
+    {
+        return ($this->getIncludeNotInMenu($configuration) || (int)$page['nav_hide'] !== 1);
     }
 
     protected function populateAdditionalKeysForPage(array &$page): void
