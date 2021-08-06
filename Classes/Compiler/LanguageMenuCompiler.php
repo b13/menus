@@ -44,7 +44,7 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
                 }
                 $languageAspect = LanguageAspectFactory::createFromSiteLanguage($language);
                 $context->setAspect('language', $languageAspect);
-                $page = $this->menuRepository->getPageInLanguage($targetPage, $context);
+                $page = $this->menuRepository->getPageInLanguage($targetPage, $context, $configuration);
                 if (!empty($page)) {
                     $page['language'] = $language->toArray();
                     if (!empty($page['_PAGES_OVERLAY']) && $page['_PAGES_OVERLAY'] === true) {

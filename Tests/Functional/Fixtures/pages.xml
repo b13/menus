@@ -2,10 +2,12 @@
 <dataset>
 
     <!--
-    * page-1
-    ** page 2
-    *** page 3
-    ** page 4
+    * page-1 (nav_hide = 0)
+    ** page 2 (nav_hide = 0)
+    *** page 3 (nav_hide = 0)
+    *** page 5 (nav_hide = 1)
+    ** page 4 (nav_hide = 0)
+    ** page 6 (nav_hide = 1)
     -->
 
     <pages>
@@ -13,6 +15,7 @@
         <pid>0</pid>
         <title>page-1</title>
         <slug>/page-1</slug>
+        <nav_hide>0</nav_hide>
     </pages>
     <pages>
         <uid>2</uid>
@@ -20,17 +23,34 @@
         <doktype>99</doktype>
         <title>page-2</title>
         <slug>/page-1/page-2</slug>
+        <nav_hide>0</nav_hide>
     </pages>
     <pages>
         <uid>3</uid>
         <pid>2</pid>
         <title>page-3</title>
         <slug>/page-1/page-2/page-3</slug>
+        <nav_hide>0</nav_hide>
     </pages>
     <pages>
         <uid>4</uid>
         <pid>1</pid>
         <title>page-4</title>
         <slug>/page-1/page-4</slug>
+        <nav_hide>0</nav_hide>
+    </pages>
+    <pages>
+        <uid>5</uid>
+        <pid>2</pid>
+        <title>page-5</title>
+        <slug>/page-1/page-2/page-5</slug>
+        <nav_hide>1</nav_hide>
+    </pages>
+    <pages>
+        <uid>6</uid>
+        <pid>1</pid>
+        <title>page-6</title>
+        <slug>/page-1/page-6</slug>
+        <nav_hide>1</nav_hide>
     </pages>
 </dataset>

@@ -50,6 +50,7 @@ The extension ships TypoScript cObjects and TypoScript DataProcessors for Fluid-
 
 * excludePages - a list of page IDs (and their subpages if Tree Menu or Breadcrumbs is used) to exclude from the page
 * excludeDoktypes - a list of doktypes that are not rendered. BE_USER_SECTIONs are excluded by default. SYS_FOLDERs are queried (for subpages etc) but never rendered.
+* includeNotInMenu - include pages with nav_hide set to 1, instead of ignoring them
 
 ### Common options for items
 
@@ -73,6 +74,8 @@ Pure TypoScript-based solution:
     # the number of levels to fetch from the database (1 if empty)
     page.10.depth = 3
     page.10.excludePages = 4,51
+    # 0: default, 1 to include nav_hide = 1 pages
+    page.10.includeNotInMenu = 0
     page.10.renderObj.level1 = TEXT
     page.10.renderObj.level1.typolink.parameter.data = field:uid
     page.10.renderObj.level1.typolink.ATagParams = class="active"
@@ -86,6 +89,8 @@ Fluid-based solution:
     page.10.dataProcessing.10.entryPoints = 23,13
     page.10.dataProcessing.10.depth = 3
     page.10.dataProcessing.10.excludePages = 4,51
+    # 0: default, 1 to include nav_hide = 1 pages
+    page.10.dataProcessing.10.includeNotInMenu = 0
     page.10.dataProcessing.10.as = mobilemenu
 
 Usage in Fluid:
@@ -113,6 +118,8 @@ Pure TypoScript solution:
 
     page.10 = LANGUAGEMENU
     page.10.excludeLanguages = de,en
+    # 0: default, 1 to include nav_hide = 1 pages
+    page.10.includeNotInMenu = 0
     page.10.wrap = <ul> | </ul>
     page.10.renderObj = TEXT
     page.10.renderObj.typolink.parameter.data = field:uid
@@ -126,6 +133,8 @@ Fluid-based solution:
     page.10 = FLUIDTEMPLATE
     page.10.dataProcessing.10 = B13\Menus\DataProcessing\LanguageMenu
     page.10.dataProcessing.10.excludeLanguages = de,en
+    # 0: default, 1 to include nav_hide = 1 pages
+    page.10.dataProcessing.10.includeNotInMenu = 0
     page.10.dataProcessing.10.as = languageswitcher
 
 Usage in Fluid:
@@ -147,6 +156,8 @@ Pure TypoScript-based solution:
     page.10 = LISTMENU
     # a page ID, rootpageID is used if none given, stdWrap possible
     page.10.pages = 13,14,15
+    # 0: default, 1 to include nav_hide = 1 pages
+    page.10.includeNotInMenu = 0
 
 Fluid-based solution:
 
@@ -154,6 +165,8 @@ Fluid-based solution:
     page.10.dataProcessing.10 = B13\Menus\DataProcessing\ListMenu
     page.10.dataProcessing.10.pages = 13,14,15
     page.10.dataProcessing.10.as = footerlinks
+    # 0: default, 1 to include nav_hide = 1 pages
+    page.10.dataProcessing.10.includeNotInMenu = 0
 
 Usage in Fluid:
 
@@ -168,6 +181,8 @@ Usage in Fluid:
 
     page.10 = BREADCRUMBS
     page.10.excludePages = 4,51
+    # 0: default, 1 to include nav_hide = 1 pages
+    page.10.includeNotInMenu = 0
     page.10.wrap = <ul> | </ul>
     page.10.renderObj = TEXT
     page.10.renderObj.typolink.parameter.data = field:uid
@@ -179,6 +194,8 @@ Fluid-based solution:
     page.10 = FLUIDTEMPLATE
     page.10.dataProcessing.10 = B13\Menus\DataProcessing\BreadcrumbsMenu
     page.10.dataProcessors.10.excludePages = 4,51
+    # 0: default, 1 to include nav_hide = 1 pages
+    page.10.dataProcessing.10.includeNotInMenu = 0
     page.10.dataProcessing.10.as = breadcrumbs
 
 Usage in Fluid:
@@ -199,7 +216,7 @@ If you want to get a menu of the direct siblings of a page, no matter what page 
 		entryPoints.data = page:pid
 		as = listOfJobPages
 	}
-    
+
 By using the `.data` property of the entryPointy attribute we can access each property of the currently build page. And so we can render the siblings of the page.
 
 ## Technical Details
