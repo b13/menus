@@ -36,7 +36,7 @@ class MenuRepositoryTest extends UnitTestCase
             PageRepository::DOKTYPE_SYSFOLDER
         ];
         $pageRepository->getMenu(1, '*', 'sorting', Argument::any(), false)->willReturn([]);
-        $pageRepository->getMenu(1, '*', 'sorting', 'AND doktype NOT IN (' . implode(',', $excludedDoktypes) . ') AND nav_hide=0 ', false)->shouldBeCalled()->willReturn([]);
+        $pageRepository->getMenu(1, '*', 'sorting', 'AND doktype NOT IN (' . implode(',', $excludedDoktypes) . ') ', false)->shouldBeCalled()->willReturn([]);
 
         $menuRepository = $this->getMockBuilder(MenuRepository::class)
             ->setMethods(['foo'])
@@ -59,7 +59,7 @@ class MenuRepositoryTest extends UnitTestCase
             PageRepository::DOKTYPE_SYSFOLDER
         ];
         $pageRepository->getMenu(1, '*', 'sorting', Argument::any(), false)->willReturn([]);
-        $pageRepository->getMenu(1, '*', 'sorting', 'AND doktype NOT IN (' . implode(',', $excludedDoktypes) . ',99) AND nav_hide=0 ', false)->shouldBeCalled()->willReturn([]);
+        $pageRepository->getMenu(1, '*', 'sorting', 'AND doktype NOT IN (' . implode(',', $excludedDoktypes) . ',99) ', false)->shouldBeCalled()->willReturn([]);
 
         $menuRepository = $this->getMockBuilder(MenuRepository::class)
             ->setMethods(['foo'])
@@ -74,8 +74,8 @@ class MenuRepositoryTest extends UnitTestCase
     public function getBreadcrumbsMenuRespectConfiguredExcludeDoktypes(): void
     {
         $rootLine = [
-            ['uid' => 1, 'doktype' => 99],
-            ['uid' => 2, 'doktype' => 98]
+            ['uid' => 1, 'doktype' => 99, 'nav_hide'=> 0,],
+            ['uid' => 2, 'doktype' => 98, 'nav_hide'=> 0,],
         ];
         $context = $this->prophesize(Context::class);
         $context->getAspect('language')->willReturn($this->prophesize(LanguageAspect::class)->reveal());
