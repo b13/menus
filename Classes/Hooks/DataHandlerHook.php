@@ -44,10 +44,11 @@ class DataHandlerHook
 
     public function clearMenuCaches(array $params, DataHandler $dataHandler): void
     {
-        if ($params['table'] !== 'pages' || empty($params['uid_page'])) {
+        $pageId = (int)($params['uid_page'] ?? 0);
+        if ($params['table'] ?? '' !== 'pages' || $pageId === 0) {
             return;
         }
-        $pageId = (int)$params['uid_page'];
+
         $menuTags = ['menuId_' . $pageId];
         // Clear caches of the parent page as well (needed when moving records)
         $parentPageId = $dataHandler->getPID('pages', $pageId);
