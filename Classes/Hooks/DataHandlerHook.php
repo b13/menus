@@ -45,7 +45,7 @@ class DataHandlerHook
     public function clearMenuCaches(array $params, DataHandler $dataHandler): void
     {
         $pageId = (int)($params['uid_page'] ?? 0);
-        if ($params['table'] ?? '' !== 'pages' || $pageId === 0) {
+        if (($params['table'] ?? '') !== 'pages' || $pageId === 0) {
             return;
         }
 
