@@ -22,11 +22,11 @@ class TreeMenuCompiler extends AbstractMenuCompiler
     {
         $cacheIdentifier = $this->generateCacheIdentifierForMenu('tree', $configuration);
 
-        $includeStartPageIds = $contentObjectRenderer->stdWrap($configuration['includeRootPages'] ?? false, $configuration['includeRootPages.']);
-        $startPageIds = $contentObjectRenderer->stdWrap($configuration['entryPoints'] ?? $this->getCurrentSite()->getRootPageId(), $configuration['entryPoints.']);
+        $includeStartPageIds = $contentObjectRenderer->stdWrap($configuration['includeRootPages'] ?? false, $configuration['includeRootPages.'] ?? []);
+        $startPageIds = $contentObjectRenderer->stdWrap($configuration['entryPoints'] ?? $this->getCurrentSite()->getRootPageId(), $configuration['entryPoints.'] ?? []);
         $startPageIds = GeneralUtility::intExplode(',', $startPageIds);
-        $depth = (int)$contentObjectRenderer->stdWrap($configuration['depth'] ?? 1, $configuration['depth.']);
-        $excludePages = $this->parseStdWrap($configuration['excludePages'], $configuration['excludePages.']);
+        $depth = (int)$contentObjectRenderer->stdWrap($configuration['depth'] ?? 1, $configuration['depth.'] ?? []);
+        $excludePages = $this->parseStdWrap($configuration['excludePages'] ?? '', $configuration['excludePages.'] ?? []);
         $configuration['excludePages'] = $excludePages;
 
         $cacheIdentifier .= '-' . GeneralUtility::shortMD5(json_encode([$includeStartPageIds, $startPageIds, $depth, $excludePages]));
