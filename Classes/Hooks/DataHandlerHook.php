@@ -25,29 +25,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class DataHandlerHook
 {
-    /**
-     * @var FrontendInterface
-     */
-    protected $cacheHash;
-
-    /**
-     * @var FrontendInterface
-     */
-    protected $cachePages;
-
-    public function __construct(
-        FrontendInterface $cacheHash = null,
-        FrontendInterface $cachePages = null
-    ) {
-        if ((new Typo3Version())->getMajorVersion() < 10) {
-            $this->cacheHash = $cacheHash ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('cache_hash');
-            $this->cachePages = $cachePages ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('cache_pages');
-        } else {
-            $this->cacheHash = $cacheHash ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('hash');
-            $this->cachePages = $cachePages ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('pages');
-        }
-    }
-
     public function clearMenuCaches(array $params, DataHandler $dataHandler): void
     {
         $pageId = (int)($params['uid_page'] ?? 0);
@@ -61,7 +38,9 @@ class DataHandlerHook
         if ($parentPageId > 0) {
             $menuTags[] = 'menuId_' . $parentPageId;
         }
-        $this->cacheHash->flushByTags($menuTags);
-        $this->cachePages->flushByTags($menuTags);
+
+        /** @var CacheManager $cacheManager */
+        $cacheManager = GeneralUtility::makeInstance(CacheManager::class);
+        $cacheManager->flushCachesByTags($menuTags);
     }
 }
