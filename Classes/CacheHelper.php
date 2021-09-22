@@ -14,6 +14,7 @@ namespace B13\Menus;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
@@ -39,7 +40,11 @@ class CacheHelper implements SingletonInterface
 
     public function __construct(FrontendInterface $cache = null, Context $context = null)
     {
-        $this->cache = $cache ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('cache_hash');
+        if ((new Typo3Version())->getMajorVersion() < 10) {
+            $this->cache = $cache ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('cache_hash');
+        } else {
+            $this->cache = $cache ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('hash');
+        }
         if ($context === null) {
             $context = GeneralUtility::makeInstance(Context::class);
         }

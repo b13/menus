@@ -15,6 +15,7 @@ namespace B13\Menus\Hooks;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -38,8 +39,13 @@ class DataHandlerHook
         FrontendInterface $cacheHash = null,
         FrontendInterface $cachePages = null
     ) {
-        $this->cacheHash = $cacheHash ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('cache_hash');
-        $this->cachePages = $cachePages ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('cache_pages');
+        if ((new Typo3Version())->getMajorVersion() < 10) {
+            $this->cacheHash = $cacheHash ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('cache_hash');
+            $this->cachePages = $cachePages ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('cache_pages');
+        } else {
+            $this->cacheHash = $cacheHash ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('hash');
+            $this->cachePages = $cachePages ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('pages');
+        }
     }
 
     public function clearMenuCaches(array $params, DataHandler $dataHandler): void
