@@ -43,7 +43,7 @@ abstract class AbstractMenu implements DataProcessorInterface
      */
     protected function processAdditionalDataProcessors(&$page, $processorConfiguration)
     {
-        if (is_array($page['subpages'])) {
+        if (isset($page['subpages']) && is_array($page['subpages'])) {
             foreach ($page['subpages'] as &$item) {
                 $this->processAdditionalDataProcessors($item, $processorConfiguration);
             }
