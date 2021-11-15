@@ -10,13 +10,11 @@ namespace B13\Menus\Tests\Unit\DataProcessing;
  * of the License, or any later version.
  */
 
-
 use B13\Menus\DataProcessing\BreadcrumbsMenu;
 use B13\Menus\Domain\Repository\MenuRepository;
 use TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
-
 
 class BreadcrumbsMenuTest extends UnitTestCase
 {
@@ -47,9 +45,9 @@ class BreadcrumbsMenuTest extends UnitTestCase
             ->getMock();
         $contentObjectRenderer->stdWrapValue('as', [], 'breadcrumbs')->willReturn('breadcrumbs');
         $processedData = $breadcrumbsMenuDataProcessor->process($contentObjectRenderer->reveal(), [], [], []);
-        $this->assertTrue($processedData['breadcrumbs'][0]['isInRootLine']);
-        $this->assertTrue($processedData['breadcrumbs'][1]['isInRootLine']);
-        $this->assertFalse($processedData['breadcrumbs'][0]['isCurrentPage']);
-        $this->assertTrue($processedData['breadcrumbs'][1]['isCurrentPage']);
+        self::assertTrue($processedData['breadcrumbs'][0]['isInRootLine']);
+        self::assertTrue($processedData['breadcrumbs'][1]['isInRootLine']);
+        self::assertFalse($processedData['breadcrumbs'][0]['isCurrentPage']);
+        self::assertTrue($processedData['breadcrumbs'][1]['isCurrentPage']);
     }
 }

@@ -10,7 +10,6 @@ namespace B13\Menus\Tests\Functional\Hooks;
  * of the License, or any later version.
  */
 
-
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -19,19 +18,18 @@ use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
-
 class DataHandlerTest extends FunctionalTestCase
 {
 
     /**
      * @var DataHandler
      */
-    protected $dataHandler = null;
+    protected $dataHandler;
 
     /**
      * @var BackendUserAuthentication
      */
-    protected $backendUser = null;
+    protected $backendUser;
 
     /**
      * @var array
@@ -115,6 +113,6 @@ class DataHandlerTest extends FunctionalTestCase
             ->from('cache_pages')
             ->execute()
             ->fetchAll();
-        $this->assertSame(0, count($rows));
+        self::assertSame(0, count($rows));
     }
 }

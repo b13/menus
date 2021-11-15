@@ -10,10 +10,8 @@ namespace B13\Menus\Tests\Unit;
  * of the License, or any later version.
  */
 
-
 use B13\Menus\PageStateMarker;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
-
 
 class PageStateMarkerTest extends UnitTestCase
 {
@@ -36,8 +34,8 @@ class PageStateMarkerTest extends UnitTestCase
         ];
         $GLOBALS['TSFE']->id = 2;
         PageStateMarker::markStatesRecursively($page, 1);
-        $this->assertTrue($page['isInRootLine']);
-        $this->assertTrue($page['subpages'][0]['isInRootLine']);
+        self::assertTrue($page['isInRootLine']);
+        self::assertTrue($page['subpages'][0]['isInRootLine']);
     }
 
     /**
@@ -66,8 +64,8 @@ class PageStateMarkerTest extends UnitTestCase
         ];
         $GLOBALS['TSFE']->id = 3;
         PageStateMarker::markStatesRecursively($page, 1);
-        $this->assertTrue($page['isInRootLine']);
-        $this->assertTrue($page['subpages'][0]['isInRootLine']);
-        $this->assertTrue($page['subpages'][0]['subpages'][0]['isInRootLine']);
+        self::assertTrue($page['isInRootLine']);
+        self::assertTrue($page['subpages'][0]['isInRootLine']);
+        self::assertTrue($page['subpages'][0]['subpages'][0]['isInRootLine']);
     }
 }

@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace B13\Menus\DataProcessing;
 
 /*
@@ -13,8 +14,8 @@ namespace B13\Menus\DataProcessing;
 use B13\Menus\Domain\Repository\MenuRepository;
 use B13\Menus\PageStateMarker;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
  * DataProcessor to retrieve a list of all pages of the current rootline to build a breadcrumb menu.
@@ -24,7 +25,7 @@ class BreadcrumbsMenu extends AbstractMenu
     /**
      * @var MenuRepository
      */
-    protected $menuRepository = null;
+    protected $menuRepository;
 
     public function __construct(ContentDataProcessor $contentDataProcessor = null, MenuRepository $menuRepository = null)
     {

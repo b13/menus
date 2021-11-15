@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 namespace B13\Menus;
 
 /*
@@ -13,12 +13,12 @@ namespace B13\Menus;
 
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
-use TYPO3\CMS\Core\Context\Context;
 
 /**
  * This is a helper class and a wrapper around "cache_hash".
@@ -51,7 +51,6 @@ class CacheHelper implements SingletonInterface
         try {
             $this->workspaceId = (int)$context->getPropertyFromAspect('workspace', 'id');
         } catch (AspectNotFoundException $e) {
-
         }
     }
 

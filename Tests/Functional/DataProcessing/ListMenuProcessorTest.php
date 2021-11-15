@@ -111,10 +111,10 @@ class ListMenuProcessorTest extends DataProcessingTest
                     ]
                 ]
             ],
-            # tests with includeNotInMenu
+            // tests with includeNotInMenu
             [
                 'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2]]],
-                'configuration' => ['as' => 'my-list', 'pages' => '2,4,6', 'includeNotInMenu' => 1,],
+                'configuration' => ['as' => 'my-list', 'pages' => '2,4,6', 'includeNotInMenu' => 1],
                 'expected' => [
                     [
                         'uid' => 2,
@@ -138,7 +138,7 @@ class ListMenuProcessorTest extends DataProcessingTest
             ],
             [
                 'tsfe' => ['id' => 4, 'rootLine' => [['uid' => 1], ['uid' => 4]]],
-                'configuration' => ['as' => 'my-list', 'pages' => '2,4,6', 'includeNotInMenu' => 1,],
+                'configuration' => ['as' => 'my-list', 'pages' => '2,4,6', 'includeNotInMenu' => 1],
                 'expected' => [
                     [
                         'uid' => 2,
@@ -162,7 +162,7 @@ class ListMenuProcessorTest extends DataProcessingTest
             ],
             [
                 'tsfe' => ['id' => 4, 'rootLine' => [['uid' => 1], ['uid' => 4]]],
-                'configuration' => ['as' => 'my-list', 'pages' => '2,4,3,5,6', 'includeNotInMenu' => 1,],
+                'configuration' => ['as' => 'my-list', 'pages' => '2,4,3,5,6', 'includeNotInMenu' => 1],
                 'expected' => [
                     [
                         'uid' => 2,
@@ -198,7 +198,7 @@ class ListMenuProcessorTest extends DataProcessingTest
             ],
             [
                 'tsfe' => ['id' => 3, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 3]]],
-                'configuration' => ['as' => 'my-list', 'pages' => '2,4,3,5,6', 'includeNotInMenu' => 1,],
+                'configuration' => ['as' => 'my-list', 'pages' => '2,4,3,5,6', 'includeNotInMenu' => 1],
                 'expected' => [
                     [
                         'uid' => 2,
@@ -234,7 +234,7 @@ class ListMenuProcessorTest extends DataProcessingTest
             ],
             [
                 'tsfe' => ['id' => 5, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 5]]],
-                'configuration' => ['as' => 'my-list', 'pages' => '2,4,3,5,6', 'includeNotInMenu' => 1,],
+                'configuration' => ['as' => 'my-list', 'pages' => '2,4,3,5,6', 'includeNotInMenu' => 1],
                 'expected' => [
                     [
                         'uid' => 2,
@@ -270,7 +270,7 @@ class ListMenuProcessorTest extends DataProcessingTest
             ],
             [
                 'tsfe' => ['id' => 6, 'rootLine' => [['uid' => 1], ['uid' => 6]]],
-                'configuration' => ['as' => 'my-list', 'pages' => '2,4,3,5,6', 'includeNotInMenu' => 1,],
+                'configuration' => ['as' => 'my-list', 'pages' => '2,4,3,5,6', 'includeNotInMenu' => 1],
                 'expected' => [
                     [
                         'uid' => 2,
@@ -340,22 +340,22 @@ class ListMenuProcessorTest extends DataProcessingTest
             [
                 'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2]]],
                 'configuration' => ['as' => 'my-list', 'pages' => '2,4,6'],
-                'expectedTags' => ['menuId_1',],
+                'expectedTags' => ['menuId_1'],
             ],
             [
                 'tsfe' => ['id' => 4, 'rootLine' => [['uid' => 1], ['uid' => 4]]],
                 'configuration' => ['as' => 'my-list', 'pages' => '2,4,6'],
-                'expectedTags' => ['menuId_1',],
+                'expectedTags' => ['menuId_1'],
             ],
             [
                 'tsfe' => ['id' => 4, 'rootLine' => [['uid' => 1], ['uid' => 4]]],
                 'configuration' => ['as' => 'my-list', 'pages' => '2,4,3,5,6'],
-                'expectedTags' => ['menuId_1','menuId_2',],
+                'expectedTags' => ['menuId_1', 'menuId_2'],
             ],
             [
                 'tsfe' => ['id' => 3, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 3]]],
                 'configuration' => ['as' => 'my-list', 'pages' => '2,4,3,5,6'],
-                'expectedTags' => ['menuId_1','menuId_2',],
+                'expectedTags' => ['menuId_1', 'menuId_2'],
             ]
         ];
     }

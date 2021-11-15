@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace B13\Menus\DataProcessing;
 
 /*
@@ -24,7 +25,7 @@ abstract class AbstractMenu implements DataProcessorInterface
     /**
      * @var ContentDataProcessor
      */
-    protected $contentDataProcessor = null;
+    protected $contentDataProcessor;
 
     /**
      * Constructor

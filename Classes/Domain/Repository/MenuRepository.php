@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace B13\Menus\Domain\Repository;
 
 /*
@@ -176,7 +177,7 @@ class MenuRepository
 
     protected function isPageIncludable(array $page, array $configuration): bool
     {
-        return ($this->getIncludeNotInMenu($configuration) || (int)$page['nav_hide'] !== 1);
+        return $this->getIncludeNotInMenu($configuration) || (int)$page['nav_hide'] !== 1;
     }
 
     protected function populateAdditionalKeysForPage(array &$page): void

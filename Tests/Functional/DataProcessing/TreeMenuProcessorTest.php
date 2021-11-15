@@ -10,14 +10,12 @@ namespace B13\Menus\Tests\Functional\DataProcessing;
  * of the License, or any later version.
  */
 
-
 use B13\Menus\DataProcessing\TreeMenu;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Site\Entity\NullSite;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
-
 
 class TreeMenuProcessorTest extends DataProcessingTest
 {
@@ -124,7 +122,7 @@ class TreeMenuProcessorTest extends DataProcessingTest
                 ]
             ],
             [
-                'tsfe' => ['id' => 5, 'rootLine' => [['uid' => 1], ['uid' => 2],['uid' => 5]]],
+                'tsfe' => ['id' => 5, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 5]]],
                 'configuration' => ['as' => 'my-tree', 'entryPoints' => 1, 'depth' => 2],
                 'expected' => [
                     [
@@ -152,7 +150,7 @@ class TreeMenuProcessorTest extends DataProcessingTest
                     ]
                 ]
             ],
-            # includeNotInMenu option tests
+            // includeNotInMenu option tests
             [
                 'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2]]],
                 'configuration' => ['as' => 'my-tree', 'entryPoints' => 1, 'depth' => 2, 'includeNotInMenu' => 1],
@@ -419,7 +417,7 @@ class TreeMenuProcessorTest extends DataProcessingTest
     public function cacheDataProvider()
     {
         return [
-            # entry point 2
+            // entry point 2
             [
                 'tsfe' => ['id' => 1, 'rootLine' => [['uid' => 1]]],
                 'entryPoints' => 2,
@@ -435,7 +433,7 @@ class TreeMenuProcessorTest extends DataProcessingTest
                 'entryPoints' => 2,
                 'expectedTags' => ['menuId_2']
             ],
-            # entry point 1
+            // entry point 1
             [
                 'tsfe' => ['id' => 1, 'rootLine' => [['uid' => 1]]],
                 'entryPoints' => 1,
@@ -451,7 +449,7 @@ class TreeMenuProcessorTest extends DataProcessingTest
                 'entryPoints' => 1,
                 'expectedTags' => ['menuId_1', 'menuId_2']
             ]
-            # menuId_3 and menuId_4 are never added to tags, because they are leaves
+            // menuId_3 and menuId_4 are never added to tags, because they are leaves
         ];
     }
 
