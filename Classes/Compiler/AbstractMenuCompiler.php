@@ -69,8 +69,9 @@ abstract class AbstractMenuCompiler
     {
         $groupIds = $this->context->getAspect('frontend.user')->getGroupIds();
         $language = $this->context->getAspect('language')->getId();
+        $visibility = $this->context->getAspect('visibility')->includeHiddenPages() ? '-with-hidden' : '';
         $root = $this->getCurrentSite()->getRootPageId();
-        $identifier = $prefix . '-root-' . $root . '-language-' . $language . '-groups-' . implode('_', $groupIds) . '-' . GeneralUtility::shortMD5(json_encode($configuration));
+        $identifier = $prefix . '-root-' . $root . '-language-' . $language . '-groups-' . implode('_', $groupIds) . '-' . $visibility . '-' . GeneralUtility::shortMD5(json_encode($configuration));
         return $identifier;
     }
 
