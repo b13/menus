@@ -25,9 +25,9 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
     {
         $cacheIdentifier = $this->generateCacheIdentifierForMenu('list', $configuration);
 
-        $excludedLanguages = $contentObjectRenderer->stdWrap($configuration['excludeLanguages'] ?? '', $configuration['excludeLanguages.']);
+        $excludedLanguages = $contentObjectRenderer->stdWrap($configuration['excludeLanguages'] ?? '', $configuration['excludeLanguages.'] ?? []);
         $excludedLanguages = GeneralUtility::trimExplode(',', $excludedLanguages);
-        $targetPage = $contentObjectRenderer->stdWrap($configuration['pointToPage'] ?? $GLOBALS['TSFE']->id, $configuration['pointToPage.']);
+        $targetPage = $contentObjectRenderer->stdWrap($configuration['pointToPage'] ?? $GLOBALS['TSFE']->id, $configuration['pointToPage.'] ?? []);
         $targetPage = (int)$targetPage;
 
         $cacheIdentifier .= '-' . GeneralUtility::shortMD5(json_encode([$excludedLanguages, $targetPage]));
