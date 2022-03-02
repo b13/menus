@@ -23,7 +23,7 @@ class ListMenuCompiler extends AbstractMenuCompiler
     {
         $cacheIdentifier = $this->generateCacheIdentifierForMenu('list', $configuration);
 
-        $pageIds = $contentObjectRenderer->stdWrap($configuration['pages'] ?? $this->getCurrentSite()->getRootPageId(), $configuration['pages.']);
+        $pageIds = $contentObjectRenderer->stdWrap($configuration['pages'] ?? $this->getCurrentSite()->getRootPageId(), $configuration['pages.'] ?? []);
         $pageIds = GeneralUtility::intExplode(',', $pageIds);
 
         $cacheIdentifier .= '-' . GeneralUtility::shortMD5(json_encode([$pageIds]));
