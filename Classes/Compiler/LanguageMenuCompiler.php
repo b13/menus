@@ -30,7 +30,7 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
         $targetPage = $contentObjectRenderer->stdWrap($configuration['pointToPage'] ?? $GLOBALS['TSFE']->id, $configuration['pointToPage.'] ?? []);
         $targetPage = (int)$targetPage;
 
-        $cacheIdentifier .= '-' . GeneralUtility::shortMD5(json_encode([$excludedLanguages, $targetPage]));
+        $cacheIdentifier .= '-' . substr(md5(json_encode([$excludedLanguages, $targetPage])), 0, 10);
 
         return $this->cache->get($cacheIdentifier, function () use ($contentObjectRenderer, $configuration, $excludedLanguages, $targetPage) {
             $site = $this->getCurrentSite();

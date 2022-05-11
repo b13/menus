@@ -14,7 +14,7 @@ use B13\Menus\Domain\Repository\MenuRepository;
 use Prophecy\Argument;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
-use TYPO3\CMS\Frontend\Page\PageRepository;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class MenuRepositoryTest extends UnitTestCase
