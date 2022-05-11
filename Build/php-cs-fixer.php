@@ -1,5 +1,5 @@
 <?php
 
 $config = \TYPO3\CodingStandards\CsFixerConfig::create();
-$config->getFinder()->in(__DIR__)->exclude(['build']);
+$config->getFinder()->exclude(['var'])->in(__DIR__ . '/..');
 return $config;

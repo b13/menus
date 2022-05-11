@@ -47,8 +47,8 @@ class DataHandlerTest extends FunctionalTestCase
         parent::setUp();
         $this->importDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Fixtures/pages.xml');
         $this->importDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Fixtures/caches.xml');
-        Bootstrap::initializeLanguageObject();
         $this->backendUser = $this->setUpBackendUserFromFixture(1);
+        Bootstrap::initializeLanguageObject();
         $this->dataHandler = GeneralUtility::makeInstance(DataHandler::class);
     }
 

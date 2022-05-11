@@ -1,3 +1,5 @@
+![CI](https://github.com/b13/menus/actions/workflows/ci.yml/badge.svg)
+
 # Menus - A TYPO3 Extension for creating fast menus - in a fast way
 
 ## Introduction

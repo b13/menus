@@ -9,15 +9,20 @@
     "typo3/cms-frontend": "^9.5 || ^10 || ^11"
   },
   "require-dev": {
-    "typo3/testing-framework": "~6.1.0",
-    "typo3/cms-core": "^10 || ^11",
-    "typo3/cms-frontend": "^10 || ^11",
+    "typo3/testing-framework": "^6",
+    "phpunit/phpunit": "^8.4",
+    "typo3/cms-core": "^10",
+    "typo3/cms-frontend": "^10",
     "typo3/coding-standards": "^0.4.0",
     "typo3/tailor": "^1.0"
   },
   "config": {
     "vendor-dir": ".Build/vendor",
-    "bin-dir": ".Build/bin"
+    "bin-dir": ".Build/bin",
+    "allow-plugins": {
+      "typo3/class-alias-loader": true,
+      "typo3/cms-composer-installers": true
+    }
   },
   "extra": {
     "typo3/cms": {

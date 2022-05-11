@@ -12,11 +12,11 @@ namespace Functional\DataProcessing;
 
 use B13\Menus\DataProcessing\ListMenu;
 use B13\Menus\Tests\Functional\DataProcessing\DataProcessingTest;
+use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Site\Entity\NullSite;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 class ListMenuProcessorTest extends DataProcessingTest
 {
@@ -316,9 +316,10 @@ class ListMenuProcessorTest extends DataProcessingTest
         $site = GeneralUtility::makeInstance(NullSite::class);
         $request = GeneralUtility::makeInstance(ServerRequest::class);
         $request = $request->withAttribute('site', $site);
+        $request = $request->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_FE);
         $GLOBALS['TYPO3_REQUEST'] = $request;
 
-        $GLOBALS['TSFE'] = GeneralUtility::makeInstance(TypoScriptFrontendController::class, null, $site, $site->getLanguageById(0));
+        $GLOBALS['TSFE'] = $this->getTypoScriptFrontendController($site, $tsfe['id']);
         $GLOBALS['TSFE']->rootLine = $tsfe['rootLine'];
         $GLOBALS['TSFE']->id = $tsfe['id'];
 
@@ -369,9 +370,10 @@ class ListMenuProcessorTest extends DataProcessingTest
         $site = GeneralUtility::makeInstance(NullSite::class);
         $request = GeneralUtility::makeInstance(ServerRequest::class);
         $request = $request->withAttribute('site', $site);
+        $request = $request->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_FE);
         $GLOBALS['TYPO3_REQUEST'] = $request;
 
-        $GLOBALS['TSFE'] = GeneralUtility::makeInstance(TypoScriptFrontendController::class, null, $site, $site->getLanguageById(0));
+        $GLOBALS['TSFE'] = $this->getTypoScriptFrontendController($site, $tsfe['id']);
         $GLOBALS['TSFE']->rootLine = $tsfe['rootLine'];
         $GLOBALS['TSFE']->id = $tsfe['id'];
 

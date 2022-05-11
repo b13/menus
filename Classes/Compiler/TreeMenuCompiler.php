@@ -30,7 +30,7 @@ class TreeMenuCompiler extends AbstractMenuCompiler
         $excludePages = $this->parseStdWrap($configuration['excludePages'] ?? '', $configuration['excludePages.'] ?? []);
         $configuration['excludePages'] = $excludePages;
 
-        $cacheIdentifier .= '-' . GeneralUtility::shortMD5(json_encode([$includeStartPageIds, $startPageIds, $depth, $excludePages]));
+        $cacheIdentifier .= '-' . substr(md5(json_encode([$includeStartPageIds, $startPageIds, $depth, $excludePages])), 0, 10);
 
         return $this->cache->get($cacheIdentifier, function () use ($contentObjectRenderer, $configuration, $includeStartPageIds, $startPageIds, $depth) {
             $tree = [];

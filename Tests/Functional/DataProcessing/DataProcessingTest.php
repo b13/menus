@@ -10,6 +10,15 @@ namespace B13\Menus\Tests\Functional\DataProcessing;
  * of the License, or any later version.
  */
 
+use Prophecy\Argument;
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Routing\PageArguments;
+use TYPO3\CMS\Core\Site\Entity\SiteInterface;
+use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 abstract class DataProcessingTest extends FunctionalTestCase
@@ -62,5 +71,36 @@ abstract class DataProcessingTest extends FunctionalTestCase
             }
         }
         $results = $this->reduceResults($results);
+    }
+
+    protected function getTypoScriptFrontendController(SiteInterface $site, int $pageId): TypoScriptFrontendController
+    {
+        if ((new Typo3Version())->getMajorVersion() < 11) {
+            return GeneralUtility::makeInstance(TypoScriptFrontendController::class, null, $site, $site->getLanguageById(0));
+        }
+        $context = $this->prophesize(Context::class);
+        $context->hasAspect('frontend.preview')->willReturn(false);
+        $context->setAspect('frontend.preview', Argument::any());
+        $siteLanguage = $this->prophesize(SiteLanguage::class);
+        $siteLanguage->getTypo3Language()->willReturn('default');
+        $pageArguments = $this->prophesize(PageArguments::class);
+        $pageArguments->getPageid()->willReturn($pageId);
+        $pageArguments->getPageType()->willReturn(0);
+        $pageArguments->getArguments()->willReturn([]);
+        $frontendUserAuth = $this->prophesize(FrontendUserAuthentication::class);
+
+        $controller = $this->getAccessibleMock(
+            TypoScriptFrontendController::class,
+            ['get_cache_timeout'],
+            [
+                $context->reveal(),
+                $site,
+                $siteLanguage->reveal(),
+                $pageArguments->reveal(),
+                $frontendUserAuth->reveal()
+            ]
+        );
+        $controller->expects(self::any())->method('get_cache_timeout')->willReturn(1);
+        return $controller;
     }
 }

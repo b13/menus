@@ -26,8 +26,11 @@ setUpDockerComposeDotEnv() {
     echo "PHP_XDEBUG_ON=${PHP_XDEBUG_ON}" >> .env
     echo "PHP_XDEBUG_PORT=${PHP_XDEBUG_PORT}" >> .env
     echo "DOCKER_PHP_IMAGE=${DOCKER_PHP_IMAGE}" >> .env
+    echo "TYPO3=${TYPO3}" >> .env
+    echo "PHP_VERSION=${PHP_VERSION}" >> .env
     echo "EXTRA_TEST_OPTIONS=${EXTRA_TEST_OPTIONS}" >> .env
     echo "SCRIPT_VERBOSE=${SCRIPT_VERBOSE}" >> .env
+    echo "CGLCHECK_DRY_RUN=${CGLCHECK_DRY_RUN}" >> .env
 }
 
 # Load help text into $HELP
@@ -39,7 +42,7 @@ Successfully tested with docker version 18.06.1-ce and docker-compose 1.21.2.
 
 Usage: $0 [options] [file]
 
-No arguments: Run all unit tests with PHP 7.2
+No arguments: Run all unit tests with PHP 7.4
 
 Options:
     -s <...>
@@ -51,6 +54,10 @@ Options:
             - lint: PHP linting
             - unit (default): PHP unit tests
 
+    -t <10|11>
+        Only with -s composerInstall|phpstan
+        TYPO3 core major version the extension is embedded in for testing.
+
     -d <mariadb|mssql|postgres|sqlite>
         Only with -s functional
         Specifies on which DBMS tests are performed
@@ -59,10 +66,9 @@ Options:
             - postgres: use postgres
             - sqlite: use sqlite
 
-    -p <7.2|7.3>
+    -p <7.2|7.3|7.4|8.0|8.1>
         Specifies the PHP minor version to be used
-            - 7.2 (default): use PHP 7.2
-            - 7.3: use PHP 7.3
+            - 7.4 (default): use PHP 7.4
 
     -e "<phpunit or codeception options>"
         Only with -s acceptance|functional|unit
@@ -72,7 +78,7 @@ Options:
         named "canRetrieveValueWithGP"
 
     -x
-        Only with -s functional|unit
+        Only with -s functional|unit|acceptance
         Send information to host instance for test or system under test break points. This is especially
         useful if a local PhpStorm instance is listening on default xdebug port 9000. A different port
         can be selected with -y
@@ -80,6 +86,10 @@ Options:
     -y <port>
         Send xdebug information to a different port than default 9000 if an IDE like PhpStorm
         is not listening on default port.
+
+    -n
+        Only with -s cgl
+        Activate dry-run in CGL check that does not actively change files and only prints broken ones.
 
     -u
         Update existing typo3gmbh/phpXY:latest docker images. Maintenance call to docker pull latest
@@ -94,7 +104,7 @@ Options:
         Show this help.
 
 Examples:
-    # Run unit tests using PHP 7.2
+    # Run unit tests using PHP 7.4
     ./Build/Scripts/runTests.sh
 
     # Run unit tests using PHP 7.3
@@ -119,11 +129,12 @@ cd ../testing-docker || exit 1
 ROOT_DIR=`readlink -f ${PWD}/../../`
 TEST_SUITE="unit"
 DBMS="mariadb"
-PHP_VERSION="7.2"
+PHP_VERSION="7.4"
 PHP_XDEBUG_ON=0
 PHP_XDEBUG_PORT=9000
 EXTRA_TEST_OPTIONS=""
 SCRIPT_VERBOSE=0
+TYPO3="10"
 
 # Option parsing
 # Reset in case getopts has been used previously in the shell
@@ -131,7 +142,7 @@ OPTIND=1
 # Array for invalid options
 INVALID_OPTIONS=();
 # Simple option parsing based on getopts (! not getopt)
-while getopts ":s:d:p:e:xy:huv" OPT; do
+while getopts ":s:d:p:e:t:xy:nhuvf" OPT; do
     case ${OPT} in
         s)
             TEST_SUITE=${OPTARG}
@@ -141,6 +152,9 @@ while getopts ":s:d:p:e:xy:huv" OPT; do
             ;;
         p)
             PHP_VERSION=${OPTARG}
+            ;;
+        t)
+            TYPO3=${OPTARG}
             ;;
         e)
             EXTRA_TEST_OPTIONS=${OPTARG}
@@ -154,6 +168,9 @@ while getopts ":s:d:p:e:xy:huv" OPT; do
         h)
             echo "${HELP}"
             exit 0
+            ;;
+        n)
+            CGLCHECK_DRY_RUN="-n"
             ;;
         u)
             TEST_SUITE=update
@@ -188,18 +205,6 @@ DOCKER_PHP_IMAGE=`echo "php${PHP_VERSION}" | sed -e 's/\.//'`
 shift $((OPTIND - 1))
 if [ -n "${1}" ]; then
     TEST_FILE="Web/typo3conf/ext/menus/${1}"
-else
-    case ${TEST_SUITE} in
-        acceptance)
-            TEST_FILE="Web/typo3conf/ext/menus/Tests/Acceptance"
-            ;;
-        functional)
-            TEST_FILE="Web/typo3conf/ext/menus/Tests/Functional"
-            ;;
-        unit)
-            TEST_FILE="Web/typo3conf/ext/menus/Tests/Unit"
-            ;;
-    esac
 fi
 
 if [ ${SCRIPT_VERBOSE} -eq 1 ]; then
@@ -211,6 +216,16 @@ case ${TEST_SUITE} in
     acceptance)
         setUpDockerComposeDotEnv
         docker-compose run acceptance_backend_mariadb10
+        SUITE_EXIT_CODE=$?
+        docker-compose down
+        ;;
+    cgl)
+        # Active dry-run for cgl needs not "-n" but specific options
+        if [ -n "${CGLCHECK_DRY_RUN}" ]; then
+            CGLCHECK_DRY_RUN="--dry-run --diff"
+        fi
+        setUpDockerComposeDotEnv
+        docker-compose run cgl
         SUITE_EXIT_CODE=$?
         docker-compose down
         ;;
@@ -234,7 +249,7 @@ case ${TEST_SUITE} in
                 SUITE_EXIT_CODE=$?
                 ;;
             mssql)
-                docker-compose run functional_mssql2017cu9
+                docker-compose run functional_mssql2019latest
                 SUITE_EXIT_CODE=$?
                 ;;
             postgres)
@@ -259,6 +274,12 @@ case ${TEST_SUITE} in
         SUITE_EXIT_CODE=$?
         docker-compose down
         ;;
+    phpstan)
+        setUpDockerComposeDotEnv
+        docker-compose run phpstan
+        SUITE_EXIT_CODE=$?
+        docker-compose down
+        ;;
     unit)
         setUpDockerComposeDotEnv
         docker-compose run unit
@@ -266,10 +287,10 @@ case ${TEST_SUITE} in
         docker-compose down
         ;;
     update)
-        # pull typo3gmbh/phpXY:latest versions of those ones that exist locally
-        docker images typo3gmbh/php*:latest --format "{{.Repository}}:latest" | xargs -I {} docker pull {}
-        # remove "dangling" typo3gmbh/phpXY images (those tagged as <none>)
-        docker images typo3gmbh/php* --filter "dangling=true" --format "{{.ID}}" | xargs -I {} docker rmi {}
+        # pull typo3/core-testing-*:latest versions of those ones that exist locally
+        docker images typo3/core-testing-*:latest --format "{{.Repository}}:latest" | xargs -I {} docker pull {}
+        # remove "dangling" typo3/core-testing-* images (those tagged as <none>)
+        docker images typo3/core-testing-* --filter "dangling=true" --format "{{.ID}}" | xargs -I {} docker rmi {}
         ;;
     *)
         echo "Invalid -s option argument ${TEST_SUITE}" >&2
