@@ -123,12 +123,8 @@ class CacheHelper implements SingletonInterface
     /**
      * pages.cache_timeout is not used here, as this is supposed to be relevant for content of a page, not the
      * metadata.
-     *
-     * @param array $pages
-     * @param null $maxLifetime
-     * @return int|null
      */
-    protected function getMaxLifetimeOfPages(array $pages, $maxLifetime = null): ?int
+    protected function getMaxLifetimeOfPages(array $pages, int $maxLifetime = null): ?int
     {
         foreach ($pages as $page) {
             if (!empty($page['endtime'])) {

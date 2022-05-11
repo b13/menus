@@ -72,9 +72,9 @@ class MenuRepositoryTest extends FunctionalTestCase
      * @param array $results
      * @return array
      */
-    protected function reduceResults(array $result): array
+    protected function reduceResults(array $results): array
     {
         $keys = ['uid', 'pid', 'sys_language_uid', 'l10n_parent', 'nav_hide'];
-        return array_intersect_key($result, array_flip($keys));
+        return array_intersect_key($results, array_flip($keys));
     }
 }

@@ -48,6 +48,7 @@ class MenuRepository
     public function getBreadcrumbsMenu(array $originalRootLine, array $configuration): array
     {
         $pages = [];
+        /** @var LanguageAspect $languageAspect */
         $languageAspect = $this->context->getAspect('language');
         $excludeDoktypes = $this->getExcludeDoktypes($configuration);
         $excludedPagesArray = $this->getExcludePages($configuration);
@@ -72,6 +73,7 @@ class MenuRepository
     public function getPage(int $pageId, array $configuration): array
     {
         $page = $this->pageRepository->getPage($pageId);
+        /** @var LanguageAspect $languageAspect */
         $languageAspect = $this->context->getAspect('language');
         if (!$this->isPageSuitableForLanguage($page, $languageAspect, $configuration)) {
             return [];
@@ -84,7 +86,9 @@ class MenuRepository
     {
         $pageRepository = GeneralUtility::makeInstance(PageRepository::class, $context);
         $page = $pageRepository->getPage($pageId);
-        if (!$this->isPageIncludable($page, $configuration) || !$pageRepository->isPageSuitableForLanguage($page, $context->getAspect('language'))) {
+        /** @var LanguageAspect $languageAspect */
+        $languageAspect = $context->getAspect('language');
+        if (!$this->isPageIncludable($page, $configuration) || !$pageRepository->isPageSuitableForLanguage($page, $languageAspect)) {
             return [];
         }
         $this->populateAdditionalKeysForPage($page);
@@ -94,6 +98,7 @@ class MenuRepository
     public function getPageTree(int $startPageId, int $depth, array $configuration): array
     {
         $page = $this->pageRepository->getPage($startPageId);
+        /** @var LanguageAspect $languageAspect */
         $languageAspect = $this->context->getAspect('language');
         if (!$this->isPageSuitableForLanguage($page, $languageAspect, $configuration)) {
             return [];
@@ -104,7 +109,7 @@ class MenuRepository
     }
 
     /**
-     * @param array $configurtion
+     * @param array $configuration
      * @return array
      */
     protected function getExcludeDoktypes(array $configuration): array

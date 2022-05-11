@@ -38,9 +38,8 @@ jobs:
       - name: CGL
         run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s cgl -n
 
-# todo next step
-#      - name: phpstan
-#        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -t ${{ matrix.TYPO3 }} -s phpstan
+      - name: phpstan
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -t ${{ matrix.TYPO3 }} -s phpstan
 
       - name: Unit Tests
         run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s unit
