@@ -26,19 +26,18 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
         $cacheIdentifier = $this->generateCacheIdentifierForMenu('list', $configuration);
 
         $excludedLanguages = $contentObjectRenderer->stdWrap($configuration['excludeLanguages'] ?? '', $configuration['excludeLanguages.'] ?? []);
-        $excludedLanguagesIsoCodes = GeneralUtility::trimExplode(',', $excludedLanguages, true);
-        $excludedLanguages = GeneralUtility::intExplode(',', $excludedLanguages, true);
+        $excludedLanguages = GeneralUtility::trimExplode(',', $excludedLanguages);
         $targetPage = $contentObjectRenderer->stdWrap($configuration['pointToPage'] ?? $GLOBALS['TSFE']->id, $configuration['pointToPage.'] ?? []);
         $targetPage = (int)$targetPage;
 
         $cacheIdentifier .= '-' . substr(md5(json_encode([$excludedLanguages, $targetPage])), 0, 10);
 
-        return $this->cache->get($cacheIdentifier, function () use ($configuration, $excludedLanguages, $targetPage, $excludedLanguagesIsoCodes) {
+        return $this->cache->get($cacheIdentifier, function () use ($configuration, $excludedLanguages, $targetPage) {
             $site = $this->getCurrentSite();
             $context = clone GeneralUtility::makeInstance(Context::class);
             $pages = [];
             foreach ($site->getLanguages() as $language) {
-                if (in_array($language->getTwoLetterIsoCode(), $excludedLanguagesIsoCodes, true)) {
+                if (in_array($language->getTwoLetterIsoCode(), $excludedLanguages, true)) {
                     continue;
                 }
                 if (in_array($language->getLanguageId(), $excludedLanguages, true)) {

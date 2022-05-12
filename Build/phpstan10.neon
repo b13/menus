@@ -12,3 +12,6 @@ parameters:
     -
       message: '#Call to an undefined method Prophecy\\Prophecy\\ObjectProphecy::.*#'
       path: %currentWorkingDirectory%/Tests
+    -
+      message: '#Call to function in_array\(\) with arguments int, array<string> and true will always evaluate to false.#'
+      path: %currentWorkingDirectory%/Classes/Compiler/LanguageMenuCompiler.php
