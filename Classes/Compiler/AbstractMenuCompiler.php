@@ -14,6 +14,9 @@ namespace B13\Menus\Compiler;
 use B13\Menus\CacheHelper;
 use B13\Menus\Domain\Repository\MenuRepository;
 use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Context\LanguageAspect;
+use TYPO3\CMS\Core\Context\UserAspect;
+use TYPO3\CMS\Core\Context\VisibilityAspect;
 use TYPO3\CMS\Core\Site\Entity\SiteInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -67,9 +70,15 @@ abstract class AbstractMenuCompiler
      */
     protected function generateCacheIdentifierForMenu(string $prefix, array $configuration): string
     {
-        $groupIds = $this->context->getAspect('frontend.user')->getGroupIds();
-        $language = $this->context->getAspect('language')->getId();
-        $visibility = $this->context->getAspect('visibility')->includeHiddenPages() ? '-with-hidden' : '';
+        /** @var UserAspect $frontendUserAspect */
+        $frontendUserAspect = $this->context->getAspect('frontend.user');
+        $groupIds = $frontendUserAspect->getGroupIds();
+        /** @var LanguageAspect $languageAspect */
+        $languageAspect = $this->context->getAspect('language');
+        $language = $languageAspect->getId();
+        /** @var VisibilityAspect $visibilityAspect */
+        $visibilityAspect = $this->context->getAspect('visibility');
+        $visibility = $visibilityAspect->includeHiddenPages() ? '-with-hidden' : '';
         $root = $this->getCurrentSite()->getRootPageId();
         $identifier = $prefix . '-root-' . $root . '-language-' . $language . '-groups-' . implode('_', $groupIds) . '-' . $visibility . '-' . substr(md5(json_encode($configuration)), 0, 10);
         return $identifier;

@@ -41,10 +41,6 @@ abstract class DataProcessingTest extends FunctionalTestCase
         $this->importDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Fixtures/pages.xml');
     }
 
-    /**
-     * @param array $results
-     * @return array
-     */
     protected function reduceResults(array $results): array
     {
         $reduced = [];
@@ -59,10 +55,6 @@ abstract class DataProcessingTest extends FunctionalTestCase
         return $reduced;
     }
 
-    /**
-     * @param array $results
-     * @return array
-     */
     protected function reduceResultsRecursive(array &$results): void
     {
         foreach ($results as &$result) {

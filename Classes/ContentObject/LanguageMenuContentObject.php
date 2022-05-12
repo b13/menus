@@ -52,6 +52,6 @@ class LanguageMenuContentObject extends AbstractContentObject
 
     protected function getCurrentSiteLanguage(): ?SiteLanguage
     {
-        $GLOBALS['TYPO3_REQUEST']->getAttribute('language');
+        return $GLOBALS['TYPO3_REQUEST']->getAttribute('language');
     }
 }

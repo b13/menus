@@ -1,0 +1,17 @@
+parameters:
+  level: 5
+
+  paths:
+    - %currentWorkingDirectory%/Classes
+    - %currentWorkingDirectory%/Tests
+
+  ignoreErrors:
+    -
+      message: '#Constant ORIGINAL_ROOT not found.#'
+      path: %currentWorkingDirectory%/Tests
+    -
+      message: '#Call to an undefined method Prophecy\\Prophecy\\ObjectProphecy::.*#'
+      path: %currentWorkingDirectory%/Tests
+    -
+      message: '#Call to function in_array\(\) with arguments int, array<string> and true will always evaluate to false.#'
+      path: %currentWorkingDirectory%/Classes/Compiler/LanguageMenuCompiler.php
