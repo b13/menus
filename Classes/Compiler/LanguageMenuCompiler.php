@@ -29,10 +29,11 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
         $excludedLanguages = GeneralUtility::trimExplode(',', $excludedLanguages);
         $targetPage = $contentObjectRenderer->stdWrap($configuration['pointToPage'] ?? $GLOBALS['TSFE']->id, $configuration['pointToPage.'] ?? []);
         $targetPage = (int)$targetPage;
+        $addAllSiteLanguages = isset($configuration['addAllSiteLanguages']) && (bool)$configuration['addAllSiteLanguages'] === true;
 
         $cacheIdentifier .= '-' . substr(md5(json_encode([$excludedLanguages, $targetPage])), 0, 10);
 
-        return $this->cache->get($cacheIdentifier, function () use ($configuration, $excludedLanguages, $targetPage) {
+        return $this->cache->get($cacheIdentifier, function () use ($configuration, $excludedLanguages, $targetPage, $addAllSiteLanguages) {
             $site = $this->getCurrentSite();
             $context = clone GeneralUtility::makeInstance(Context::class);
             $pages = [];
@@ -48,9 +49,13 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
                 $page = $this->menuRepository->getPageInLanguage($targetPage, $context, $configuration);
                 if (!empty($page)) {
                     $page['language'] = $language->toArray();
-                    if (!empty($page['_PAGES_OVERLAY']) && $page['_PAGES_OVERLAY'] === true) {
-                        $page['uid'] = $page['_PAGES_OVERLAY_UID'];
-                    }
+                    $page['pageIsAvailable'] = true;
+                    $pages[] = $page;
+                } elseif ($addAllSiteLanguages === true) {
+                    $page = [
+                        'language' => $language->toArray(),
+                        'pageIsAvailable' => false
+                    ];
                     $pages[] = $page;
                 }
             }

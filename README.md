@@ -122,6 +122,8 @@ Pure TypoScript solution:
     page.10.excludeLanguages = de,en
     # 0: default, 1 to include nav_hide = 1 pages
     page.10.includeNotInMenu = 0
+    # add all siteLanguages to menu even if page is not available in language (default 0)
+    page.10.addAllSiteLanguages = 1
     page.10.wrap = <ul> | </ul>
     page.10.renderObj = TEXT
     page.10.renderObj.typolink.parameter.data = field:uid
@@ -137,6 +139,8 @@ Fluid-based solution:
     page.10.dataProcessing.10.excludeLanguages = de,en
     # 0: default, 1 to include nav_hide = 1 pages
     page.10.dataProcessing.10.includeNotInMenu = 0
+    # add all siteLanguages to menu even if page is not available in language (default 0)
+    page.10.dataProcessing.10.addAllSiteLanguages = 1
     page.10.dataProcessing.10.as = languageswitcher
 
 Usage in Fluid:
