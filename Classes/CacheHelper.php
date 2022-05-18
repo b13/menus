@@ -33,10 +33,7 @@ class CacheHelper implements SingletonInterface
      */
     protected $cache;
 
-    /**
-     * @var int
-     */
-    protected $workspaceId = 0;
+    protected $disableCaching = false;
 
     public function __construct(FrontendInterface $cache = null, Context $context = null)
     {
@@ -49,8 +46,14 @@ class CacheHelper implements SingletonInterface
             $context = GeneralUtility::makeInstance(Context::class);
         }
         try {
-            $this->workspaceId = (int)$context->getPropertyFromAspect('workspace', 'id');
+            $this->disableCaching = $context->getPropertyFromAspect('workspace', 'id', 0) > 0;
         } catch (AspectNotFoundException $e) {
+        }
+        if ($this->disableCaching === false) {
+            try {
+                $this->disableCaching = $context->getPropertyFromAspect('frontend.preview', 'isPreview', false);
+            } catch (AspectNotFoundException $e) {
+            }
         }
     }
 
@@ -64,7 +67,7 @@ class CacheHelper implements SingletonInterface
      */
     public function get(string $cacheIdentifier, callable $loader): array
     {
-        if ($this->workspaceId > 0) {
+        if ($this->disableCaching) {
             return $loader();
         }
         $pages = $this->cache->get($cacheIdentifier);
