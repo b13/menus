@@ -34,8 +34,10 @@ class LanguageMenu extends AbstractMenu
         $currentLanguage = $this->getCurrentSiteLanguage();
         foreach ($pages as &$page) {
             PageStateMarker::markStates($page);
-            if ((int)$page['sys_language_uid'] === $currentLanguage->getLanguageId()) {
+            if ((int)$page['language']['languageId'] === $currentLanguage->getLanguageId()) {
                 $page['isActiveLanguage'] = true;
+            } else {
+                $page['isActiveLanguage'] = false;
             }
         }
         foreach ($pages as &$page) {

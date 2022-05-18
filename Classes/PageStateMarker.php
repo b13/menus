@@ -32,6 +32,11 @@ class PageStateMarker
         if ($level !== null) {
             $page['level'] = $level;
         }
+        if (!isset($page['uid'])) {
+            $page['isInRootLine'] = false;
+            $page['isCurrentPage'] = false;
+            return;
+        }
         $page['isInRootLine'] = self::isPageInCurrentRootLine((int)$page['uid']);
         $page['isCurrentPage'] = self::isCurrentPage((int)$page['uid']);
     }

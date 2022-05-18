@@ -41,8 +41,10 @@ class LanguageMenuContentObject extends AbstractContentObject
         $currentLanguage = $this->getCurrentSiteLanguage();
         foreach ($pages as $page) {
             PageStateMarker::markStates($page);
-            if ((int)$page['sys_language_uid'] === $currentLanguage->getLanguageId()) {
+            if ((int)$page['language']['languageId'] === $currentLanguage->getLanguageId()) {
                 $page['isActiveLanguage'] = true;
+            } else {
+                $page['isActiveLanguage'] = false;
             }
             $cObjForItems->start($page, 'pages');
             $content .= $cObjForItems->cObjGetSingle($conf['renderObj'], $conf['renderObj.']);
