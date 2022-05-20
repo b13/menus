@@ -31,16 +31,16 @@ class BreadcrumbsMenuTest extends DataProcessingTest
                         'hasSubpages' => false,
                         'level' => 2,
                         'isInRootLine' => true,
-                        'isCurrentPage' => true
+                        'isCurrentPage' => true,
                     ],
                     [
                         'uid' => 1,
                         'hasSubpages' => false,
                         'level' => 1,
                         'isInRootLine' => true,
-                        'isCurrentPage' => false
-                    ]
-                ]
+                        'isCurrentPage' => false,
+                    ],
+                ],
             ],
             [
                 'tsfe' => ['id' => 3, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 3]]],
@@ -51,16 +51,16 @@ class BreadcrumbsMenuTest extends DataProcessingTest
                         'hasSubpages' => false,
                         'level' => 2,
                         'isInRootLine' => true,
-                        'isCurrentPage' => true
+                        'isCurrentPage' => true,
                     ],
                     [
                         'uid' => 1,
                         'hasSubpages' => false,
                         'level' => 1,
                         'isInRootLine' => true,
-                        'isCurrentPage' => false
-                    ]
-                ]
+                        'isCurrentPage' => false,
+                    ],
+                ],
             ],
             [
                 'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2]]],
@@ -71,9 +71,9 @@ class BreadcrumbsMenuTest extends DataProcessingTest
                         'hasSubpages' => false,
                         'level' => 1,
                         'isInRootLine' => true,
-                        'isCurrentPage' => true
-                    ]
-                ]
+                        'isCurrentPage' => true,
+                    ],
+                ],
             ],
             [
                 'tsfe' => ['id' => 5, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 5]]],
@@ -84,16 +84,16 @@ class BreadcrumbsMenuTest extends DataProcessingTest
                         'hasSubpages' => false,
                         'level' => 2,
                         'isInRootLine' => true,
-                        'isCurrentPage' => false
+                        'isCurrentPage' => false,
                     ],
                     [
                         'uid' => 1,
                         'hasSubpages' => false,
                         'level' => 1,
                         'isInRootLine' => true,
-                        'isCurrentPage' => false
-                    ]
-                ]
+                        'isCurrentPage' => false,
+                    ],
+                ],
             ],
             [
                 'tsfe' => ['id' => 5, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 5]]],
@@ -104,23 +104,23 @@ class BreadcrumbsMenuTest extends DataProcessingTest
                         'hasSubpages' => false,
                         'level' => 3,
                         'isInRootLine' => true,
-                        'isCurrentPage' => true
+                        'isCurrentPage' => true,
                     ],
                     [
                         'uid' => 2,
                         'hasSubpages' => false,
                         'level' => 2,
                         'isInRootLine' => true,
-                        'isCurrentPage' => false
+                        'isCurrentPage' => false,
                     ],
                     [
                         'uid' => 1,
                         'hasSubpages' => false,
                         'level' => 1,
                         'isInRootLine' => true,
-                        'isCurrentPage' => false
-                    ]
-                ]
+                        'isCurrentPage' => false,
+                    ],
+                ],
             ],
             [
                 'tsfe' => ['id' => 5, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 5]]],
@@ -131,16 +131,16 @@ class BreadcrumbsMenuTest extends DataProcessingTest
                         'hasSubpages' => false,
                         'level' => 2,
                         'isInRootLine' => true,
-                        'isCurrentPage' => true
+                        'isCurrentPage' => true,
                     ],
                     [
                         'uid' => 2,
                         'hasSubpages' => false,
                         'level' => 1,
                         'isInRootLine' => true,
-                        'isCurrentPage' => false
-                    ]
-                ]
+                        'isCurrentPage' => false,
+                    ],
+                ],
             ],
             [
                 'tsfe' => ['id' => 5, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 5]]],
@@ -151,16 +151,16 @@ class BreadcrumbsMenuTest extends DataProcessingTest
                         'hasSubpages' => false,
                         'level' => 2,
                         'isInRootLine' => true,
-                        'isCurrentPage' => true
+                        'isCurrentPage' => true,
                     ],
                     [
                         'uid' => 1,
                         'hasSubpages' => false,
                         'level' => 1,
                         'isInRootLine' => true,
-                        'isCurrentPage' => false
-                    ]
-                ]
+                        'isCurrentPage' => false,
+                    ],
+                ],
             ],
             [
                 'tsfe' => ['id' => 5, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 5]]],
@@ -171,15 +171,15 @@ class BreadcrumbsMenuTest extends DataProcessingTest
                         'hasSubpages' => false,
                         'level' => 1,
                         'isInRootLine' => true,
-                        'isCurrentPage' => true
-                    ]
-                ]
+                        'isCurrentPage' => true,
+                    ],
+                ],
             ],
             [
                 'tsfe' => ['id' => 5, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 5]]],
                 'configuration' => ['excludeDoktypes' => 99, 'excludePages' => '1'],
-                'expected' => []
-            ]
+                'expected' => [],
+            ],
         ];
     }
 

@@ -23,7 +23,7 @@ class MenuRepositoryTest extends FunctionalTestCase
      * @var array
      */
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/menus'
+        'typo3conf/ext/menus',
     ];
 
     /**
@@ -62,7 +62,7 @@ class MenuRepositoryTest extends FunctionalTestCase
             'pid' => 0,
             'sys_language_uid' => 1,
             'l10n_parent' => 1,
-            'nav_hide' => 1
+            'nav_hide' => 1,
         ];
         self::assertSame($expectedPage, $page);
         self::assertSame($expectedPage, $pageInLanguage);

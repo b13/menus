@@ -35,7 +35,7 @@ class DataHandlerTest extends FunctionalTestCase
      * @var array
      */
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/menus'
+        'typo3conf/ext/menus',
     ];
 
     /**
@@ -60,19 +60,19 @@ class DataHandlerTest extends FunctionalTestCase
         return [
             'copy page' => ['cmdmap' => ['pages' => [
                 3 => [
-                    'copy' => 2
-                ]
+                    'copy' => 2,
+                ],
             ]]],
             'move page into' => ['cmdmap' => ['pages' => [
                 3 => [
-                    'move' => 2
-                ]
+                    'move' => 2,
+                ],
             ]]],
             'move page after' => ['cmdmap' => ['pages' => [
                 3 => [
-                    'move' => -2
-                ]
-            ]]]
+                    'move' => -2,
+                ],
+            ]]],
         ];
     }
 
@@ -83,8 +83,8 @@ class DataHandlerTest extends FunctionalTestCase
     {
         $datamap = [
             'pages' => [
-                2 => ['title' => 'foo']
-            ]
+                2 => ['title' => 'foo'],
+            ],
         ];
         $this->dataHandler->start($datamap, [], $this->backendUser);
         $this->dataHandler->process_datamap();

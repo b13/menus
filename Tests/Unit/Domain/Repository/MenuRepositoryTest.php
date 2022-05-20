@@ -31,7 +31,7 @@ class MenuRepositoryTest extends UnitTestCase
         $excludedDoktypes = [
             PageRepository::DOKTYPE_BE_USER_SECTION,
             PageRepository::DOKTYPE_RECYCLER,
-            PageRepository::DOKTYPE_SYSFOLDER
+            PageRepository::DOKTYPE_SYSFOLDER,
         ];
         $pageRepository->getMenu(1, '*', 'sorting', Argument::any(), false)->willReturn([]);
         $pageRepository->getMenu(1, '*', 'sorting', 'AND doktype NOT IN (' . implode(',', $excludedDoktypes) . ') ', false)->shouldBeCalled()->willReturn([]);
@@ -54,7 +54,7 @@ class MenuRepositoryTest extends UnitTestCase
         $excludedDoktypes = [
             PageRepository::DOKTYPE_BE_USER_SECTION,
             PageRepository::DOKTYPE_RECYCLER,
-            PageRepository::DOKTYPE_SYSFOLDER
+            PageRepository::DOKTYPE_SYSFOLDER,
         ];
         $pageRepository->getMenu(1, '*', 'sorting', Argument::any(), false)->willReturn([]);
         $pageRepository->getMenu(1, '*', 'sorting', 'AND doktype NOT IN (' . implode(',', $excludedDoktypes) . ',99) ', false)->shouldBeCalled()->willReturn([]);

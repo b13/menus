@@ -28,7 +28,7 @@ abstract class DataProcessingTest extends FunctionalTestCase
      * @var array
      */
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/menus'
+        'typo3conf/ext/menus',
     ];
 
     /**
@@ -89,7 +89,7 @@ abstract class DataProcessingTest extends FunctionalTestCase
                 $site,
                 $siteLanguage->reveal(),
                 $pageArguments->reveal(),
-                $frontendUserAuth->reveal()
+                $frontendUserAuth->reveal(),
             ]
         );
         $controller->expects(self::any())->method('get_cache_timeout')->willReturn(1);
