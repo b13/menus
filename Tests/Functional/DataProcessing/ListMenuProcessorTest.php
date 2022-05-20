@@ -35,15 +35,15 @@ class ListMenuProcessorTest extends DataProcessingTest
                         'uid' => 2,
                         'hasSubpages' => false,
                         'isInRootLine' => true,
-                        'isCurrentPage' => true
+                        'isCurrentPage' => true,
                     ],
                     [
                         'uid' => 4,
                         'hasSubpages' => false,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
-                    ]
-                ]
+                        'isCurrentPage' => false,
+                    ],
+                ],
             ],
             [
                 'tsfe' => ['id' => 4, 'rootLine' => [['uid' => 1], ['uid' => 4]]],
@@ -53,15 +53,15 @@ class ListMenuProcessorTest extends DataProcessingTest
                         'uid' => 2,
                         'hasSubpages' => false,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
+                        'isCurrentPage' => false,
                     ],
                     [
                         'uid' => 4,
                         'hasSubpages' => false,
                         'isInRootLine' => true,
-                        'isCurrentPage' => true
-                    ]
-                ]
+                        'isCurrentPage' => true,
+                    ],
+                ],
             ],
             [
                 'tsfe' => ['id' => 4, 'rootLine' => [['uid' => 1], ['uid' => 4]]],
@@ -71,21 +71,21 @@ class ListMenuProcessorTest extends DataProcessingTest
                         'uid' => 2,
                         'hasSubpages' => false,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
+                        'isCurrentPage' => false,
                     ],
                     [
                         'uid' => 4,
                         'hasSubpages' => false,
                         'isInRootLine' => true,
-                        'isCurrentPage' => true
+                        'isCurrentPage' => true,
                     ],
                     [
                         'uid' => 3,
                         'hasSubpages' => false,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
-                    ]
-                ]
+                        'isCurrentPage' => false,
+                    ],
+                ],
             ],
             [
                 'tsfe' => ['id' => 3, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 3]]],
@@ -95,21 +95,21 @@ class ListMenuProcessorTest extends DataProcessingTest
                         'uid' => 2,
                         'hasSubpages' => false,
                         'isInRootLine' => true,
-                        'isCurrentPage' => false
+                        'isCurrentPage' => false,
                     ],
                     [
                         'uid' => 4,
                         'hasSubpages' => false,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
+                        'isCurrentPage' => false,
                     ],
                     [
                         'uid' => 3,
                         'hasSubpages' => false,
                         'isInRootLine' => true,
-                        'isCurrentPage' => true
-                    ]
-                ]
+                        'isCurrentPage' => true,
+                    ],
+                ],
             ],
             // tests with includeNotInMenu
             [
@@ -120,21 +120,21 @@ class ListMenuProcessorTest extends DataProcessingTest
                         'uid' => 2,
                         'hasSubpages' => false,
                         'isInRootLine' => true,
-                        'isCurrentPage' => true
+                        'isCurrentPage' => true,
                     ],
                     [
                         'uid' => 4,
                         'hasSubpages' => false,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
+                        'isCurrentPage' => false,
                     ],
                     [
                         'uid' => 6,
                         'hasSubpages' => false,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
-                    ]
-                ]
+                        'isCurrentPage' => false,
+                    ],
+                ],
             ],
             [
                 'tsfe' => ['id' => 4, 'rootLine' => [['uid' => 1], ['uid' => 4]]],
@@ -144,21 +144,21 @@ class ListMenuProcessorTest extends DataProcessingTest
                         'uid' => 2,
                         'hasSubpages' => false,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
+                        'isCurrentPage' => false,
                     ],
                     [
                         'uid' => 4,
                         'hasSubpages' => false,
                         'isInRootLine' => true,
-                        'isCurrentPage' => true
+                        'isCurrentPage' => true,
                     ],
                     [
                         'uid' => 6,
                         'hasSubpages' => false,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
-                    ]
-                ]
+                        'isCurrentPage' => false,
+                    ],
+                ],
             ],
             [
                 'tsfe' => ['id' => 4, 'rootLine' => [['uid' => 1], ['uid' => 4]]],
@@ -168,33 +168,33 @@ class ListMenuProcessorTest extends DataProcessingTest
                         'uid' => 2,
                         'hasSubpages' => false,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
+                        'isCurrentPage' => false,
                     ],
                     [
                         'uid' => 4,
                         'hasSubpages' => false,
                         'isInRootLine' => true,
-                        'isCurrentPage' => true
+                        'isCurrentPage' => true,
                     ],
                     [
                         'uid' => 3,
                         'hasSubpages' => false,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
+                        'isCurrentPage' => false,
                     ],
                     [
                         'uid' => 5,
                         'hasSubpages' => false,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
+                        'isCurrentPage' => false,
                     ],
                     [
                         'uid' => 6,
                         'hasSubpages' => false,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
-                    ]
-                ]
+                        'isCurrentPage' => false,
+                    ],
+                ],
             ],
             [
                 'tsfe' => ['id' => 3, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 3]]],
@@ -204,33 +204,33 @@ class ListMenuProcessorTest extends DataProcessingTest
                         'uid' => 2,
                         'hasSubpages' => false,
                         'isInRootLine' => true,
-                        'isCurrentPage' => false
+                        'isCurrentPage' => false,
                     ],
                     [
                         'uid' => 4,
                         'hasSubpages' => false,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
+                        'isCurrentPage' => false,
                     ],
                     [
                         'uid' => 3,
                         'hasSubpages' => false,
                         'isInRootLine' => true,
-                        'isCurrentPage' => true
+                        'isCurrentPage' => true,
                     ],
                     [
                         'uid' => 5,
                         'hasSubpages' => false,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
+                        'isCurrentPage' => false,
                     ],
                     [
                         'uid' => 6,
                         'hasSubpages' => false,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
-                    ]
-                ]
+                        'isCurrentPage' => false,
+                    ],
+                ],
             ],
             [
                 'tsfe' => ['id' => 5, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 5]]],
@@ -240,33 +240,33 @@ class ListMenuProcessorTest extends DataProcessingTest
                         'uid' => 2,
                         'hasSubpages' => false,
                         'isInRootLine' => true,
-                        'isCurrentPage' => false
+                        'isCurrentPage' => false,
                     ],
                     [
                         'uid' => 4,
                         'hasSubpages' => false,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
+                        'isCurrentPage' => false,
                     ],
                     [
                         'uid' => 3,
                         'hasSubpages' => false,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
+                        'isCurrentPage' => false,
                     ],
                     [
                         'uid' => 5,
                         'hasSubpages' => false,
                         'isInRootLine' => true,
-                        'isCurrentPage' => true
+                        'isCurrentPage' => true,
                     ],
                     [
                         'uid' => 6,
                         'hasSubpages' => false,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
-                    ]
-                ]
+                        'isCurrentPage' => false,
+                    ],
+                ],
             ],
             [
                 'tsfe' => ['id' => 6, 'rootLine' => [['uid' => 1], ['uid' => 6]]],
@@ -276,34 +276,34 @@ class ListMenuProcessorTest extends DataProcessingTest
                         'uid' => 2,
                         'hasSubpages' => false,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
+                        'isCurrentPage' => false,
                     ],
                     [
                         'uid' => 4,
                         'hasSubpages' => false,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
+                        'isCurrentPage' => false,
                     ],
                     [
                         'uid' => 3,
                         'hasSubpages' => false,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
+                        'isCurrentPage' => false,
                     ],
                     [
                         'uid' => 5,
                         'hasSubpages' => false,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
+                        'isCurrentPage' => false,
                     ],
                     [
                         'uid' => 6,
                         'hasSubpages' => false,
                         'isInRootLine' => true,
-                        'isCurrentPage' => true
-                    ]
-                ]
-            ]
+                        'isCurrentPage' => true,
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -357,7 +357,7 @@ class ListMenuProcessorTest extends DataProcessingTest
                 'tsfe' => ['id' => 3, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 3]]],
                 'configuration' => ['as' => 'my-list', 'pages' => '2,4,3,5,6'],
                 'expectedTags' => ['menuId_1', 'menuId_2'],
-            ]
+            ],
         ];
     }
 

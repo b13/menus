@@ -54,7 +54,7 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
                 } elseif ($addAllSiteLanguages === true) {
                     $page = [
                         'language' => $language->toArray(),
-                        'pageIsAvailable' => false
+                        'pageIsAvailable' => false,
                     ];
                     $pages[] = $page;
                 }

@@ -21,7 +21,7 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 class LanguageMenuCompilerTest extends FunctionalTestCase
 {
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/menus'
+        'typo3conf/ext/menus',
     ];
 
     protected $pathsToLinkInTestInstance = [
@@ -38,14 +38,14 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
             'pid' => 0,
             'l10n_parent' => 1,
             'l10n_source' => 1,
-            'sys_language_uid' => 1
+            'sys_language_uid' => 1,
         ],
         'frPage' => [
             'uid' => 3,
             'pid' => 0,
             'l10n_parent' => 1,
             'l10n_source' => 1,
-            'sys_language_uid' => 2
+            'sys_language_uid' => 2,
         ],
     ];
 
@@ -227,7 +227,7 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
             LanguageMenuCompiler::class,
             [
                 'generateCacheIdentifierForMenu',
-                'getCurrentSite'
+                'getCurrentSite',
             ]
         );
         $languageMenuCompiler->expects(self::any())->method('generateCacheIdentifierForMenu')->willReturn('foo');

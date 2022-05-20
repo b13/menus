@@ -36,7 +36,7 @@ class MenuRepository
     protected $excludedDoktypes = [
         PageRepository::DOKTYPE_BE_USER_SECTION,
         PageRepository::DOKTYPE_RECYCLER,
-        PageRepository::DOKTYPE_SYSFOLDER
+        PageRepository::DOKTYPE_SYSFOLDER,
     ];
 
     public function __construct(Context $context = null, PageRepository $pageRepository = null)

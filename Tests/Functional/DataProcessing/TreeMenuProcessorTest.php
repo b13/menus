@@ -41,18 +41,18 @@ class TreeMenuProcessorTest extends DataProcessingTest
                                 'hasSubpages' => false,
                                 'level' => 2,
                                 'isInRootLine' => false,
-                                'isCurrentPage' => false
-                            ]
-                        ]
+                                'isCurrentPage' => false,
+                            ],
+                        ],
                     ],
                     [
                         'uid' => 4,
                         'hasSubpages' => false,
                         'level' => 1,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
-                    ]
-                ]
+                        'isCurrentPage' => false,
+                    ],
+                ],
             ],
             [
                 'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2]]],
@@ -70,18 +70,18 @@ class TreeMenuProcessorTest extends DataProcessingTest
                                 'hasSubpages' => false,
                                 'level' => 2,
                                 'isInRootLine' => true,
-                                'isCurrentPage' => true
+                                'isCurrentPage' => true,
                             ],
                             [
                                 'uid' => 4,
                                 'hasSubpages' => false,
                                 'level' => 2,
                                 'isInRootLine' => false,
-                                'isCurrentPage' => false
-                            ]
-                        ]
-                    ]
-                ]
+                                'isCurrentPage' => false,
+                            ],
+                        ],
+                    ],
+                ],
             ],
             [
                 'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2]]],
@@ -106,20 +106,20 @@ class TreeMenuProcessorTest extends DataProcessingTest
                                         'hasSubpages' => false,
                                         'level' => 3,
                                         'isInRootLine' => false,
-                                        'isCurrentPage' => false
-                                    ]
-                                ]
+                                        'isCurrentPage' => false,
+                                    ],
+                                ],
                             ],
                             [
                                 'uid' => 4,
                                 'hasSubpages' => false,
                                 'level' => 2,
                                 'isInRootLine' => false,
-                                'isCurrentPage' => false
-                            ]
-                        ]
-                    ]
-                ]
+                                'isCurrentPage' => false,
+                            ],
+                        ],
+                    ],
+                ],
             ],
             [
                 'tsfe' => ['id' => 5, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 5]]],
@@ -137,18 +137,18 @@ class TreeMenuProcessorTest extends DataProcessingTest
                                 'hasSubpages' => false,
                                 'level' => 2,
                                 'isInRootLine' => false,
-                                'isCurrentPage' => false
-                            ]
-                        ]
+                                'isCurrentPage' => false,
+                            ],
+                        ],
                     ],
                     [
                         'uid' => 4,
                         'hasSubpages' => false,
                         'level' => 1,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
-                    ]
-                ]
+                        'isCurrentPage' => false,
+                    ],
+                ],
             ],
             // includeNotInMenu option tests
             [
@@ -167,32 +167,32 @@ class TreeMenuProcessorTest extends DataProcessingTest
                                 'hasSubpages' => false,
                                 'level' => 2,
                                 'isInRootLine' => false,
-                                'isCurrentPage' => false
+                                'isCurrentPage' => false,
                             ],
                             [
                                 'uid' => 5,
                                 'hasSubpages' => false,
                                 'level' => 2,
                                 'isInRootLine' => false,
-                                'isCurrentPage' => false
-                            ]
-                        ]
+                                'isCurrentPage' => false,
+                            ],
+                        ],
                     ],
                     [
                         'uid' => 4,
                         'hasSubpages' => false,
                         'level' => 1,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
+                        'isCurrentPage' => false,
                     ],
                     [
                         'uid' => 6,
                         'hasSubpages' => false,
                         'level' => 1,
                         'isInRootLine' => false,
-                        'isCurrentPage' => false
-                    ]
-                ]
+                        'isCurrentPage' => false,
+                    ],
+                ],
             ],
             [
                 'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2]]],
@@ -210,24 +210,24 @@ class TreeMenuProcessorTest extends DataProcessingTest
                                 'hasSubpages' => false,
                                 'level' => 2,
                                 'isInRootLine' => true,
-                                'isCurrentPage' => true
+                                'isCurrentPage' => true,
                             ],
                             [
                                 'uid' => 4,
                                 'hasSubpages' => false,
                                 'level' => 2,
                                 'isInRootLine' => false,
-                                'isCurrentPage' => false
+                                'isCurrentPage' => false,
                             ],
                             [
                                 'uid' => 6,
                                 'hasSubpages' => false,
                                 'level' => 2,
                                 'isInRootLine' => false,
-                                'isCurrentPage' => false
-                            ]
-                        ]
-                    ]
+                                'isCurrentPage' => false,
+                            ],
+                        ],
+                    ],
                 ],
             ],
             [
@@ -253,34 +253,34 @@ class TreeMenuProcessorTest extends DataProcessingTest
                                         'hasSubpages' => false,
                                         'level' => 3,
                                         'isInRootLine' => false,
-                                        'isCurrentPage' => false
+                                        'isCurrentPage' => false,
                                     ],
                                     [
                                         'uid' => 5,
                                         'hasSubpages' => false,
                                         'level' => 3,
                                         'isInRootLine' => false,
-                                        'isCurrentPage' => false
-                                    ]
-                                ]
+                                        'isCurrentPage' => false,
+                                    ],
+                                ],
                             ],
                             [
                                 'uid' => 4,
                                 'hasSubpages' => false,
                                 'level' => 2,
                                 'isInRootLine' => false,
-                                'isCurrentPage' => false
+                                'isCurrentPage' => false,
                             ],
                             [
                                 'uid' => 6,
                                 'hasSubpages' => false,
                                 'level' => 2,
                                 'isInRootLine' => false,
-                                'isCurrentPage' => false
-                            ]
-                        ]
-                    ]
-                ]
+                                'isCurrentPage' => false,
+                            ],
+                        ],
+                    ],
+                ],
             ],
             [
                 'tsfe' => ['id' => 5, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 5]]],
@@ -305,34 +305,34 @@ class TreeMenuProcessorTest extends DataProcessingTest
                                         'hasSubpages' => false,
                                         'level' => 3,
                                         'isInRootLine' => false,
-                                        'isCurrentPage' => false
+                                        'isCurrentPage' => false,
                                     ],
                                     [
                                         'uid' => 5,
                                         'hasSubpages' => false,
                                         'level' => 3,
                                         'isInRootLine' => true,
-                                        'isCurrentPage' => true
-                                    ]
-                                ]
+                                        'isCurrentPage' => true,
+                                    ],
+                                ],
                             ],
                             [
                                 'uid' => 4,
                                 'hasSubpages' => false,
                                 'level' => 2,
                                 'isInRootLine' => false,
-                                'isCurrentPage' => false
+                                'isCurrentPage' => false,
                             ],
                             [
                                 'uid' => 6,
                                 'hasSubpages' => false,
                                 'level' => 2,
                                 'isInRootLine' => false,
-                                'isCurrentPage' => false
-                            ]
-                        ]
-                    ]
-                ]
+                                'isCurrentPage' => false,
+                            ],
+                        ],
+                    ],
+                ],
             ],
             [
                 'tsfe' => ['id' => 6, 'rootLine' => [['uid' => 1], ['uid' => 6]]],
@@ -357,35 +357,35 @@ class TreeMenuProcessorTest extends DataProcessingTest
                                         'hasSubpages' => false,
                                         'level' => 3,
                                         'isInRootLine' => false,
-                                        'isCurrentPage' => false
+                                        'isCurrentPage' => false,
                                     ],
                                     [
                                         'uid' => 5,
                                         'hasSubpages' => false,
                                         'level' => 3,
                                         'isInRootLine' => false,
-                                        'isCurrentPage' => false
-                                    ]
-                                ]
+                                        'isCurrentPage' => false,
+                                    ],
+                                ],
                             ],
                             [
                                 'uid' => 4,
                                 'hasSubpages' => false,
                                 'level' => 2,
                                 'isInRootLine' => false,
-                                'isCurrentPage' => false
+                                'isCurrentPage' => false,
                             ],
                             [
                                 'uid' => 6,
                                 'hasSubpages' => false,
                                 'level' => 2,
                                 'isInRootLine' => true,
-                                'isCurrentPage' => true
-                            ]
-                        ]
-                    ]
-                ]
-            ]
+                                'isCurrentPage' => true,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -422,34 +422,34 @@ class TreeMenuProcessorTest extends DataProcessingTest
             [
                 'tsfe' => ['id' => 1, 'rootLine' => [['uid' => 1]]],
                 'entryPoints' => 2,
-                'expectedTags' => ['menuId_2']
+                'expectedTags' => ['menuId_2'],
             ],
             [
                 'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2]]],
                 'entryPoints' => 2,
-                'expectedTags' => ['menuId_2']
+                'expectedTags' => ['menuId_2'],
             ],
             [
                 'tsfe' => ['id' => 3, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 3]]],
                 'entryPoints' => 2,
-                'expectedTags' => ['menuId_2']
+                'expectedTags' => ['menuId_2'],
             ],
             // entry point 1
             [
                 'tsfe' => ['id' => 1, 'rootLine' => [['uid' => 1]]],
                 'entryPoints' => 1,
-                'expectedTags' => ['menuId_1', 'menuId_2']
+                'expectedTags' => ['menuId_1', 'menuId_2'],
             ],
             [
                 'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2]]],
                 'entryPoints' => 1,
-                'expectedTags' => ['menuId_1', 'menuId_2']
+                'expectedTags' => ['menuId_1', 'menuId_2'],
             ],
             [
                 'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 3]]],
                 'entryPoints' => 1,
-                'expectedTags' => ['menuId_1', 'menuId_2']
-            ]
+                'expectedTags' => ['menuId_1', 'menuId_2'],
+            ],
             // menuId_3 and menuId_4 are never added to tags, because they are leaves
         ];
     }

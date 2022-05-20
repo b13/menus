@@ -24,13 +24,13 @@ class PageStateMarkerTest extends UnitTestCase
         $page = [
             'uid' => 1,
             'subpages' => [
-                ['uid' => 2]
-            ]
+                ['uid' => 2],
+            ],
         ];
         $GLOBALS['TSFE'] = new \stdClass();
         $GLOBALS['TSFE']->rootLine = [
             ['uid' => 1],
-            ['uid' => 2]
+            ['uid' => 2],
         ];
         $GLOBALS['TSFE']->id = 2;
         PageStateMarker::markStatesRecursively($page, 1);
@@ -50,17 +50,17 @@ class PageStateMarkerTest extends UnitTestCase
                     'uid' => 2,
                     'subpages' => [
                         [
-                            'uid' => 3
-                        ]
-                    ]
-                ]
-            ]
+                            'uid' => 3,
+                        ],
+                    ],
+                ],
+            ],
         ];
         $GLOBALS['TSFE'] = new \stdClass();
         $GLOBALS['TSFE']->rootLine = [
             ['uid' => 1],
             ['uid' => 2],
-            ['uid' => 3]
+            ['uid' => 3],
         ];
         $GLOBALS['TSFE']->id = 3;
         PageStateMarker::markStatesRecursively($page, 1);

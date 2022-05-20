@@ -26,13 +26,13 @@ class BreadcrumbsMenuTest extends UnitTestCase
     {
         $pages = [
             ['uid' => 1],
-            ['uid' => 2]
+            ['uid' => 2],
 
         ];
         $GLOBALS['TSFE'] = new \stdClass();
         $GLOBALS['TSFE']->rootLine = [
             ['uid' => 1],
-            ['uid' => 2]
+            ['uid' => 2],
         ];
         $GLOBALS['TSFE']->id = 2;
         $menuRepository = $this->prophesize(MenuRepository::class);
