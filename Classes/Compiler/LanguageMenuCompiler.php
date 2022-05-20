@@ -26,7 +26,7 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
         $cacheIdentifier = $this->generateCacheIdentifierForMenu('list', $configuration);
 
         $excludedLanguages = $contentObjectRenderer->stdWrap($configuration['excludeLanguages'] ?? '', $configuration['excludeLanguages.'] ?? []);
-        $excludedLanguages = GeneralUtility::trimExplode(',', $excludedLanguages);
+        $excludedLanguages = GeneralUtility::trimExplode(',', $excludedLanguages, true);
         $targetPage = $contentObjectRenderer->stdWrap($configuration['pointToPage'] ?? $GLOBALS['TSFE']->id, $configuration['pointToPage.'] ?? []);
         $targetPage = (int)$targetPage;
         $addAllSiteLanguages = isset($configuration['addAllSiteLanguages']) && (bool)$configuration['addAllSiteLanguages'] === true;
@@ -41,7 +41,7 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
                 if (in_array($language->getTwoLetterIsoCode(), $excludedLanguages, true)) {
                     continue;
                 }
-                if (in_array($language->getLanguageId(), $excludedLanguages, true)) {
+                if (in_array((string)$language->getLanguageId(), $excludedLanguages, true)) {
                     continue;
                 }
                 $languageAspect = LanguageAspectFactory::createFromSiteLanguage($language);
