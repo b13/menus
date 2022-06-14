@@ -182,6 +182,9 @@ class MenuRepository
 
     protected function isPageIncludable(array $page, array $configuration): bool
     {
+        if ($page === []) {
+            return false;
+        }
         return $this->getIncludeNotInMenu($configuration) || (int)$page['nav_hide'] !== 1;
     }
 
