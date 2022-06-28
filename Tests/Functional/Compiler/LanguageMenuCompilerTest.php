@@ -205,6 +205,26 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
         self::assertSame(2, count($menu), 'only two pages should be included in menu');
     }
 
+    /**
+     * @test
+     */
+    public function deAsIdIsExcludedLanguageAllSiteLanguages(): void
+    {
+        $pageDataset = $this->defaultPageDataSet;
+        $menu = $this->compileMenu($pageDataset, ['excludeLanguages' => '1', 'addAllSiteLanguages' => '1']);
+        self::assertSame(2, count($menu), 'only two pages should be included in menu');
+    }
+
+    /**
+     * @test
+     */
+    public function deAsIdIsExcludedLanguage(): void
+    {
+        $pageDataset = $this->defaultPageDataSet;
+        $menu = $this->compileMenu($pageDataset, ['excludeLanguages' => '1']);
+        self::assertSame(2, count($menu), 'only two pages should be included in menu');
+    }
+
     protected function compileMenu(array $pageDataset, array $configuration = []): array
     {
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('pages');
