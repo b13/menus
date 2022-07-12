@@ -141,7 +141,7 @@ class MenuRepository
      */
     protected function getIncludeNotInMenu(array $configuration): bool
     {
-        return 1 === (int)($configuration['includeNotInMenu'] ?? 0);
+        return (int)($configuration['includeNotInMenu'] ?? 0) === 1;
     }
 
     public function getSubPagesOfPage(int $pageId, int $depth, array $configuration)
