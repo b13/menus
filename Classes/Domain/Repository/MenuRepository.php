@@ -11,6 +11,8 @@ namespace B13\Menus\Domain\Repository;
  * of the License, or any later version.
  */
 
+use B13\Menus\Event\PopulatePageInformationEvent;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -32,6 +34,11 @@ class MenuRepository
      */
     protected $pageRepository;
 
+    /**
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
     // Never show or query them.
     protected $excludedDoktypes = [
         PageRepository::DOKTYPE_BE_USER_SECTION,
@@ -39,10 +46,11 @@ class MenuRepository
         PageRepository::DOKTYPE_SYSFOLDER,
     ];
 
-    public function __construct(Context $context = null, PageRepository $pageRepository = null)
+    public function __construct(Context $context = null, PageRepository $pageRepository = null, EventDispatcherInterface $eventDispatcher = null)
     {
         $this->context = $context ?? GeneralUtility::makeInstance(Context::class);
         $this->pageRepository = $pageRepository ?? GeneralUtility::makeInstance(PageRepository::class, $this->context);
+        $this->eventDispatcher = $eventDispatcher ?? GeneralUtility::makeInstance(EventDispatcherInterface::class, $this->context);
     }
 
     public function getBreadcrumbsMenu(array $originalRootLine, array $configuration): array
@@ -195,5 +203,9 @@ class MenuRepository
             $page['isSpacer'] = true;
         }
         $page['nav_title'] = $page['nav_title'] ?: $page['title'];
+
+        $event = new PopulatePageInformationEvent($page);
+        $this->eventDispatcher->dispatch($event);
+        $page = $event->getPage();
     }
 }
