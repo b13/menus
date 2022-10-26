@@ -13,8 +13,8 @@ namespace B13\Menus\Domain\Repository;
 
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Frontend\Page\PageRepository;
 
 /**
  * Responsible for interacting with the PageRepository class, in addition, should be responsible for overlays
@@ -22,15 +22,8 @@ use TYPO3\CMS\Frontend\Page\PageRepository;
  */
 class MenuRepository
 {
-    /**
-     * @var Context
-     */
-    protected $context;
-
-    /**
-     * @var PageRepository
-     */
-    protected $pageRepository;
+    protected Context $context;
+    protected PageRepository $pageRepository;
 
     // Never show or query them.
     protected $excludedDoktypes = [
@@ -39,10 +32,10 @@ class MenuRepository
         PageRepository::DOKTYPE_SYSFOLDER,
     ];
 
-    public function __construct(Context $context = null, PageRepository $pageRepository = null)
+    public function __construct(Context $context, PageRepository $pageRepository)
     {
-        $this->context = $context ?? GeneralUtility::makeInstance(Context::class);
-        $this->pageRepository = $pageRepository ?? GeneralUtility::makeInstance(PageRepository::class, $this->context);
+        $this->context = $context;
+        $this->pageRepository = $pageRepository;
     }
 
     public function getBreadcrumbsMenu(array $originalRootLine, array $configuration): array
@@ -108,10 +101,6 @@ class MenuRepository
         return $page;
     }
 
-    /**
-     * @param array $configuration
-     * @return array
-     */
     protected function getExcludeDoktypes(array $configuration): array
     {
         if (!empty($configuration['excludeDoktypes'])) {
@@ -122,10 +111,6 @@ class MenuRepository
         return $excludedDoktypes;
     }
 
-    /**
-     * @param array $configuration
-     * @return array
-     */
     protected function getExcludePages(array $configuration): ?array
     {
         $excludePages = null;
@@ -135,10 +120,6 @@ class MenuRepository
         return empty($excludePages) ? null : $excludePages;
     }
 
-    /**
-     * @param array $configuration
-     * @return bool
-     */
     protected function getIncludeNotInMenu(array $configuration): bool
     {
         return (int)($configuration['includeNotInMenu'] ?? 0) === 1;

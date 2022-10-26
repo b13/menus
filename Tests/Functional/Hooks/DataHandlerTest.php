@@ -20,23 +20,10 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 class DataHandlerTest extends FunctionalTestCase
 {
+    protected DataHandler $dataHandler;
+    protected BackendUserAuthentication $backendUser;
 
-    /**
-     * @var DataHandler
-     */
-    protected $dataHandler;
-
-    /**
-     * @var BackendUserAuthentication
-     */
-    protected $backendUser;
-
-    /**
-     * @var array
-     */
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/menus',
-    ];
+    protected $testExtensionsToLoad = ['typo3conf/ext/menus'];
 
     /**
      * @throws \Doctrine\DBAL\DBALException
@@ -45,17 +32,14 @@ class DataHandlerTest extends FunctionalTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->importDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Fixtures/pages.xml');
-        $this->importDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Fixtures/caches.xml');
+        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Fixtures/pages.csv');
+        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Fixtures/caches.csv');
         $this->backendUser = $this->setUpBackendUserFromFixture(1);
         Bootstrap::initializeLanguageObject();
         $this->dataHandler = GeneralUtility::makeInstance(DataHandler::class);
     }
 
-    /**
-     * @return array
-     */
-    public function cmdmapDataProvider()
+    public function cmdmapDataProvider(): array
     {
         return [
             'copy page' => ['cmdmap' => ['pages' => [
@@ -112,7 +96,7 @@ class DataHandlerTest extends FunctionalTestCase
         $rows = $queryBuilder->select('*')
             ->from('cache_pages')
             ->execute()
-            ->fetchAll();
+            ->fetchAllAssociative();
         self::assertSame(0, count($rows));
     }
 }

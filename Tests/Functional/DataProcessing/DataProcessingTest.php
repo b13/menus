@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace B13\Menus\Tests\Functional\DataProcessing;
 
 /*
@@ -10,7 +12,6 @@ namespace B13\Menus\Tests\Functional\DataProcessing;
  * of the License, or any later version.
  */
 
-use Prophecy\Argument;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Routing\PageArguments;
@@ -23,13 +24,7 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 abstract class DataProcessingTest extends FunctionalTestCase
 {
-
-    /**
-     * @var array
-     */
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/menus',
-    ];
+    protected $testExtensionsToLoad = ['typo3conf/ext/menus'];
 
     /**
      * @throws \Doctrine\DBAL\DBALException
@@ -38,7 +33,7 @@ abstract class DataProcessingTest extends FunctionalTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->importDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Fixtures/pages.xml');
+        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Fixtures/pages.csv');
     }
 
     protected function reduceResults(array $results): array
@@ -70,26 +65,32 @@ abstract class DataProcessingTest extends FunctionalTestCase
         if ((new Typo3Version())->getMajorVersion() < 11) {
             return GeneralUtility::makeInstance(TypoScriptFrontendController::class, null, $site, $site->getLanguageById(0));
         }
-        $context = $this->prophesize(Context::class);
-        $context->hasAspect('frontend.preview')->willReturn(false);
-        $context->setAspect('frontend.preview', Argument::any());
-        $siteLanguage = $this->prophesize(SiteLanguage::class);
-        $siteLanguage->getTypo3Language()->willReturn('default');
-        $pageArguments = $this->prophesize(PageArguments::class);
-        $pageArguments->getPageid()->willReturn($pageId);
-        $pageArguments->getPageType()->willReturn(0);
-        $pageArguments->getArguments()->willReturn([]);
-        $frontendUserAuth = $this->prophesize(FrontendUserAuthentication::class);
-
+        $context = $this->getMockBuilder(Context::class)
+            ->getMock();
+        $context->expects(self::any())->method('hasAspect')->with('frontend.preview')->willReturn(false);
+        $context->expects(self::any())->method('setAspect');
+        $siteLanguage = $this->getMockBuilder(SiteLanguage::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $siteLanguage->expects(self::any())->method('getTypo3Language')->willReturn('default');
+        $pageArguments = $this->getMockBuilder(PageArguments::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $pageArguments->expects(self::any())->method('getPageId')->willReturn($pageId);
+        $pageArguments->expects(self::any())->method('getPageType')->willReturn('0');
+        $pageArguments->expects(self::any())->method('getArguments')->willReturn([]);
+        $frontendUserAuth = $this->getMockBuilder(FrontendUserAuthentication::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $controller = $this->getAccessibleMock(
             TypoScriptFrontendController::class,
             ['get_cache_timeout'],
             [
-                $context->reveal(),
+                $context,
                 $site,
-                $siteLanguage->reveal(),
-                $pageArguments->reveal(),
-                $frontendUserAuth->reveal(),
+                $siteLanguage,
+                $pageArguments,
+                $frontendUserAuth,
             ]
         );
         $controller->expects(self::any())->method('get_cache_timeout')->willReturn(1);

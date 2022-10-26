@@ -13,29 +13,25 @@ namespace B13\Menus\Tests\Functional\Domain\Repository;
 use B13\Menus\Domain\Repository\MenuRepository;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 class MenuRepositoryTest extends FunctionalTestCase
 {
-
-    /**
-     * @var array
-     */
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/menus',
-    ];
+    protected $testExtensionsToLoad = ['typo3conf/ext/menus'];
 
     /**
      * @test
      */
     public function translatedPageIsNotInMenuIfNavHideIsSet(): void
     {
-        $this->importDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Domain/Repository/Fixtures/translated_page_with_nav_hide.xml');
+        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Domain/Repository/Fixtures/translated_page_with_nav_hide.csv');
         $languageAspect = GeneralUtility::makeInstance(LanguageAspect::class, 1);
         $context = GeneralUtility::makeInstance(Context::class);
         $context->setAspect('language', $languageAspect);
-        $menuRepository = GeneralUtility::makeInstance(MenuRepository::class);
+        $pageRepository = GeneralUtility::makeInstance(PageRepository::class);
+        $menuRepository = GeneralUtility::makeInstance(MenuRepository::class, $context, $pageRepository);
         $page = $menuRepository->getPage(1, []);
         $pageInLanguage = $menuRepository->getPageInLanguage(1, $context, []);
         self::assertSame([], $page);
@@ -47,11 +43,12 @@ class MenuRepositoryTest extends FunctionalTestCase
      */
     public function translatedPageIsInMenuIfNavHideAndIgnoreNavHideIsSet(): void
     {
-        $this->importDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Domain/Repository/Fixtures/translated_page_with_nav_hide.xml');
+        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Domain/Repository/Fixtures/translated_page_with_nav_hide.csv');
         $languageAspect = GeneralUtility::makeInstance(LanguageAspect::class, 1);
         $context = GeneralUtility::makeInstance(Context::class);
         $context->setAspect('language', $languageAspect);
-        $menuRepository = GeneralUtility::makeInstance(MenuRepository::class);
+        $pageRepository = GeneralUtility::makeInstance(PageRepository::class);
+        $menuRepository = GeneralUtility::makeInstance(MenuRepository::class, $context, $pageRepository);
         $page = $menuRepository->getPage(1, ['includeNotInMenu' => 1]);
         $pageInLanguage = $menuRepository->getPageInLanguage(1, $context, ['includeNotInMenu' => 1]);
         $page = $this->reduceResults($page);

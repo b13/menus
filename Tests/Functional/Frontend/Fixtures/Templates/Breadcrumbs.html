@@ -1,0 +1,7 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:spaceless>
+    <f:for each="{breadcrumbs}" as="page">
+        <f:link.page pageUid="{page.uid}">{page.title}</f:link.page>
+    </f:for>
+</f:spaceless>
+</html>

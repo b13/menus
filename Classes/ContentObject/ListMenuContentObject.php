@@ -22,13 +22,21 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  */
 class ListMenuContentObject extends AbstractContentObject
 {
+    protected ListMenuCompiler $listMenuCompiler;
+
+    public function __construct(ContentObjectRenderer $cObj)
+    {
+        parent::__construct($cObj);
+        $this->listMenuCompiler = (GeneralUtility::makeInstance(ContentObjectServiceContainer::class))->getListMenuCompiler();
+    }
+
     /**
      * @param array $conf
-     * @return string|void
+     * @return string
      */
     public function render($conf = [])
     {
-        $pages = GeneralUtility::makeInstance(ListMenuCompiler::class)->compile($this->cObj, $conf);
+        $pages = $this->listMenuCompiler->compile($this->cObj, $conf);
         $content = $this->renderItems($pages, $conf);
         return $this->cObj->stdWrap($content, $conf);
     }
@@ -40,7 +48,7 @@ class ListMenuContentObject extends AbstractContentObject
         foreach ($pages as $page) {
             PageStateMarker::markStates($page);
             $cObjForItems->start($page, 'pages');
-            $content .= $cObjForItems->cObjGetSingle($conf['renderObj'], $conf['renderObj.']);
+            $content .= $cObjForItems->cObjGetSingle($conf['renderObj'] ?? '', $conf['renderObj.'] ?? []);
         }
         return $content;
     }

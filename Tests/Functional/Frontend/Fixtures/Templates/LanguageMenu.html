@@ -1,0 +1,7 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:spaceless>
+    <f:for each="{menu}" as="item">
+        <f:link.page pageUid="{item.uid}" language="{item.language.languageId}" class="{f:if(condition: item.isActiveLanguage, then: 'active')}">{item.language.title}</f:link.page>
+    </f:for>
+</f:spaceless>
+</html>
