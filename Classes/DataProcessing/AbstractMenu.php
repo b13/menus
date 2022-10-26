@@ -21,28 +21,14 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  */
 abstract class AbstractMenu implements DataProcessorInterface
 {
+    protected ContentDataProcessor $contentDataProcessor;
 
-    /**
-     * @var ContentDataProcessor
-     */
-    protected $contentDataProcessor;
-
-    /**
-     * Constructor
-     */
-    public function __construct(ContentDataProcessor $contentDataProcessor = null)
+    public function __construct(ContentDataProcessor $contentDataProcessor)
     {
-        $this->contentDataProcessor = $contentDataProcessor ?? GeneralUtility::makeInstance(ContentDataProcessor::class);
+        $this->contentDataProcessor = $contentDataProcessor;
     }
 
-    /**
-     * Process additional data processors
-     *
-     * @param array $page
-     * @param array $processorConfiguration
-     * @return array
-     */
-    protected function processAdditionalDataProcessors(&$page, $processorConfiguration)
+    protected function processAdditionalDataProcessors(array &$page, array $processorConfiguration): array
     {
         if (isset($page['subpages']) && is_array($page['subpages'])) {
             foreach ($page['subpages'] as &$item) {

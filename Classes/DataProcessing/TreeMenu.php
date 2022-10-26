@@ -13,7 +13,7 @@ namespace B13\Menus\DataProcessing;
 
 use B13\Menus\Compiler\TreeMenuCompiler;
 use B13\Menus\PageStateMarker;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
@@ -21,6 +21,13 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  */
 class TreeMenu extends AbstractMenu
 {
+    protected TreeMenuCompiler $treeMenuCompiler;
+
+    public function __construct(ContentDataProcessor $contentDataProcessor, TreeMenuCompiler $treeMenuCompiler)
+    {
+        $this->treeMenuCompiler = $treeMenuCompiler;
+        parent::__construct($contentDataProcessor);
+    }
 
     /**
      * @inheritDoc
@@ -30,7 +37,7 @@ class TreeMenu extends AbstractMenu
         if (isset($processorConfiguration['if.']) && !$cObj->checkIf($processorConfiguration['if.'])) {
             return $processedData;
         }
-        $pages = GeneralUtility::makeInstance(TreeMenuCompiler::class)->compile($cObj, $processorConfiguration);
+        $pages = $this->treeMenuCompiler->compile($cObj, $processorConfiguration);
         foreach ($pages as &$page) {
             PageStateMarker::markStatesRecursively($page, 1);
         }

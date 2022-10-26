@@ -1,0 +1,5 @@
+"pages"
+,"uid","pid","title","slug","l10n_parent","sys_language_uid"
+,11,0,"root-de","/",1,1
+,12,1,"page-de-1","/page-1",2,1
+,13,1,"page-de-2","/page-2",3,1

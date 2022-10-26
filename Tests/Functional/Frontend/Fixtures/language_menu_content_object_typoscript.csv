@@ -1,0 +1,14 @@
+"sys_template"
+,"uid","pid","root","config"
+,1,1,1,"page = PAGE
+page.config.disableAllHeaderCode = 1
+page.20 = LANGUAGEMENU
+page.20.renderObj = TEXT
+page.20.renderObj.typolink.parameter.data = field:uid
+page.20.renderObj.typolink.ATagParams = class='active'
+page.20.renderObj.typolink.ATagParams.if.isTrue.field = isActiveLanguage
+page.20.renderObj.typolink.additionalParams.data = field:language|languageId
+page.20.renderObj.typolink.additionalParams.intval = 1
+page.20.renderObj.typolink.additionalParams.wrap = &L=|
+page.20.renderObj.data = field:language|title // field:language|twoLetterIsoCode
+"

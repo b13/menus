@@ -22,13 +22,21 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  */
 class TreeMenuContentObject extends AbstractContentObject
 {
+    protected TreeMenuCompiler $treeMenuCompiler;
+
+    public function __construct(ContentObjectRenderer $cObj)
+    {
+        parent::__construct($cObj);
+        $this->treeMenuCompiler = (GeneralUtility::makeInstance(ContentObjectServiceContainer::class))->getTreeMenuCompiler();
+    }
+
     /**
      * @param array $conf
-     * @return string|void
+     * @return string
      */
     public function render($conf = [])
     {
-        $tree = GeneralUtility::makeInstance(TreeMenuCompiler::class)->compile($this->cObj, $conf);
+        $tree = $this->treeMenuCompiler->compile($this->cObj, $conf);
         $content = $this->renderItems($tree, 0, $conf['renderObj.'] ?? []);
         return $this->cObj->stdWrap($content, $conf);
     }
@@ -47,7 +55,7 @@ class TreeMenuContentObject extends AbstractContentObject
                 $page['subpageContent'] = $this->renderItems($page['subpages'], $level++, $renderConfiguration);
             }
             $cObjForItems->start($page, 'pages');
-            $content .= $cObjForItems->cObjGetSingle($renderConfiguration['level' . $level], $renderConfiguration['level' . $level . '.']);
+            $content .= $cObjForItems->cObjGetSingle($renderConfiguration['level' . $level] ?? '', $renderConfiguration['level' . $level . '.'] ?? []);
         }
         return $content;
     }

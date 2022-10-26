@@ -13,7 +13,6 @@ namespace B13\Menus\DataProcessing;
 
 use B13\Menus\Domain\Repository\MenuRepository;
 use B13\Menus\PageStateMarker;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
@@ -22,15 +21,12 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  */
 class BreadcrumbsMenu extends AbstractMenu
 {
-    /**
-     * @var MenuRepository
-     */
-    protected $menuRepository;
+    protected MenuRepository $menuRepository;
 
-    public function __construct(ContentDataProcessor $contentDataProcessor = null, MenuRepository $menuRepository = null)
+    public function __construct(ContentDataProcessor $contentDataProcessor, MenuRepository $menuRepository)
     {
         parent::__construct($contentDataProcessor);
-        $this->menuRepository = $menuRepository ?? GeneralUtility::makeInstance(MenuRepository::class);
+        $this->menuRepository = $menuRepository;
     }
 
     /**

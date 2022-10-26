@@ -14,7 +14,6 @@ namespace B13\Menus\Hooks;
 
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * This hook is triggered before caches for a page get flushed.
@@ -23,6 +22,13 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class DataHandlerHook
 {
+    protected CacheManager $cacheManager;
+
+    public function __construct(CacheManager $cacheManager)
+    {
+        $this->cacheManager = $cacheManager;
+    }
+
     public function clearMenuCaches(array $params, DataHandler $dataHandler): void
     {
         $pageId = (int)($params['uid_page'] ?? 0);
@@ -36,9 +42,6 @@ class DataHandlerHook
         if ($parentPageId > 0) {
             $menuTags[] = 'menuId_' . $parentPageId;
         }
-
-        /** @var CacheManager $cacheManager */
-        $cacheManager = GeneralUtility::makeInstance(CacheManager::class);
-        $cacheManager->flushCachesByTags($menuTags);
+        $this->cacheManager->flushCachesByTags($menuTags);
     }
 }

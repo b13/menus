@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace B13\Menus\Tests\Functional\Compiler;
 
 /*
@@ -10,8 +12,12 @@ namespace B13\Menus\Tests\Functional\Compiler;
  * of the License, or any later version.
  */
 
+use B13\Menus\CacheHelper;
 use B13\Menus\Compiler\LanguageMenuCompiler;
+use B13\Menus\Domain\Repository\MenuRepository;
+use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -243,13 +249,27 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
         $contentObjectRenderer = new ContentObjectRenderer();
         $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
         $site = $siteFinder->getSiteByIdentifier('main');
-        $languageMenuCompiler = $this->getAccessibleMock(
-            LanguageMenuCompiler::class,
-            [
-                'generateCacheIdentifierForMenu',
-                'getCurrentSite',
-            ]
-        );
+        $context = $this->getMockBuilder(Context::class)
+            ->getMock();
+        $pageRepository = GeneralUtility::makeInstance(PageRepository::class);
+        $menuRepository = GeneralUtility::makeInstance(MenuRepository::class, $context, $pageRepository);
+        $cacheHelper = $this->getAccessibleMock(CacheHelper::class, ['foo'], [], '', false);
+        $cacheHelper->_set('disableCaching', true);
+        $languageMenuCompiler = $this->getMockBuilder(LanguageMenuCompiler::class)
+            ->onlyMethods(
+                [
+                    'generateCacheIdentifierForMenu',
+                    'getCurrentSite',
+                ]
+            )
+            ->setConstructorArgs(
+                [
+                    $context,
+                    $cacheHelper,
+                    $menuRepository,
+                ]
+            )
+            ->getMock();
         $languageMenuCompiler->expects(self::any())->method('generateCacheIdentifierForMenu')->willReturn('foo');
         $languageMenuCompiler->expects(self::any())->method('getCurrentSite')->willReturn($site);
         $menu = $languageMenuCompiler->compile($contentObjectRenderer, $configuration);

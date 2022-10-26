@@ -22,23 +22,17 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  */
 class BreadcrumbsContentObject extends AbstractContentObject
 {
-    /**
-     * @var MenuRepository
-     */
-    protected $menuRepository;
+    protected MenuRepository $menuRepository;
 
-    /**
-     * @param ContentObjectRenderer $cObj
-     */
     public function __construct(ContentObjectRenderer $cObj)
     {
-        $this->menuRepository = GeneralUtility::makeInstance(MenuRepository::class);
         parent::__construct($cObj);
+        $this->menuRepository = (GeneralUtility::makeInstance(ContentObjectServiceContainer::class))->getMenuRepository();
     }
 
     /**
      * @param array $conf
-     * @return string|void
+     * @return string
      */
     public function render($conf = [])
     {
@@ -49,7 +43,7 @@ class BreadcrumbsContentObject extends AbstractContentObject
         foreach ($pages as $page) {
             PageStateMarker::markStates($page, $rootLevelCount--);
             $cObjForItems->start($page, 'pages');
-            $content .= $cObjForItems->cObjGetSingle($conf['renderObj'], $conf['renderObj.']);
+            $content .= $cObjForItems->cObjGetSingle($conf['renderObj'] ?? '', $conf['renderObj.'] ?? []);
         }
         return $this->cObj->stdWrap($content, $conf);
     }

@@ -14,7 +14,7 @@ namespace B13\Menus\DataProcessing;
 use B13\Menus\Compiler\LanguageMenuCompiler;
 use B13\Menus\PageStateMarker;
 use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
@@ -22,6 +22,14 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  */
 class LanguageMenu extends AbstractMenu
 {
+    protected $languageMenuCompliler;
+
+    public function __construct(ContentDataProcessor $contentDataProcessor, LanguageMenuCompiler $languageMenuCompiler)
+    {
+        $this->languageMenuCompliler = $languageMenuCompiler;
+        parent::__construct($contentDataProcessor);
+    }
+
     /**
      * @inheritDoc
      */
@@ -30,7 +38,7 @@ class LanguageMenu extends AbstractMenu
         if (isset($processorConfiguration['if.']) && !$cObj->checkIf($processorConfiguration['if.'])) {
             return $processedData;
         }
-        $pages = GeneralUtility::makeInstance(LanguageMenuCompiler::class)->compile($cObj, $processorConfiguration);
+        $pages = $this->languageMenuCompliler->compile($cObj, $processorConfiguration);
         $currentLanguage = $this->getCurrentSiteLanguage();
         foreach ($pages as &$page) {
             PageStateMarker::markStates($page);
@@ -48,9 +56,6 @@ class LanguageMenu extends AbstractMenu
         return $processedData;
     }
 
-    /**
-     * @return SiteLanguage|null
-     */
     protected function getCurrentSiteLanguage(): ?SiteLanguage
     {
         return $GLOBALS['TYPO3_REQUEST']->getAttribute('language');

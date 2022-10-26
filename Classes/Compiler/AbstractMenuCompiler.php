@@ -17,6 +17,7 @@ use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Context\UserAspect;
 use TYPO3\CMS\Core\Context\VisibilityAspect;
+use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Site\Entity\SiteInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -24,36 +25,21 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 /**
  * MenuCompiler sorts out all relevant parts in the constructor which most menu compilers need.
  */
-abstract class AbstractMenuCompiler
+abstract class AbstractMenuCompiler implements SingletonInterface
 {
-    /**
-     * @var MenuRepository
-     */
-    protected $menuRepository;
+    protected MenuRepository $menuRepository;
+    protected CacheHelper $cache;
+    protected Context $context;
 
-    /**
-     * @var CacheHelper
-     */
-    protected $cache;
-
-    /**
-     * @var Context
-     */
-    protected $context;
-
-    public function __construct(Context $context = null, CacheHelper $cache = null)
+    public function __construct(Context $context, CacheHelper $cache, MenuRepository $menuRepository)
     {
-        $this->context = $context ?? GeneralUtility::makeInstance(Context::class);
-        $this->menuRepository = GeneralUtility::makeInstance(MenuRepository::class, $this->context);
-        $this->cache = $cache ?? GeneralUtility::makeInstance(CacheHelper::class);
+        $this->context = $context;
+        $this->menuRepository = $menuRepository;
+        $this->cache = $cache;
     }
 
     /**
      * Fetch the related pages and caches it via the cache helper.
-     *
-     * @param ContentObjectRenderer $contentObjectRenderer
-     * @param array $configuration
-     * @return array
      */
     abstract public function compile(ContentObjectRenderer $contentObjectRenderer, array $configuration): array;
 
@@ -91,12 +77,8 @@ abstract class AbstractMenuCompiler
 
     /**
      * Function to parse typoscript config with stdWrap
-     * @param string $content
-     * @param string $configuration
-     *
-     * @return string
      */
-    public function parseStdWrap($content, $configuration): string
+    public function parseStdWrap(string $content, array $configuration): string
     {
         $return = GeneralUtility::makeInstance(ContentObjectRenderer::class)->stdWrap($content, $configuration);
         if ($return !== null) {

@@ -1,0 +1,9 @@
+"sys_template"
+,"uid","pid","root","config"
+,1,1,1,"page = PAGE
+page.config.disableAllHeaderCode = 1
+page.20 = LISTMENU
+page.20.pages = 2
+page.20.renderObj = TEXT
+page.20.renderObj.typolink.parameter.data = field:uid
+"
