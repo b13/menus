@@ -11,13 +11,10 @@ namespace B13\Menus;
  * of the License, or any later version.
  */
 
-use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\SingletonInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
@@ -28,23 +25,12 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
  */
 class CacheHelper implements SingletonInterface
 {
-    /**
-     * @var FrontendInterface
-     */
-    protected $cache;
+    protected FrontendInterface $cache;
+    protected bool $disableCaching = false;
 
-    protected $disableCaching = false;
-
-    public function __construct(FrontendInterface $cache = null, Context $context = null)
+    public function __construct(FrontendInterface $cache, Context $context)
     {
-        if ((new Typo3Version())->getMajorVersion() < 10) {
-            $this->cache = $cache ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('cache_hash');
-        } else {
-            $this->cache = $cache ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('hash');
-        }
-        if ($context === null) {
-            $context = GeneralUtility::makeInstance(Context::class);
-        }
+        $this->cache = $cache;
         try {
             $this->disableCaching = $context->getPropertyFromAspect('workspace', 'id', 0) > 0;
         } catch (AspectNotFoundException $e) {
@@ -60,10 +46,6 @@ class CacheHelper implements SingletonInterface
     /**
      * Looks up the items inside the cache, if it exists, takes the cached entry, otherwise computes the data
      * via the $loader().
-     *
-     * @param string $cacheIdentifier
-     * @param callable $loader
-     * @return array
      */
     public function get(string $cacheIdentifier, callable $loader): array
     {
@@ -146,9 +128,6 @@ class CacheHelper implements SingletonInterface
         return $maxLifetime;
     }
 
-    /**
-     * @return TypoScriptFrontendController
-     */
     protected function getFrontendController(): TypoScriptFrontendController
     {
         return $GLOBALS['TSFE'];

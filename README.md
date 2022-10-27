@@ -78,11 +78,11 @@ Pure TypoScript-based solution:
     page.10.excludePages = 4,51
     # 0: default, 1 to include nav_hide = 1 pages
     page.10.includeNotInMenu = 0
-    page.10.renderObj.level1 = TEXT
-    page.10.renderObj.level1.typolink.parameter.data = field:uid
-    page.10.renderObj.level1.typolink.ATagParams = class="active"
-    page.10.renderObj.level1.typolink.ATagParams.if.isTrue = field:isInRootLine
-    page.10.renderObj.level1.dataWrap = <li class="firstLevel">|<ul>{field:subpageContent}</ul></li>
+    page.10.renderObj.level0 = TEXT
+    page.10.renderObj.level0.typolink.parameter.data = field:uid
+    page.10.renderObj.level0.typolink.ATagParams = class="active"
+    page.10.renderObj.level0.typolink.ATagParams.if.isTrue.field = isInRootLine
+    page.10.renderObj.level0.dataWrap = <li class="firstLevel">|<ul>{field:subpageContent}</ul></li>
 
 Fluid-based solution:
 
@@ -125,9 +125,11 @@ Pure TypoScript solution:
     # add all siteLanguages to menu even if page is not available in language (default 0)
     page.10.addAllSiteLanguages = 1
     page.10.wrap = <ul> | </ul>
-    page.10.renderObj = TEXT
     page.10.renderObj.typolink.parameter.data = field:uid
-    page.10.renderObj.data = field:language_title // field:language_two_letter_iso_code
+    page.10.renderObj.typolink.additionalParams.data = field:language|languageId
+    page.10.renderObj.typolink.additionalParams.intval = 1
+    page.10.renderObj.typolink.additionalParams.wrap = &L=|
+    page.10.renderObj.data = field:language|title // field:language|twoLetterIsoCode
     page.10.renderObj.wrap = <li class="language-item"> | </li>
 
 The stdWrap `data` is the information of the current page plus the information merged from the selected SiteLanguage.
@@ -164,6 +166,10 @@ Pure TypoScript-based solution:
     page.10.pages = 13,14,15
     # 0: default, 1 to include nav_hide = 1 pages
     page.10.includeNotInMenu = 0
+    page.10.wrap = <ul> | </ul>
+    page.10.renderObj = TEXT
+    page.10.renderObj.typolink.parameter.data = field:uid
+    page.10.renderObj.wrap = <li> | </li>
 
 Fluid-based solution:
 

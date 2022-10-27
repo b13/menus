@@ -13,7 +13,7 @@ namespace B13\Menus\DataProcessing;
 
 use B13\Menus\Compiler\ListMenuCompiler;
 use B13\Menus\PageStateMarker;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
@@ -21,6 +21,14 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  */
 class ListMenu extends AbstractMenu
 {
+    protected ListMenuCompiler $listMenuCompiler;
+
+    public function __construct(ContentDataProcessor $contentDataProcessor, ListMenuCompiler $listMenuCompiler)
+    {
+        $this->listMenuCompiler = $listMenuCompiler;
+        parent::__construct($contentDataProcessor);
+    }
+
     /**
      * @inheritDoc
      */
@@ -30,7 +38,7 @@ class ListMenu extends AbstractMenu
             return $processedData;
         }
 
-        $pages = GeneralUtility::makeInstance(ListMenuCompiler::class)->compile($cObj, $processorConfiguration);
+        $pages = $this->listMenuCompiler->compile($cObj, $processorConfiguration);
         foreach ($pages as &$page) {
             PageStateMarker::markStates($page);
         }

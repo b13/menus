@@ -1,0 +1,7 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:spaceless>
+    <f:for each="{menu}" as="page">
+        <f:link.page pageUid="{page.uid}" class="{f:if(condition: page.isInRootLine, then: 'active')}">{page.title}</f:link.page>
+    </f:for>
+</f:spaceless>
+</html>

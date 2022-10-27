@@ -1,0 +1,8 @@
+"pages"
+,"uid","pid","title","slug",nav_hide,doktype
+,1,0,"page-1","/page-1",0,0
+,2,1,"page-2","/page-1/page-2",0,99
+,3,2,"page-3","/page-1/page-2/page-3",0,0
+,4,1,"page-4","/page-1/page-4",0,0
+,5,2,"page-5","/page-1/page-2/page-5",1,0
+,6,1,"page-6","/page-1/page-6",1,0

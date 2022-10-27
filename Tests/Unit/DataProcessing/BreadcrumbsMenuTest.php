@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace B13\Menus\Tests\Unit\DataProcessing;
 
 /*
@@ -35,16 +37,22 @@ class BreadcrumbsMenuTest extends UnitTestCase
             ['uid' => 2],
         ];
         $GLOBALS['TSFE']->id = 2;
-        $menuRepository = $this->prophesize(MenuRepository::class);
-        $menuRepository->getBreadcrumbsMenu($GLOBALS['TSFE']->rootLine, [])->willReturn($pages);
-        $contentDataProcessor = $this->prophesize(ContentDataProcessor::class);
-        $contentObjectRenderer = $this->prophesize(ContentObjectRenderer::class);
-        $breadcrumbsMenuDataProcessor = $this->getMockBuilder(BreadcrumbsMenu::class)
-            ->setMethods(['processAdditionalDataProcessors'])
-            ->setConstructorArgs([$contentDataProcessor->reveal(), $menuRepository->reveal()])
+        $menuRepository = $this->getMockBuilder(MenuRepository::class)
+            ->disableOriginalConstructor()
             ->getMock();
-        $contentObjectRenderer->stdWrapValue('as', [], 'breadcrumbs')->willReturn('breadcrumbs');
-        $processedData = $breadcrumbsMenuDataProcessor->process($contentObjectRenderer->reveal(), [], [], []);
+        $menuRepository->expects(self::once())->method('getBreadcrumbsMenu')->with($GLOBALS['TSFE']->rootLine, [])->willReturn($pages);
+        $contentDataProcessor = $this->getMockBuilder(ContentDataProcessor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $contentObjectRenderer = $this->getMockBuilder(ContentObjectRenderer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $contentObjectRenderer->expects(self::once())->method('stdWrapValue')->with('as', [], 'breadcrumbs')->willReturn('breadcrumbs');
+        $breadcrumbsMenuDataProcessor = $this->getMockBuilder(BreadcrumbsMenu::class)
+            ->onlyMethods(['processAdditionalDataProcessors'])
+            ->setConstructorArgs([$contentDataProcessor, $menuRepository])
+            ->getMock();
+        $processedData = $breadcrumbsMenuDataProcessor->process($contentObjectRenderer, [], [], []);
         self::assertTrue($processedData['breadcrumbs'][0]['isInRootLine']);
         self::assertTrue($processedData['breadcrumbs'][1]['isInRootLine']);
         self::assertFalse($processedData['breadcrumbs'][0]['isCurrentPage']);

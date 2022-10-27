@@ -9,6 +9,3 @@ parameters:
     -
       message: '#Constant ORIGINAL_ROOT not found.#'
       path: %currentWorkingDirectory%/Tests
-    -
-      message: '#Call to an undefined method Prophecy\\Prophecy\\ObjectProphecy::.*#'
-      path: %currentWorkingDirectory%/Tests

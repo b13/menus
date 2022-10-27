@@ -1,0 +1,10 @@
+"sys_template"
+,"uid","pid","root","config"
+,1,1,1,"page = PAGE
+page.config.disableAllHeaderCode = 1
+page.20 = TREEMENU
+page.20.renderObj.level0 = TEXT
+page.20.renderObj.level0.typolink.parameter.data = field:uid
+page.20.renderObj.level0.typolink.ATagParams = class='active'
+page.20.renderObj.level0.typolink.ATagParams.if.isTrue.field = isInRootLine
+"

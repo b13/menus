@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace B13\Menus\Tests\Unit\Domain\Repository;
 
 /*
@@ -11,7 +13,6 @@ namespace B13\Menus\Tests\Unit\Domain\Repository;
  */
 
 use B13\Menus\Domain\Repository\MenuRepository;
-use Prophecy\Argument;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
@@ -25,21 +26,23 @@ class MenuRepositoryTest extends UnitTestCase
      */
     public function getSubPagesOfPageRestrictQueryToExcludeDoktypes(): void
     {
-        $context = $this->prophesize(Context::class);
-        $context->getAspect('language')->willReturn($this->prophesize(LanguageAspect::class)->reveal());
-        $pageRepository = $this->prophesize(PageRepository::class);
+        $languageAspect = $this->getMockBuilder(LanguageAspect::class)
+            ->getMock();
+        $context = $this->getMockBuilder(Context::class)
+            ->getMock();
+        $context->expects(self::once())->method('getAspect')->with('language')->willReturn($languageAspect);
+        $pageRepository = $this->getMockBuilder(PageRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $excludedDoktypes = [
             PageRepository::DOKTYPE_BE_USER_SECTION,
             PageRepository::DOKTYPE_RECYCLER,
             PageRepository::DOKTYPE_SYSFOLDER,
         ];
-        $pageRepository->getMenu(1, '*', 'sorting', Argument::any(), false)->willReturn([]);
-        $pageRepository->getMenu(1, '*', 'sorting', 'AND doktype NOT IN (' . implode(',', $excludedDoktypes) . ') ', false)->shouldBeCalled()->willReturn([]);
-
-        $menuRepository = $this->getMockBuilder(MenuRepository::class)
-            ->setMethods(['foo'])
-            ->setConstructorArgs([$context->reveal(), $pageRepository->reveal()])
-            ->getMock();
+        $pageRepository->expects(self::once())->method('getMenu')
+            ->with(1, '*', 'sorting', 'AND doktype NOT IN (' . implode(',', $excludedDoktypes) . ') ', false)
+            ->willReturn([]);
+        $menuRepository = new MenuRepository($context, $pageRepository);
         $menuRepository->getSubPagesOfPage(1, 1, []);
     }
 
@@ -48,21 +51,23 @@ class MenuRepositoryTest extends UnitTestCase
      */
     public function getSubPagesOfPageMergeExcludeDoktypesFromConfiguration(): void
     {
-        $context = $this->prophesize(Context::class);
-        $context->getAspect('language')->willReturn($this->prophesize(LanguageAspect::class)->reveal());
-        $pageRepository = $this->prophesize(PageRepository::class);
+        $languageAspect = $this->getMockBuilder(LanguageAspect::class)
+            ->getMock();
+        $context = $this->getMockBuilder(Context::class)
+            ->getMock();
+        $context->expects(self::once())->method('getAspect')->with('language')->willReturn($languageAspect);
+        $pageRepository = $this->getMockBuilder(PageRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $excludedDoktypes = [
             PageRepository::DOKTYPE_BE_USER_SECTION,
             PageRepository::DOKTYPE_RECYCLER,
             PageRepository::DOKTYPE_SYSFOLDER,
         ];
-        $pageRepository->getMenu(1, '*', 'sorting', Argument::any(), false)->willReturn([]);
-        $pageRepository->getMenu(1, '*', 'sorting', 'AND doktype NOT IN (' . implode(',', $excludedDoktypes) . ',99) ', false)->shouldBeCalled()->willReturn([]);
-
-        $menuRepository = $this->getMockBuilder(MenuRepository::class)
-            ->setMethods(['foo'])
-            ->setConstructorArgs([$context->reveal(), $pageRepository->reveal()])
-            ->getMock();
+        $pageRepository->expects(self::once())->method('getMenu')
+            ->with(1, '*', 'sorting', 'AND doktype NOT IN (' . implode(',', $excludedDoktypes) . ',99) ', false)
+            ->willReturn([]);
+        $menuRepository = new MenuRepository($context, $pageRepository);
         $menuRepository->getSubPagesOfPage(1, 1, ['excludeDoktypes' => 99]);
     }
 
@@ -75,16 +80,21 @@ class MenuRepositoryTest extends UnitTestCase
             ['uid' => 1, 'doktype' => 99, 'nav_hide'=> 0],
             ['uid' => 2, 'doktype' => 98, 'nav_hide'=> 0],
         ];
-        $context = $this->prophesize(Context::class);
-        $context->getAspect('language')->willReturn($this->prophesize(LanguageAspect::class)->reveal());
-        $pageRepository = $this->prophesize(PageRepository::class);
-        $pageRepository->getPage(1)->willReturn($rootLine[0]);
-        $pageRepository->getPage(2)->willReturn($rootLine[1]);
-        $pageRepository->isPageSuitableForLanguage(Argument::any(), Argument::any())->willReturn(true);
-        $menuRepository = $this->getMockBuilder(MenuRepository::class)
-            ->setMethods(['populateAdditionalKeysForPage'])
-            ->setConstructorArgs([$context->reveal(), $pageRepository->reveal()])
+        $languageAspect = $this->getMockBuilder(LanguageAspect::class)
             ->getMock();
+        $context = $this->getMockBuilder(Context::class)
+            ->getMock();
+        $context->expects(self::once())->method('getAspect')->with('language')->willReturn($languageAspect);
+        $pageRepository = $this->getMockBuilder(PageRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $pageRepository->expects(self::at(0))->method('getPage')->with(1)->willReturn($rootLine[0]);
+        $pageRepository->expects(self::at(1))->method('getPage')->with(2)->willReturn($rootLine[1]);
+        $menuRepository = $this->getMockBuilder(MenuRepository::class)
+            ->onlyMethods(['populateAdditionalKeysForPage', 'isPageSuitableForLanguage'])
+            ->setConstructorArgs([$context, $pageRepository])
+            ->getMock();
+        $menuRepository->expects(self::any())->method('isPageSuitableForLanguage')->willReturn(true);
         $breadcrumbs = $menuRepository->getBreadcrumbsMenu($rootLine, ['excludeDoktypes' => 99]);
         self::assertSame(1, count($breadcrumbs));
     }

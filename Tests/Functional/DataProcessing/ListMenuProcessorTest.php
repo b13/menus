@@ -1,6 +1,8 @@
 <?php
 
-namespace Functional\DataProcessing;
+declare(strict_types=1);
+
+namespace B13\Menus\Tests\Functional\DataProcessing;
 
 /*
  * This file is part of TYPO3 CMS-based extension "menus" by b13.
@@ -11,7 +13,6 @@ namespace Functional\DataProcessing;
  */
 
 use B13\Menus\DataProcessing\ListMenu;
-use B13\Menus\Tests\Functional\DataProcessing\DataProcessingTest;
 use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Site\Entity\NullSite;

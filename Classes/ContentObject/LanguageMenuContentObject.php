@@ -23,13 +23,21 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  */
 class LanguageMenuContentObject extends AbstractContentObject
 {
+    protected LanguageMenuCompiler $languageMenuCompiler;
+
+    public function __construct(ContentObjectRenderer $cObj)
+    {
+        parent::__construct($cObj);
+        $this->languageMenuCompiler = (GeneralUtility::makeInstance(ContentObjectServiceContainer::class))->getLanguageMenuCompiler();
+    }
+
     /**
      * @param array $conf
-     * @return string|void
+     * @return string
      */
     public function render($conf = [])
     {
-        $pages = GeneralUtility::makeInstance(LanguageMenuCompiler::class)->compile($this->cObj, $conf);
+        $pages = $this->languageMenuCompiler->compile($this->cObj, $conf);
         $content = $this->renderItems($pages, $conf);
         return $this->cObj->stdWrap($content, $conf);
     }
@@ -47,7 +55,7 @@ class LanguageMenuContentObject extends AbstractContentObject
                 $page['isActiveLanguage'] = false;
             }
             $cObjForItems->start($page, 'pages');
-            $content .= $cObjForItems->cObjGetSingle($conf['renderObj'], $conf['renderObj.']);
+            $content .= $cObjForItems->cObjGetSingle($conf['renderObj'] ?? '', $conf['renderObj.'] ?? []);
         }
         return $content;
     }
