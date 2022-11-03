@@ -20,7 +20,6 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class BreadcrumbsMenuTest extends UnitTestCase
 {
-
     /**
      * @test
      */

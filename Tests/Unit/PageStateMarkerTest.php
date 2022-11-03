@@ -17,7 +17,6 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class PageStateMarkerTest extends UnitTestCase
 {
-
     /**
      * @test
      */

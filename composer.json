@@ -5,17 +5,16 @@
   "description": "Easy and fast menus for TYPO3 Frontends",
   "require": {
     "php": "^7.4 || ~8.0",
-    "typo3/cms-core": "^10 || ^11",
-    "typo3/cms-frontend": "^10 || ^11"
+    "typo3/cms-core": "^10 || ^11 || 12.*.*@dev",
+    "typo3/cms-frontend": "^10 || ^11 || 12.*.*@dev"
   },
   "require-dev": {
     "phpstan/phpstan": "^1.8.11",
-    "phpunit/phpunit": "^8.4",
     "typo3/cms-fluid-styled-content": "^11.5",
     "typo3/cms-install": "^11.5",
     "typo3/coding-standards": "^0.5",
     "typo3/tailor": "^1.0",
-    "typo3/testing-framework": "^6"
+    "typo3/testing-framework": "~7.0@dev"
   },
   "config": {
     "vendor-dir": ".Build/vendor",
@@ -35,11 +34,11 @@
     }
   },
   "scripts": {
-    "post-autoload-dump": [
-      "TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare",
-      "if [ ! -e .Build/Web/vendor ]; then cd .Build/Web  && ln -s ../vendor && cd -; fi",
-      "if [ ! -e .Build/Web/typo3conf/ext/json_response ]; then cd .Build/Web/typo3conf/ext && ln -s ../../../vendor/typo3/testing-framework/Resources/Core/Functional/Extensions/json_response && cd -; fi",
-      "if [ ! -e .Build/Web/typo3conf/sites ]; then cd .Build/Web/typo3conf && ln -s ../../../Build/sites && cd -; fi"
+    "prepare-tests-10": [
+      "TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
+    ],
+    "prepare-tests": [
+       "if [ ! -e .Build/Web/typo3conf/sites -a -e .Build/Web/typo3conf ]; then cd .Build/Web/typo3conf && ln -s ../../../Build/sites && cd -; fi"
     ]
   },
   "autoload": {

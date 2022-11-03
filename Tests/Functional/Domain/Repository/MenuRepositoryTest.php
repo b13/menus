@@ -19,7 +19,7 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 class MenuRepositoryTest extends FunctionalTestCase
 {
-    protected $testExtensionsToLoad = ['typo3conf/ext/menus'];
+    protected array $testExtensionsToLoad = ['typo3conf/ext/menus'];
 
     /**
      * @test
