@@ -11,14 +11,9 @@ namespace B13\Menus\Tests\Functional\Functional;
  */
 
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
-use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
-class BreadcrumbMenuContentObjectTest extends FunctionalTestCase
+class BreadcrumbMenuContentObjectTest extends AbstractFrontendTest
 {
-    protected $testExtensionsToLoad = ['typo3conf/ext/menus'];
-    protected $coreExtensionsToLoad = ['core', 'frontend'];
-    protected $pathsToLinkInTestInstance = ['typo3conf/ext/menus/Build/sites' => 'typo3conf/sites'];
-
     /**
      * @test
      */
@@ -26,7 +21,7 @@ class BreadcrumbMenuContentObjectTest extends FunctionalTestCase
     {
         $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/pages.csv');
         $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/breadcrumb_menu_content_object_typoscript.csv');
-        $response = $this->executeFrontendRequest(new InternalRequest('http://localhost/'));
+        $response = $this->executeFrontendRequestWrapper(new InternalRequest('http://localhost/'));
         $expected = '<a href="/">root</a>';
         $body = (string)$response->getBody();
         self::assertStringContainsString($expected, $body);
@@ -39,7 +34,7 @@ class BreadcrumbMenuContentObjectTest extends FunctionalTestCase
     {
         $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/pages.csv');
         $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/breadcrumb_menu_content_object_typoscript.csv');
-        $response = $this->executeFrontendRequest(new InternalRequest('http://localhost/page-1'));
+        $response = $this->executeFrontendRequestWrapper(new InternalRequest('http://localhost/page-1'));
         $expected = '<a href="/">root</a><a href="/page-1">page-1</a>';
         $body = (string)$response->getBody();
         self::assertStringContainsString($expected, $body);

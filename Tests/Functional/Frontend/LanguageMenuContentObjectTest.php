@@ -11,14 +11,9 @@ namespace B13\Menus\Tests\Functional\Functional;
  */
 
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
-use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
-class LanguageMenuContentObjectTest extends FunctionalTestCase
+class LanguageMenuContentObjectTest extends AbstractFrontendTest
 {
-    protected $testExtensionsToLoad = ['typo3conf/ext/menus'];
-    protected $coreExtensionsToLoad = ['core', 'frontend'];
-    protected $pathsToLinkInTestInstance = ['typo3conf/ext/menus/Build/sites' => 'typo3conf/sites'];
-
     /**
      * @test
      */
@@ -27,7 +22,7 @@ class LanguageMenuContentObjectTest extends FunctionalTestCase
         $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/pages.csv');
         $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/translated_pages.csv');
         $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/language_menu_content_object_typoscript.csv');
-        $response = $this->executeFrontendRequest(new InternalRequest('http://localhost/'));
+        $response = $this->executeFrontendRequestWrapper(new InternalRequest('http://localhost/'));
         $expected = '<a href="/" class="active">english</a><a href="/de/">german</a>';
         $body = (string)$response->getBody();
         self::assertStringContainsString($expected, $body);
@@ -41,7 +36,7 @@ class LanguageMenuContentObjectTest extends FunctionalTestCase
         $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/pages.csv');
         $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/translated_pages.csv');
         $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/language_menu_content_object_typoscript.csv');
-        $response = $this->executeFrontendRequest(new InternalRequest('http://localhost/de/'));
+        $response = $this->executeFrontendRequestWrapper(new InternalRequest('http://localhost/de/'));
         $expected = '<a href="/">english</a><a href="/de/" class="active">german</a>';
         $body = (string)$response->getBody();
         self::assertStringContainsString($expected, $body);

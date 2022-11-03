@@ -15,9 +15,6 @@
 use TYPO3\CMS\Core\Information\Typo3Version;
 
 call_user_func(function () {
-    if (!class_exists(\TYPO3\CMS\Frontend\Page\PageRepository::class)) {
-        class_alias(\TYPO3\CMS\Core\Domain\Repository\PageRepository::class, \TYPO3\CMS\Frontend\Page\PageRepository::class);
-    }
     $testbase = new \TYPO3\TestingFramework\Core\Testbase();
 
     // These if's are for core testing (package typo3/cms) only. cms-composer-installer does

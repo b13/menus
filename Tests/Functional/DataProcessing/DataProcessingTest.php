@@ -15,7 +15,7 @@ namespace B13\Menus\Tests\Functional\DataProcessing;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Routing\PageArguments;
-use TYPO3\CMS\Core\Site\Entity\SiteInterface;
+use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
@@ -24,12 +24,8 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 abstract class DataProcessingTest extends FunctionalTestCase
 {
-    protected $testExtensionsToLoad = ['typo3conf/ext/menus'];
+    protected array $testExtensionsToLoad = ['typo3conf/ext/menus'];
 
-    /**
-     * @throws \Doctrine\DBAL\DBALException
-     * @throws \TYPO3\TestingFramework\Core\Exception
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -60,7 +56,7 @@ abstract class DataProcessingTest extends FunctionalTestCase
         $results = $this->reduceResults($results);
     }
 
-    protected function getTypoScriptFrontendController(SiteInterface $site, int $pageId): TypoScriptFrontendController
+    protected function getTypoScriptFrontendController(Site $site, int $pageId): TypoScriptFrontendController
     {
         if ((new Typo3Version())->getMajorVersion() < 11) {
             return GeneralUtility::makeInstance(TypoScriptFrontendController::class, null, $site, $site->getLanguageById(0));
