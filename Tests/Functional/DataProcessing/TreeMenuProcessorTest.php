@@ -15,7 +15,7 @@ namespace B13\Menus\Tests\Functional\DataProcessing;
 use B13\Menus\DataProcessing\TreeMenu;
 use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\Http\ServerRequest;
-use TYPO3\CMS\Core\Site\Entity\NullSite;
+use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
@@ -397,7 +397,7 @@ class TreeMenuProcessorTest extends DataProcessingTest
      */
     public function processTest(array $tsfe, array $configuration, array $expected): void
     {
-        $site = GeneralUtility::makeInstance(NullSite::class);
+        $site = GeneralUtility::makeInstance(Site::class, 'main', $tsfe['id'], []);
         $request = GeneralUtility::makeInstance(ServerRequest::class);
         $request = $request->withAttribute('site', $site);
         $request = $request->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_FE);
@@ -462,7 +462,7 @@ class TreeMenuProcessorTest extends DataProcessingTest
      */
     public function menuIdTagsAreAddedToPageCache(array $tsfe, int $entryPoints, array $expectedTags): void
     {
-        $site = GeneralUtility::makeInstance(NullSite::class);
+        $site = GeneralUtility::makeInstance(Site::class, 'main', $tsfe['id'], []);
         $request = GeneralUtility::makeInstance(ServerRequest::class);
         $request = $request->withAttribute('site', $site);
         $request = $request->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_FE);

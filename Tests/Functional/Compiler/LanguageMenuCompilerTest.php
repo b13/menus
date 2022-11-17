@@ -18,6 +18,7 @@ use B13\Menus\Domain\Repository\MenuRepository;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -26,15 +27,15 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 class LanguageMenuCompilerTest extends FunctionalTestCase
 {
-    protected $testExtensionsToLoad = [
+    protected array $testExtensionsToLoad = [
         'typo3conf/ext/menus',
     ];
 
-    protected $pathsToLinkInTestInstance = [
+    protected array $pathsToLinkInTestInstance = [
         'typo3conf/ext/menus/Build/sites' => 'typo3conf/sites',
     ];
 
-    protected $defaultPageDataSet = [
+    protected array $defaultPageDataSet = [
         'defaultPage' => [
             'uid' => 1,
             'pid' => 0,
@@ -245,7 +246,11 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
             false
         );
         $GLOBALS['TSFE'] = $controller;
-        $GLOBALS['TSFE']->id = '1';
+        if ((GeneralUtility::makeInstance(Typo3Version::class))->getMajorVersion() < 12) {
+            $GLOBALS['TSFE']->id = '1';
+        } else {
+            $GLOBALS['TSFE']->id = 1;
+        }
         $contentObjectRenderer = new ContentObjectRenderer();
         $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
         $site = $siteFinder->getSiteByIdentifier('main');

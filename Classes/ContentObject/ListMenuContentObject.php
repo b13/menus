@@ -13,6 +13,7 @@ namespace B13\Menus\ContentObject;
 
 use B13\Menus\Compiler\ListMenuCompiler;
 use B13\Menus\PageStateMarker;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\AbstractContentObject;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -26,7 +27,11 @@ class ListMenuContentObject extends AbstractContentObject
 
     public function __construct(ContentObjectRenderer $cObj)
     {
-        parent::__construct($cObj);
+        if ((GeneralUtility::makeInstance(Typo3Version::class))->getMajorVersion() < 12) {
+            parent::__construct($cObj);
+        } else {
+            $this->setContentObjectRenderer($cObj);
+        }
         $this->listMenuCompiler = (GeneralUtility::makeInstance(ContentObjectServiceContainer::class))->getListMenuCompiler();
     }
 

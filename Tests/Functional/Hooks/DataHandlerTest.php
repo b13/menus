@@ -23,18 +23,15 @@ class DataHandlerTest extends FunctionalTestCase
     protected DataHandler $dataHandler;
     protected BackendUserAuthentication $backendUser;
 
-    protected $testExtensionsToLoad = ['typo3conf/ext/menus'];
+    protected array $testExtensionsToLoad = ['typo3conf/ext/menus'];
 
-    /**
-     * @throws \Doctrine\DBAL\DBALException
-     * @throws \TYPO3\TestingFramework\Core\Exception
-     */
     protected function setUp(): void
     {
         parent::setUp();
         $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Fixtures/pages.csv');
         $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Fixtures/caches.csv');
-        $this->backendUser = $this->setUpBackendUserFromFixture(1);
+        $this->importCSVDataSet(__DIR__ . '/../Fixtures/be_users.csv');
+        $this->backendUser = $GLOBALS['BE_USER'] = $this->setUpBackendUser(1);
         Bootstrap::initializeLanguageObject();
         $this->dataHandler = GeneralUtility::makeInstance(DataHandler::class);
     }

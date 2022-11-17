@@ -10,8 +10,8 @@ parameters:
       message: '#Constant ORIGINAL_ROOT not found.#'
       path: %currentWorkingDirectory%/Tests
     -
-      message: '#Call to an undefined method B13\\Menus\\ContentObject\\.*ContentObject::setContentObjectRenderer\(\).#'
+      message: '#Call to an undefined static method TYPO3\\CMS\\Frontend\\ContentObject\\AbstractContentObject::__construct\(\).#'
       path: %currentWorkingDirectory%/Classes/ContentObject/*
     -
-      message: '#Property TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController::\$id \(string\) does not accept int#'
+      message: '#Property TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController::\$id \(int\) does not accept string.#'
       path: %currentWorkingDirectory%/Tests/Functional/Compiler/LanguageMenuCompilerTest.php

@@ -104,7 +104,7 @@ class MenuRepository
     protected function getExcludeDoktypes(array $configuration): array
     {
         if (!empty($configuration['excludeDoktypes'])) {
-            $excludedDoktypes = array_unique(array_merge($this->excludedDoktypes, GeneralUtility::intExplode(',', $configuration['excludeDoktypes'])));
+            $excludedDoktypes = array_unique(array_merge($this->excludedDoktypes, GeneralUtility::intExplode(',', (string)$configuration['excludeDoktypes'])));
         } else {
             $excludedDoktypes = $this->excludedDoktypes;
         }
@@ -115,7 +115,7 @@ class MenuRepository
     {
         $excludePages = null;
         if (!empty($configuration['excludePages'])) {
-            $excludePages = array_unique(GeneralUtility::intExplode(',', $configuration['excludePages']));
+            $excludePages = array_unique(GeneralUtility::intExplode(',', (string)$configuration['excludePages']));
         }
         return empty($excludePages) ? null : $excludePages;
     }
@@ -130,7 +130,7 @@ class MenuRepository
         $whereClause = '';
 
         if (!empty($configuration['excludePages'])) {
-            $excludedPagesArray = GeneralUtility::intExplode(',', $configuration['excludePages']);
+            $excludedPagesArray = GeneralUtility::intExplode(',', (string)$configuration['excludePages']);
             $whereClause .= ' AND uid NOT IN (' . implode(',', $excludedPagesArray) . ')';
         }
         $excludedDoktypes = $this->getExcludeDoktypes($configuration);

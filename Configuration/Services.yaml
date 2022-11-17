@@ -22,3 +22,20 @@ services:
       $cache: '@cache.hash'
   B13\Menus\Hooks\DataHandlerHook:
     public: true
+
+  B13\Menus\ContentObject\TreeMenuContentObject:
+    tags:
+      - name: frontend.contentobject
+        identifier: 'TREEMENU'
+  B13\Menus\ContentObject\ListMenuContentObject:
+    tags:
+      - name: frontend.contentobject
+        identifier: 'LISTMENU'
+  B13\Menus\ContentObject\LanguageMenuContentObject:
+    tags:
+      - name: frontend.contentobject
+        identifier: 'LANGUAGEMENU'
+  B13\Menus\ContentObject\BreadcrumbsContentObject:
+    tags:
+      - name: frontend.contentobject
+        identifier: 'BREADCRUMBS'

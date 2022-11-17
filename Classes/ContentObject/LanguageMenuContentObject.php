@@ -13,6 +13,7 @@ namespace B13\Menus\ContentObject;
 
 use B13\Menus\Compiler\LanguageMenuCompiler;
 use B13\Menus\PageStateMarker;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\AbstractContentObject;
@@ -27,7 +28,11 @@ class LanguageMenuContentObject extends AbstractContentObject
 
     public function __construct(ContentObjectRenderer $cObj)
     {
-        parent::__construct($cObj);
+        if ((GeneralUtility::makeInstance(Typo3Version::class))->getMajorVersion() < 12) {
+            parent::__construct($cObj);
+        } else {
+            $this->setContentObjectRenderer($cObj);
+        }
         $this->languageMenuCompiler = (GeneralUtility::makeInstance(ContentObjectServiceContainer::class))->getLanguageMenuCompiler();
     }
 

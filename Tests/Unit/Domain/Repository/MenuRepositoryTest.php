@@ -20,6 +20,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class MenuRepositoryTest extends UnitTestCase
 {
+    protected bool $resetSingletonInstances = true;
 
     /**
      * @test
@@ -85,11 +86,22 @@ class MenuRepositoryTest extends UnitTestCase
         $context = $this->getMockBuilder(Context::class)
             ->getMock();
         $context->expects(self::once())->method('getAspect')->with('language')->willReturn($languageAspect);
-        $pageRepository = $this->getMockBuilder(PageRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $pageRepository->expects(self::at(0))->method('getPage')->with(1)->willReturn($rootLine[0]);
-        $pageRepository->expects(self::at(1))->method('getPage')->with(2)->willReturn($rootLine[1]);
+
+        $pageRepository = new class() extends PageRepository {
+            public function getPage($uid, $disableGroupAccessCheck = false)
+            {
+                if ($uid === 1) {
+                    // $rootLine[0]
+                    return ['uid' => 1, 'doktype' => 99, 'nav_hide'=> 0];
+                }
+                if ($uid === 2) {
+                    // $rootLine[0]
+                    return ['uid' => 2, 'doktype' => 98, 'nav_hide'=> 0];
+                }
+                return [];
+            }
+        };
+
         $menuRepository = $this->getMockBuilder(MenuRepository::class)
             ->onlyMethods(['populateAdditionalKeysForPage', 'isPageSuitableForLanguage'])
             ->setConstructorArgs([$context, $pageRepository])
