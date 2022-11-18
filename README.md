@@ -229,7 +229,7 @@ If you want to get a menu of the direct siblings of a page, no matter what page 
 		as = listOfJobPages
 	}
 
-By using the `.data` property of the entryPointy attribute we can access each property of the currently build page. And so we can render the siblings of the page.
+By using the `.data` property of the `entryPoints` attribute we can access each property of the currently build page. And so we can render the siblings of the page.
 
 ## Technical Details
 
