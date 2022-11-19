@@ -15,6 +15,7 @@ namespace B13\Menus\Tests\Functional\Compiler;
 use B13\Menus\CacheHelper;
 use B13\Menus\Compiler\LanguageMenuCompiler;
 use B13\Menus\Domain\Repository\MenuRepository;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
@@ -257,7 +258,7 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
         $context = $this->getMockBuilder(Context::class)
             ->getMock();
         $pageRepository = GeneralUtility::makeInstance(PageRepository::class);
-        $menuRepository = GeneralUtility::makeInstance(MenuRepository::class, $context, $pageRepository);
+        $menuRepository = GeneralUtility::makeInstance(MenuRepository::class, $context, $pageRepository, $this->createMock(EventDispatcherInterface::class));
         $cacheHelper = $this->getAccessibleMock(CacheHelper::class, ['foo'], [], '', false);
         $cacheHelper->_set('disableCaching', true);
         $languageMenuCompiler = $this->getMockBuilder(LanguageMenuCompiler::class)

@@ -11,6 +11,8 @@ namespace B13\Menus\Domain\Repository;
  * of the License, or any later version.
  */
 
+use B13\Menus\Event\PopulatePageInformationEvent;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
@@ -24,6 +26,7 @@ class MenuRepository
 {
     protected Context $context;
     protected PageRepository $pageRepository;
+    protected EventDispatcherInterface $eventDispatcher;
 
     // Never show or query them.
     protected $excludedDoktypes = [
@@ -32,10 +35,11 @@ class MenuRepository
         PageRepository::DOKTYPE_SYSFOLDER,
     ];
 
-    public function __construct(Context $context, PageRepository $pageRepository)
+    public function __construct(Context $context, PageRepository $pageRepository, EventDispatcherInterface $eventDispatcher)
     {
         $this->context = $context;
         $this->pageRepository = $pageRepository;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function getBreadcrumbsMenu(array $originalRootLine, array $configuration): array
@@ -176,5 +180,9 @@ class MenuRepository
             $page['isSpacer'] = true;
         }
         $page['nav_title'] = $page['nav_title'] ?: $page['title'];
+
+        $event = new PopulatePageInformationEvent($page);
+        $this->eventDispatcher->dispatch($event);
+        $page = $event->getPage();
     }
 }

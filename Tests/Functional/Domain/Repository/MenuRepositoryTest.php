@@ -11,6 +11,7 @@ namespace B13\Menus\Tests\Functional\Domain\Repository;
  */
 
 use B13\Menus\Domain\Repository\MenuRepository;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
@@ -31,7 +32,7 @@ class MenuRepositoryTest extends FunctionalTestCase
         $context = GeneralUtility::makeInstance(Context::class);
         $context->setAspect('language', $languageAspect);
         $pageRepository = GeneralUtility::makeInstance(PageRepository::class);
-        $menuRepository = GeneralUtility::makeInstance(MenuRepository::class, $context, $pageRepository);
+        $menuRepository = GeneralUtility::makeInstance(MenuRepository::class, $context, $pageRepository, $this->createMock(EventDispatcherInterface::class));
         $page = $menuRepository->getPage(1, []);
         $pageInLanguage = $menuRepository->getPageInLanguage(1, $context, []);
         self::assertSame([], $page);
@@ -48,7 +49,7 @@ class MenuRepositoryTest extends FunctionalTestCase
         $context = GeneralUtility::makeInstance(Context::class);
         $context->setAspect('language', $languageAspect);
         $pageRepository = GeneralUtility::makeInstance(PageRepository::class);
-        $menuRepository = GeneralUtility::makeInstance(MenuRepository::class, $context, $pageRepository);
+        $menuRepository = GeneralUtility::makeInstance(MenuRepository::class, $context, $pageRepository, $this->createMock(EventDispatcherInterface::class));
         $page = $menuRepository->getPage(1, ['includeNotInMenu' => 1]);
         $pageInLanguage = $menuRepository->getPageInLanguage(1, $context, ['includeNotInMenu' => 1]);
         $page = $this->reduceResults($page);
