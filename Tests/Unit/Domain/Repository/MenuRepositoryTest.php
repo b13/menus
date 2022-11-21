@@ -13,6 +13,7 @@ namespace B13\Menus\Tests\Unit\Domain\Repository;
  */
 
 use B13\Menus\Domain\Repository\MenuRepository;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
@@ -43,7 +44,7 @@ class MenuRepositoryTest extends UnitTestCase
         $pageRepository->expects(self::once())->method('getMenu')
             ->with(1, '*', 'sorting', 'AND doktype NOT IN (' . implode(',', $excludedDoktypes) . ') ', false)
             ->willReturn([]);
-        $menuRepository = new MenuRepository($context, $pageRepository);
+        $menuRepository = new MenuRepository($context, $pageRepository, $this->createMock(EventDispatcherInterface::class));
         $menuRepository->getSubPagesOfPage(1, 1, []);
     }
 
@@ -68,7 +69,7 @@ class MenuRepositoryTest extends UnitTestCase
         $pageRepository->expects(self::once())->method('getMenu')
             ->with(1, '*', 'sorting', 'AND doktype NOT IN (' . implode(',', $excludedDoktypes) . ',99) ', false)
             ->willReturn([]);
-        $menuRepository = new MenuRepository($context, $pageRepository);
+        $menuRepository = new MenuRepository($context, $pageRepository, $this->createMock(EventDispatcherInterface::class));
         $menuRepository->getSubPagesOfPage(1, 1, ['excludeDoktypes' => 99]);
     }
 
@@ -104,7 +105,7 @@ class MenuRepositoryTest extends UnitTestCase
 
         $menuRepository = $this->getMockBuilder(MenuRepository::class)
             ->onlyMethods(['populateAdditionalKeysForPage', 'isPageSuitableForLanguage'])
-            ->setConstructorArgs([$context, $pageRepository])
+            ->setConstructorArgs([$context, $pageRepository, $this->createMock(EventDispatcherInterface::class)])
             ->getMock();
         $menuRepository->expects(self::any())->method('isPageSuitableForLanguage')->willReturn(true);
         $breadcrumbs = $menuRepository->getBreadcrumbsMenu($rootLine, ['excludeDoktypes' => 99]);
