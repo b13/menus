@@ -17,6 +17,7 @@ use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\Typolink\PageLinkBuilder;
 
 /**
  * Responsible for interacting with the PageRepository class, in addition, should be responsible for overlays
@@ -27,6 +28,7 @@ class MenuRepository
     protected Context $context;
     protected PageRepository $pageRepository;
     protected EventDispatcherInterface $eventDispatcher;
+    protected ?PageLinkBuilder $pageLinkBuilder = null;
 
     // Never show or query them.
     protected $excludedDoktypes = [
@@ -40,6 +42,11 @@ class MenuRepository
         $this->context = $context;
         $this->pageRepository = $pageRepository;
         $this->eventDispatcher = $eventDispatcher;
+    }
+
+    public function setPageLinkBuilder(PageLinkBuilder $pageLinkBuilder): void
+    {
+        $this->pageLinkBuilder = $pageLinkBuilder;
     }
 
     public function getBreadcrumbsMenu(array $originalRootLine, array $configuration): array
@@ -180,9 +187,20 @@ class MenuRepository
             $page['isSpacer'] = true;
         }
         $page['nav_title'] = $page['nav_title'] ?: $page['title'];
+        if ((bool)($configuration['resolveLinks'] ?? false) && $this->pageLinkBuilder !== null) {
+            $page['_link'] = $this->resolveLinkForPage($page);
+        }
 
         $event = new PopulatePageInformationEvent($page);
         $this->eventDispatcher->dispatch($event);
         $page = $event->getPage();
+    }
+
+    protected function resolveLinkForPage(array $page): string
+    {
+        $linkDetails = ['pageuid' => $page['uid']];
+        $linkConfiguration = ['language' => $page['sys_language_uid']];
+        $linkResult = $this->pageLinkBuilder->build($linkDetails, '', '', $linkConfiguration);
+        return $linkResult->getUrl();
     }
 }

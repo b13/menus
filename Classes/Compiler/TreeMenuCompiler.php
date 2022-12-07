@@ -13,6 +13,7 @@ namespace B13\Menus\Compiler;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use TYPO3\CMS\Frontend\Typolink\PageLinkBuilder;
 
 class TreeMenuCompiler extends AbstractMenuCompiler
 {
@@ -32,8 +33,9 @@ class TreeMenuCompiler extends AbstractMenuCompiler
 
         $cacheIdentifier .= '-' . substr(md5(json_encode([$includeStartPageIds, $startPageIds, $depth, $excludePages])), 0, 10);
 
-        return $this->cache->get($cacheIdentifier, function () use ($configuration, $includeStartPageIds, $startPageIds, $depth) {
+        return $this->cache->get($cacheIdentifier, function () use ($configuration, $includeStartPageIds, $startPageIds, $depth, $contentObjectRenderer) {
             $tree = [];
+            $this->menuRepository->setPageLinkBuilder(GeneralUtility::makeInstance(PageLinkBuilder::class, $contentObjectRenderer, $contentObjectRenderer->getTypoScriptFrontendController()));
             foreach ($startPageIds as $startPageId) {
                 if ($includeStartPageIds) {
                     $page = $this->menuRepository->getPageTree($startPageId, $depth, $configuration);

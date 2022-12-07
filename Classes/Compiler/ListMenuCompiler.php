@@ -13,6 +13,7 @@ namespace B13\Menus\Compiler;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use TYPO3\CMS\Frontend\Typolink\PageLinkBuilder;
 
 class ListMenuCompiler extends AbstractMenuCompiler
 {
@@ -28,8 +29,9 @@ class ListMenuCompiler extends AbstractMenuCompiler
 
         $cacheIdentifier .= '-' . substr(md5(json_encode([$pageIds])), 0, 10);
 
-        return $this->cache->get($cacheIdentifier, function () use ($configuration, $pageIds) {
+        return $this->cache->get($cacheIdentifier, function () use ($configuration, $pageIds, $contentObjectRenderer) {
             $pages = [];
+            $this->menuRepository->setPageLinkBuilder(GeneralUtility::makeInstance(PageLinkBuilder::class, $contentObjectRenderer, $contentObjectRenderer->getTypoScriptFrontendController()));
             foreach ($pageIds as $pageId) {
                 $page = $this->menuRepository->getPage($pageId, $configuration);
                 if (!empty($page)) {
