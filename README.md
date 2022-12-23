@@ -78,6 +78,8 @@ Pure TypoScript-based solution:
     page.10.excludePages = 4,51
     # 0: default, 1 to include nav_hide = 1 pages
     page.10.includeNotInMenu = 0
+    # if pageFields are not set, we take "*" from pages, but you can define
+    page.10.pageFields = uid,pid,title,slug
     page.10.renderObj.level0 = TEXT
     page.10.renderObj.level0.typolink.parameter.data = field:uid
     page.10.renderObj.level0.typolink.ATagParams = class="active"
@@ -91,6 +93,7 @@ Fluid-based solution:
     page.10.dataProcessing.10.entryPoints = 23,13
     page.10.dataProcessing.10.depth = 3
     page.10.dataProcessing.10.excludePages = 4,51
+    page.10.dataProcessing.10.pageFields = uid,pid,title,slug
     # 0: default, 1 to include nav_hide = 1 pages
     page.10.dataProcessing.10.includeNotInMenu = 0
     page.10.dataProcessing.10.as = mobilemenu
