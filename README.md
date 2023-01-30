@@ -205,7 +205,7 @@ Fluid-based solution:
 
     page.10 = FLUIDTEMPLATE
     page.10.dataProcessing.10 = B13\Menus\DataProcessing\BreadcrumbsMenu
-    page.10.dataProcessors.10.excludePages = 4,51
+    page.10.dataProcessing.10.excludePages = 4,51
     # 0: default, 1 to include nav_hide = 1 pages
     page.10.dataProcessing.10.includeNotInMenu = 0
     page.10.dataProcessing.10.as = breadcrumbs
