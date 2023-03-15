@@ -10,6 +10,7 @@
   },
   "require-dev": {
     "phpstan/phpstan": "^1.8.11",
+    "phpunit/phpunit": "^9.5",
     "typo3/cms-fluid-styled-content": "^11.5",
     "typo3/cms-install": "^11.5",
     "typo3/coding-standards": "^0.5",
