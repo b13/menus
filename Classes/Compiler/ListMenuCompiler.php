@@ -24,7 +24,7 @@ class ListMenuCompiler extends AbstractMenuCompiler
         $cacheIdentifier = $this->generateCacheIdentifierForMenu('list', $configuration);
 
         $pageIds = $contentObjectRenderer->stdWrap($configuration['pages'] ?? $this->getCurrentSite()->getRootPageId(), $configuration['pages.'] ?? []);
-        $pageIds = GeneralUtility::intExplode(',', $pageIds);
+        $pageIds = GeneralUtility::intExplode(',', (string)$pageIds);
 
         $cacheIdentifier .= '-' . substr(md5(json_encode([$pageIds])), 0, 10);
 
