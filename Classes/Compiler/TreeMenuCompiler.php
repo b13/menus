@@ -25,7 +25,7 @@ class TreeMenuCompiler extends AbstractMenuCompiler
 
         $includeStartPageIds = $contentObjectRenderer->stdWrap($configuration['includeRootPages'] ?? false, $configuration['includeRootPages.'] ?? []);
         $startPageIds = $contentObjectRenderer->stdWrap($configuration['entryPoints'] ?? $this->getCurrentSite()->getRootPageId(), $configuration['entryPoints.'] ?? []);
-        $startPageIds = GeneralUtility::intExplode(',', $startPageIds);
+        $startPageIds = GeneralUtility::intExplode(',', (string)$startPageIds);
         $depth = (int)$contentObjectRenderer->stdWrap($configuration['depth'] ?? 1, $configuration['depth.'] ?? []);
         $excludePages = $this->parseStdWrap($configuration['excludePages'] ?? '', $configuration['excludePages.'] ?? []);
         $configuration['excludePages'] = $excludePages;
