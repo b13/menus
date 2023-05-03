@@ -27,7 +27,7 @@ class MenuRepositoryTest extends FunctionalTestCase
      */
     public function translatedPageIsNotInMenuIfNavHideIsSet(): void
     {
-        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Domain/Repository/Fixtures/translated_page_with_nav_hide.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/translated_page_with_nav_hide.csv');
         $languageAspect = GeneralUtility::makeInstance(LanguageAspect::class, 1);
         $context = GeneralUtility::makeInstance(Context::class);
         $context->setAspect('language', $languageAspect);
@@ -44,7 +44,7 @@ class MenuRepositoryTest extends FunctionalTestCase
      */
     public function translatedPageIsInMenuIfNavHideAndIgnoreNavHideIsSet(): void
     {
-        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Domain/Repository/Fixtures/translated_page_with_nav_hide.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/translated_page_with_nav_hide.csv');
         $languageAspect = GeneralUtility::makeInstance(LanguageAspect::class, 1);
         $context = GeneralUtility::makeInstance(Context::class);
         $context->setAspect('language', $languageAspect);

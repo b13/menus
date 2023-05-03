@@ -29,7 +29,7 @@ abstract class DataProcessingTest extends FunctionalTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Fixtures/pages.csv');
+        $this->importCSVDataSet(__DIR__ . '/../Fixtures/pages.csv');
     }
 
     protected function reduceResults(array $results): array
@@ -78,17 +78,18 @@ abstract class DataProcessingTest extends FunctionalTestCase
         $frontendUserAuth = $this->getMockBuilder(FrontendUserAuthentication::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $controller = $this->getAccessibleMock(
-            TypoScriptFrontendController::class,
-            ['get_cache_timeout'],
-            [
-                $context,
-                $site,
-                $siteLanguage,
-                $pageArguments,
-                $frontendUserAuth,
-            ]
-        );
+        $controller = $this->getMockBuilder($this->buildAccessibleProxy(TypoScriptFrontendController::class))
+            ->onlyMethods(['get_cache_timeout'])
+            ->setConstructorArgs(
+                [
+                    $context,
+                    $site,
+                    $siteLanguage,
+                    $pageArguments,
+                    $frontendUserAuth,
+                ]
+            )
+            ->getMock();
         $controller->expects(self::any())->method('get_cache_timeout')->willReturn(1);
         return $controller;
     }

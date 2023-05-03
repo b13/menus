@@ -7,9 +7,6 @@ parameters:
 
   ignoreErrors:
     -
-      message: '#Constant ORIGINAL_ROOT not found.#'
-      path: %currentWorkingDirectory%/Tests
-    -
       message: '#Call to an undefined static method TYPO3\\CMS\\Frontend\\ContentObject\\AbstractContentObject::__construct\(\).#'
       path: %currentWorkingDirectory%/Classes/ContentObject/*
     -

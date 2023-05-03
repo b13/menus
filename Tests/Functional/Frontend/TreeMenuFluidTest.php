@@ -20,8 +20,8 @@ class TreeMenuFluidTest extends AbstractFrontendTest
      */
     public function menuOnRootPage(): void
     {
-        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/pages.csv');
-        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/tree_menu_fluid_typoscript.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/pages.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/tree_menu_fluid_typoscript.csv');
         $response = $this->executeFrontendRequestWrapper(new InternalRequest('http://localhost/'));
         $expected = '<a href="/page-1">page-1</a><a href="/page-2">page-2</a>';
         $body = (string)$response->getBody();
@@ -33,8 +33,8 @@ class TreeMenuFluidTest extends AbstractFrontendTest
      */
     public function menuOnSubpage(): void
     {
-        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/pages.csv');
-        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/tree_menu_fluid_typoscript.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/pages.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/tree_menu_fluid_typoscript.csv');
         $response = $this->executeFrontendRequestWrapper(new InternalRequest('http://localhost/page-1'));
         $expected = '<a class="active" href="/page-1">page-1</a><a href="/page-2">page-2</a>';
         $body = (string)$response->getBody();
@@ -46,8 +46,8 @@ class TreeMenuFluidTest extends AbstractFrontendTest
      */
     public function menuWithAccessRestrictionForNotLoggedinUser(): void
     {
-        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/access_restriction.csv');
-        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/tree_menu_fluid_typoscript.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/access_restriction.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/tree_menu_fluid_typoscript.csv');
         $response = $this->executeFrontendRequestWrapper(new InternalRequest('http://localhost/'));
         $body = (string)$response->getBody();
         self::assertStringContainsString('<a href="/page-1">page-1</a>', $body);
@@ -59,8 +59,8 @@ class TreeMenuFluidTest extends AbstractFrontendTest
      */
     public function menuWithAccessRestrictionForLoggedinUser(): void
     {
-        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/access_restriction.csv');
-        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/tree_menu_fluid_typoscript.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/access_restriction.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/tree_menu_fluid_typoscript.csv');
         $context = (new InternalRequestContext())->withFrontendUserId(1);
         $request = new InternalRequest('http://localhost/');
         $response = $this->executeFrontendRequestWrapper($request, $context);
