@@ -239,13 +239,10 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
         foreach ($pageDataset as $page) {
             $connection->insert('pages', $page);
         }
-        $controller = $this->getAccessibleMock(
-            TypoScriptFrontendController::class,
-            ['get_cache_timeout'],
-            [],
-            '',
-            false
-        );
+        $controller = $this->getMockBuilder($this->buildAccessibleProxy(TypoScriptFrontendController::class))
+            ->onlyMethods(['get_cache_timeout'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $GLOBALS['TSFE'] = $controller;
         if ((GeneralUtility::makeInstance(Typo3Version::class))->getMajorVersion() < 12) {
             $GLOBALS['TSFE']->id = '1';
@@ -259,7 +256,10 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
             ->getMock();
         $pageRepository = GeneralUtility::makeInstance(PageRepository::class);
         $menuRepository = GeneralUtility::makeInstance(MenuRepository::class, $context, $pageRepository, $this->createMock(EventDispatcherInterface::class));
-        $cacheHelper = $this->getAccessibleMock(CacheHelper::class, ['foo'], [], '', false);
+        $cacheHelper = $this->getMockBuilder($this->buildAccessibleProxy(CacheHelper::class))
+            ->onlyMethods([])
+            ->disableOriginalConstructor()
+            ->getMock();
         $cacheHelper->_set('disableCaching', true);
         $languageMenuCompiler = $this->getMockBuilder(LanguageMenuCompiler::class)
             ->onlyMethods(

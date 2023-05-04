@@ -19,8 +19,8 @@ class BreadcrumbMenuContentObjectTest extends AbstractFrontendTest
      */
     public function menuOnRootPage(): void
     {
-        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/pages.csv');
-        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/breadcrumb_menu_content_object_typoscript.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/pages.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/breadcrumb_menu_content_object_typoscript.csv');
         $response = $this->executeFrontendRequestWrapper(new InternalRequest('http://localhost/'));
         $expected = '<a href="/">root</a>';
         $body = (string)$response->getBody();
@@ -32,8 +32,8 @@ class BreadcrumbMenuContentObjectTest extends AbstractFrontendTest
      */
     public function menuOnSubpage(): void
     {
-        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/pages.csv');
-        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/breadcrumb_menu_content_object_typoscript.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/pages.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/breadcrumb_menu_content_object_typoscript.csv');
         $response = $this->executeFrontendRequestWrapper(new InternalRequest('http://localhost/page-1'));
         $expected = '<a href="/">root</a><a href="/page-1">page-1</a>';
         $body = (string)$response->getBody();

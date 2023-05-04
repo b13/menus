@@ -7,9 +7,6 @@ parameters:
 
   ignoreErrors:
     -
-      message: '#Constant ORIGINAL_ROOT not found.#'
-      path: %currentWorkingDirectory%/Tests
-    -
       message: '#Call to an undefined method B13\\Menus\\ContentObject\\.*ContentObject::setContentObjectRenderer\(\).#'
       path: %currentWorkingDirectory%/Classes/ContentObject/*
     -

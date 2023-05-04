@@ -19,9 +19,9 @@ class LanguageMenuContentObjectTest extends AbstractFrontendTest
      */
     public function menuOnRootPage(): void
     {
-        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/pages.csv');
-        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/translated_pages.csv');
-        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/language_menu_content_object_typoscript.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/pages.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/translated_pages.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/language_menu_content_object_typoscript.csv');
         $response = $this->executeFrontendRequestWrapper(new InternalRequest('http://localhost/'));
         $expected = '<a href="/" class="active">english</a><a href="/de/">german</a>';
         $body = (string)$response->getBody();
@@ -33,9 +33,9 @@ class LanguageMenuContentObjectTest extends AbstractFrontendTest
      */
     public function menuOnSubpage(): void
     {
-        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/pages.csv');
-        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/translated_pages.csv');
-        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/menus/Tests/Functional/Frontend/Fixtures/language_menu_content_object_typoscript.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/pages.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/translated_pages.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/language_menu_content_object_typoscript.csv');
         $response = $this->executeFrontendRequestWrapper(new InternalRequest('http://localhost/de/'));
         $expected = '<a href="/">english</a><a href="/de/" class="active">german</a>';
         $body = (string)$response->getBody();
