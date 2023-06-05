@@ -148,7 +148,7 @@ Fluid-based solution:
 Usage in Fluid:
 
     <nav>
-        <f:for each="{languageMenu}" as="item">
+        <f:for each="{languageswitcher}" as="item">
             <f:link.page pageUid="{item.uid}" language="{item.language.languageId}">{item.language.title}</f:link.page>
         </f:for>
     </nav>
