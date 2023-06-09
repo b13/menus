@@ -66,7 +66,7 @@ abstract class AbstractMenuCompiler implements SingletonInterface
         $visibilityAspect = $this->context->getAspect('visibility');
         $visibility = $visibilityAspect->includeHiddenPages() ? '-with-hidden' : '';
         $root = $this->getCurrentSite()->getRootPageId();
-        $identifier = $prefix . '-root-' . $root . '-language-' . $language . '-groups-' . implode('_', $groupIds) . '-' . $visibility . '-' . substr(md5(json_encode($configuration)), 0, 10);
+        $identifier = $prefix . '-root-' . $root . '-language-' . $language . '-groups-' . md5(implode('_', $groupIds)) . '-' . $visibility . '-' . substr(md5(json_encode($configuration)), 0, 10);
         return $identifier;
     }
 
