@@ -29,8 +29,6 @@ class TreeMenuContentObject extends AbstractContentObject
     {
         if ((GeneralUtility::makeInstance(Typo3Version::class))->getMajorVersion() < 12) {
             parent::__construct($cObj);
-        } else {
-            $this->setContentObjectRenderer($cObj);
         }
         $this->treeMenuCompiler = (GeneralUtility::makeInstance(ContentObjectServiceContainer::class))->getTreeMenuCompiler();
     }

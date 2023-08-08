@@ -29,8 +29,6 @@ class ListMenuContentObject extends AbstractContentObject
     {
         if ((GeneralUtility::makeInstance(Typo3Version::class))->getMajorVersion() < 12) {
             parent::__construct($cObj);
-        } else {
-            $this->setContentObjectRenderer($cObj);
         }
         $this->listMenuCompiler = (GeneralUtility::makeInstance(ContentObjectServiceContainer::class))->getListMenuCompiler();
     }

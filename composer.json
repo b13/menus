@@ -15,7 +15,7 @@
     "typo3/cms-install": "^11.5",
     "typo3/coding-standards": "^0.5",
     "typo3/tailor": "^1.0",
-    "typo3/testing-framework": "^7"
+    "typo3/testing-framework": "7.0.2"
   },
   "config": {
     "vendor-dir": ".Build/vendor",
