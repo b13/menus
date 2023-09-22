@@ -112,6 +112,7 @@ services:
         find Tests -name \\*.php -print0 | xargs -0 sed -i 's/protected bool \(.*\)resetSingletonInstances = /protected \1resetSingletonInstances = /g';
         find Tests -name \\*.php -print0 | xargs -0 sed -i 's/protected array \(.*\)coreExtensionsToLoad = \[/protected \1coreExtensionsToLoad = [/g';
         find Tests -name \\*.php -print0 | xargs -0 sed -i 's/protected array \(.*\)pathsToLinkInTestInstance = \[/protected \1pathsToLinkInTestInstance = [/g';
+        find Tests -name \\*.php -print0 | xargs -0 sed -i 's/protected array \(.*\)configurationToUseInTestInstance = \[/protected \1configurationToUseInTestInstance = [/g';
       "
 
   composer_validate:

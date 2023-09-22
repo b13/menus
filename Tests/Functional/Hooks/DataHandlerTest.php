@@ -25,6 +25,18 @@ class DataHandlerTest extends FunctionalTestCase
 
     protected array $testExtensionsToLoad = ['typo3conf/ext/menus'];
 
+    protected array $configurationToUseInTestInstance = [
+        'SYS' => [
+            'caching' => [
+                'cacheConfigurations' => [
+                    'pages' => [
+                        'backend' => \TYPO3\CMS\Core\Cache\Backend\Typo3DatabaseBackend::class,
+                    ],
+                ],
+            ],
+        ],
+    ];
+
     protected function setUp(): void
     {
         parent::setUp();
