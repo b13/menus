@@ -105,6 +105,21 @@ class MenuRepository
         return $page;
     }
 
+    protected function getPageFields(array $configuration): string
+    {
+        if (!empty($configuration['pageFields'])) {
+            $items = GeneralUtility::trimExplode(',', $configuration['pageFields'], true);
+            // just make sure if we have a field list to not have "*" included
+            if (count($items) > 1 && ($key = array_search('*', $items)) !== false) {
+                unset($items[$key]);
+            }
+            $pageFields = GeneralUtility::uniqueList(implode(',', $items));
+        } else {
+            $pageFields = '*';
+        }
+        return $pageFields;
+    }
+
     protected function getExcludeDoktypes(array $configuration): array
     {
         if (!empty($configuration['excludeDoktypes'])) {
@@ -137,10 +152,11 @@ class MenuRepository
             $excludedPagesArray = GeneralUtility::intExplode(',', (string)$configuration['excludePages']);
             $whereClause .= ' AND uid NOT IN (' . implode(',', $excludedPagesArray) . ')';
         }
+        $pageFields = $this->getPageFields($configuration);
         $excludedDoktypes = $this->getExcludeDoktypes($configuration);
         $pageTree = $this->pageRepository->getMenu(
             $pageId,
-            '*',
+            $pageFields,
             'sorting',
             'AND doktype NOT IN (' . implode(',', $excludedDoktypes) . ') ' . $whereClause,
             false
