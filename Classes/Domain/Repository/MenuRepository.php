@@ -42,6 +42,11 @@ class MenuRepository
         $this->eventDispatcher = $eventDispatcher;
     }
 
+    public function getAnchorMenu(int $pageId, array $configuration): array
+    {
+        $page = $this->getPage($pageId, $configuration);
+    }
+
     public function getBreadcrumbsMenu(array $originalRootLine, array $configuration): array
     {
         $pages = [];
