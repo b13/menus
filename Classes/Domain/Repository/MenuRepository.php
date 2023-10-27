@@ -27,6 +27,7 @@ class MenuRepository
     protected Context $context;
     protected PageRepository $pageRepository;
     protected EventDispatcherInterface $eventDispatcher;
+    private readonly ConnectionPool $connectionPool;
 
     // Never show or query them.
     protected $excludedDoktypes = [
@@ -35,16 +36,33 @@ class MenuRepository
         PageRepository::DOKTYPE_SYSFOLDER,
     ];
 
-    public function __construct(Context $context, PageRepository $pageRepository, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Context $context, PageRepository $pageRepository, EventDispatcherInterface $eventDispatcher,  ConnectionPool $connectionPool)
     {
         $this->context = $context;
         $this->pageRepository = $pageRepository;
         $this->eventDispatcher = $eventDispatcher;
+        $this->connectionPool = $connectionPool;
     }
 
     public function getAnchorMenu(int $pageId, array $configuration): array
     {
-        $page = $this->getPage($pageId, $configuration);
+        //Get the queryBuilder for tt_content
+        $queryBuilder = $this->connectionPool
+            ->getQueryBuilderForTable('tt_content');
+
+        $result = $queryBuilder
+            ->select("header")
+            ->from("tt_content")
+            ->where($queryBuilder->exp()->eq("pid", $queryBuilder->createNamedParameter($pageId)))
+            ->andWhere($queryBuilder->exp()->neq("delete", 1))
+            ->orderBy("sorting")
+            ->executeQuery();
+
+        $menu = [];
+        while($row = $result->fetchAssoziative()){
+            $menu[] = $row["header"];
+        }
+        return $menu;
     }
 
     public function getBreadcrumbsMenu(array $originalRootLine, array $configuration): array
