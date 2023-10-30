@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 namespace B13\Menus\Domain\Repository;
 
 /*
@@ -17,6 +18,7 @@ use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 
 /**
  * Responsible for interacting with the PageRepository class, in addition, should be responsible for overlays
@@ -27,7 +29,7 @@ class MenuRepository
     protected Context $context;
     protected PageRepository $pageRepository;
     protected EventDispatcherInterface $eventDispatcher;
-    private readonly ConnectionPool $connectionPool;
+    private ConnectionPool $connectionPool;
 
     // Never show or query them.
     protected $excludedDoktypes = [
@@ -36,7 +38,7 @@ class MenuRepository
         PageRepository::DOKTYPE_SYSFOLDER,
     ];
 
-    public function __construct(Context $context, PageRepository $pageRepository, EventDispatcherInterface $eventDispatcher,  ConnectionPool $connectionPool)
+    public function __construct(Context $context, PageRepository $pageRepository, EventDispatcherInterface $eventDispatcher, ConnectionPool $connectionPool)
     {
         $this->context = $context;
         $this->pageRepository = $pageRepository;
@@ -46,22 +48,26 @@ class MenuRepository
 
     public function getAnchorMenu(int $pageId, array $configuration): array
     {
+        //@TODO add configuration options like e.g. filter
+
+
         //Get the queryBuilder for tt_content
         $queryBuilder = $this->connectionPool
             ->getQueryBuilderForTable('tt_content');
-
         $result = $queryBuilder
             ->select("header")
             ->from("tt_content")
-            ->where($queryBuilder->exp()->eq("pid", $queryBuilder->createNamedParameter($pageId)))
-            ->andWhere($queryBuilder->exp()->neq("delete", 1))
+            ->where($queryBuilder->expr()->eq("pid", $queryBuilder->createNamedParameter($pageId)))
+            ->andWhere($queryBuilder->expr()->eq("deleted", 0))
+            ->andWhere($queryBuilder->expr()->eq("CType", $queryBuilder->createNamedParameter("header")))
             ->orderBy("sorting")
             ->executeQuery();
 
         $menu = [];
-        while($row = $result->fetchAssoziative()){
+        while ($row = $result->fetchAssociative()) {
             $menu[] = $row["header"];
         }
+
         return $menu;
     }
 
@@ -168,6 +174,7 @@ class MenuRepository
             'AND doktype NOT IN (' . implode(',', $excludedDoktypes) . ') ' . $whereClause,
             false
         );
+
         /** @var LanguageAspect $languageAspect */
         $languageAspect = $this->context->getAspect('language');
         foreach ($pageTree as $k => &$page) {
@@ -176,7 +183,7 @@ class MenuRepository
                 continue;
             }
             if ($depth > 0) {
-                $page['subpages'] = $this->getSubPagesOfPage((int)$page['uid'], $depth-1, $configuration);
+                $page['subpages'] = $this->getSubPagesOfPage((int)$page['uid'], $depth - 1, $configuration);
             }
             $this->populateAdditionalKeysForPage($page);
         }

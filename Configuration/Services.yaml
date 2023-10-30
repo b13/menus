@@ -13,6 +13,8 @@ services:
     public: true
   B13\Menus\DataProcessing\ListMenu:
     public: true
+  B13\Menus\DataProcessing\AnchorMenu:
+    public: true
   B13\Menus\DataProcessing\TreeMenu:
     public: true
   B13\Menus\ContentObject\ContentObjectServiceContainer:
@@ -31,6 +33,10 @@ services:
     tags:
       - name: frontend.contentobject
         identifier: 'LISTMENU'
+  B13\Menus\ContentObject\AnchorMenuContentObject:
+    tags:
+      - name: frontend.contentobject
+        identifier: 'ANCHORMENU'
   B13\Menus\ContentObject\LanguageMenuContentObject:
     tags:
       - name: frontend.contentobject
