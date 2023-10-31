@@ -13,6 +13,7 @@ namespace B13\Menus\Domain\Repository;
  */
 
 use B13\Menus\Event\PopulatePageInformationEvent;
+use B13\Menus\Helpers\HelperFunctions;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
@@ -65,11 +66,15 @@ class MenuRepository
 
         $menu = [];
         while ($row = $result->fetchAssociative()) {
-            $menu[] = $row["header"];
+            $tmp = [];
+            $tmp["title"] = $row["header"];
+            $tmp["id"] = HelperFunctions::getAnchorId($row["header"]);
+            $menu[] = $tmp;
         }
 
         return $menu;
     }
+
 
     public function getBreadcrumbsMenu(array $originalRootLine, array $configuration): array
     {

@@ -22,7 +22,7 @@ class AnchorMenuCompiler extends AbstractMenuCompiler
      */
     public function compile(ContentObjectRenderer $contentObjectRenderer, array $configuration): array
     {
-        $includeStartPageIds = $contentObjectRenderer->stdWrap($configuration['includeRootPages'] ?? false, $configuration['includeRootPages.'] ?? []);
+
         $cacheIdentifier = $this->generateCacheIdentifierForMenu('anchor', $configuration);
         $excludePages = $this->parseStdWrap($configuration['excludePages'] ?? '', $configuration['excludePages.'] ?? []);
         $configuration['excludePages'] = $excludePages;

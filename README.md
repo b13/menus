@@ -5,9 +5,9 @@
 ## Introduction
 
 TYPO3 CMS is known for handling large websites with lots of content. TYPO3 Core provides several ways to build
-navigation / menus in a very flexible way. However, generating menus has been a tedious issue in most of our
-large-scale projects. With TYPO3 v9, the performance of generating menus improved when it comes to URL generation,
-but a few conceptual issues within linking and menu generation still exist:
+navigation / menus in a very flexible way. However, generating menus has been a tedious issue in most of our large-scale
+projects. With TYPO3 v9, the performance of generating menus improved when it comes to URL generation, but a few
+conceptual issues within linking and menu generation still exist:
 
 1. All logic relies on HMENU
 
@@ -17,32 +17,31 @@ but a few conceptual issues within linking and menu generation still exist:
 2. HMENU saves states for each page
 
    HMENU offers the possibility to define A LOT of states ("active", "current", "has children"). This information is
-   different for each page - obviously - which is then cached in a separate cache entry in `cache_hash` - making
-   the cache entries fairly large even though we do not use states.
+   different for each page - obviously - which is then cached in a separate cache entry in `cache_hash` - making the
+   cache entries fairly large even though we do not use states.
 
-   We use `expAll` (expand all subpages for all other pages as well) which makes the requests to the pages
-   enormously large.
+   We use `expAll` (expand all subpages for all other pages as well) which makes the requests to the pages enormously
+   large.
 
 3. HMENU has a cryptic syntax for "special" menus
 
-    Nowadays, it is fairly common to build menus for footer navigation, mega-menus, sitemap-like menus for an additional
-    sidebar. Using "special." for language menus, for "directories" or just a simple list of pages, seems rather complex.
-
+   Nowadays, it is fairly common to build menus for footer navigation, mega-menus, sitemap-like menus for an additional
+   sidebar. Using "special." for language menus, for "directories" or just a simple list of pages, seems rather complex.
 
 This extension tries to overcome these pitfalls by
- * building menus once, then caches the results and afterwards applying active states (reduce amount of cached data).
-   This is especially important for Tree-based menus,
- * introducing new cObjects and DataProcessors for the specific use cases making them more understandable for
-   non-TYPO3-Gurus.
+
+* building menus once, then caches the results and afterwards applying active states (reduce amount of cached data).
+  This is especially important for Tree-based menus,
+* introducing new cObjects and DataProcessors for the specific use cases making them more understandable for
+  non-TYPO3-Gurus.
 
 ## Installation & Requirements
 
 Use `composer req b13/menus` or install it via TYPO3's Extension Manager from the
 [TYPO3 Extension Repository](https://extensions.typo3.org) using the extension key `menus`.
 
-You need TYPO3 v9 with Site Handling for this extension to work. If your project supports mount points,
-this is not implemented. In addition, pages to access restricted pages (even though no access exists) are not yet
-considered.
+You need TYPO3 v9 with Site Handling for this extension to work. If your project supports mount points, this is not
+implemented. In addition, pages to access restricted pages (even though no access exists) are not yet considered.
 
 ## Features
 
@@ -51,7 +50,8 @@ The extension ships TypoScript cObjects and TypoScript DataProcessors for Fluid-
 ### Common Options for all menus
 
 * excludePages - a list of page IDs (and their subpages if Tree Menu or Breadcrumbs is used) to exclude from the page
-* excludeDoktypes - a list of doktypes that are not rendered. BE_USER_SECTIONs are excluded by default. SYS_FOLDERs are queried (for subpages etc) but never rendered.
+* excludeDoktypes - a list of doktypes that are not rendered. BE_USER_SECTIONs are excluded by default. SYS_FOLDERs are
+  queried (for subpages etc) but never rendered.
 * includeNotInMenu - include pages with nav_hide set to 1, instead of ignoring them
 
 ### Common options for items
@@ -188,7 +188,6 @@ Usage in Fluid:
         </f:for>
     </nav>
 
-
 ### Breadcrumb Menu (a.k.a. Rootline Menu)
 
     page.10 = BREADCRUMBS
@@ -199,7 +198,6 @@ Usage in Fluid:
     page.10.renderObj = TEXT
     page.10.renderObj.typolink.parameter.data = field:uid
     page.10.renderObj.wrap = <li> | </li>
-
 
 Fluid-based solution:
 
@@ -219,9 +217,53 @@ Usage in Fluid:
         </f:for>
     </nav>
 
+### Anchor Menu
+
+Only basic implementation yet. No filter atm. means only CType "header" will be used for an anchor in the menu. You can
+change this behavior in Classes\Domain\Repository\MenuRepository.php -> getAnchorMenu method in the where clause.
+
+Parameters are:<br>
+pages => for a list of Typo3 pages which should be scanned and will be used in generated links. if unset level 1 under
+root will be used<br>
+excludePages => to exclude certain pages <br>
+
+There is an AnchorViewHelper to assist with the HTML ID sanitization.
+
+Fluid-based solution:
+
+    page.10 = FLUIDTEMPLATE
+    page.10.dataProcessing.10 = B13\Menus\DataProcessing\AnchorMenu
+    page.10.dataProcessing.10.as = breadcrumbs
+
+Usage in Fluid:
+
+    <nav>
+        <f:for each="{anchors}" as="page">
+            <f:link.page pageUid="{page.uid}">{page.nav_title}</f:link.page>
+            <f:if condition="{page.isCurrentPage} == false"> &nbsp; </f:if>
+            <f:if condition="{page.anchors}">
+                <ul class="sub anchors">
+                    <f:for each="{page.anchors}" as="anchor">
+                        <li class="sub nav-item">
+                            <a href="{f:uri.page(pageUid: parentId)}#{anchor.id}" title="{anchor.title}">{anchor.title}</a>
+                        </li>
+                    </f:for>
+                </ul>
+            </f:if>
+        </f:for>
+    </nav>
+
+Viewhelper:
+`{namespace menu=B13\Menus\ViewHelpers}`
+
+    <h2 id="{header -> menu:anchor()}" class="your classes">
+         {header}
+    </h2>
+
 ### Dynamic configuration values for the menu (stdWrap)
 
-If you want to get a menu of the direct siblings of a page, no matter what page you have selected, you can use the stdWrap functions built into each property:
+If you want to get a menu of the direct siblings of a page, no matter what page you have selected, you can use the
+stdWrap functions built into each property:
 
 	9999 = B13\Menus\DataProcessing\TreeMenu
 	9999 {
@@ -229,20 +271,20 @@ If you want to get a menu of the direct siblings of a page, no matter what page 
 		as = listOfJobPages
 	}
 
-By using the `.data` property of the `entryPoints` attribute we can access each property of the currently build page. And so we can render the siblings of the page.
+By using the `.data` property of the `entryPoints` attribute we can access each property of the currently build page.
+And so we can render the siblings of the page.
 
 ## Technical Details
 
 ### Caching
 
-Fetching the records is cached in a cache entry (with proper cache tags) within "cache_hash",
-and the rendering is also cached in a separated cache entry within "cache_pages" for each page (regular),
-where active state is applied.
+Fetching the records is cached in a cache entry (with proper cache tags) within "cache_hash", and the rendering is also
+cached in a separated cache entry within "cache_pages" for each page (regular), where active state is applied.
 
 ### FAQ
 
-This extension refrains from handling options `addQueryParams`, or `ADD_GET_PARAM`, or the `target` property
-in order to deal with the pages as "native" as possible, like any other link.
+This extension refrains from handling options `addQueryParams`, or `ADD_GET_PARAM`, or the `target` property in order to
+deal with the pages as "native" as possible, like any other link.
 
 ## License
 
@@ -253,6 +295,7 @@ The extension is licensed under GPL v2+, same as the TYPO3 Core. For details see
 If you find an issue, feel free to create an issue on GitHub or a pull request.
 
 ### ToDos
+
 - add `includeSpacer` option
 - extract stdWrap functionality out of caching parameters
 
@@ -260,4 +303,6 @@ If you find an issue, feel free to create an issue on GitHub or a pull request.
 
 This extension was created by [Benni Mack](https://github.com/bmack) in 2019 for [b13 GmbH](https://b13.com).
 
-[Find more TYPO3 extensions we have developed](https://b13.com/useful-typo3-extensions-from-b13-to-you) that help us deliver value in client projects. As part of the way we work, we focus on testing and best practices to ensure long-term performance, reliability, and results in all our code.
+[Find more TYPO3 extensions we have developed](https://b13.com/useful-typo3-extensions-from-b13-to-you) that help us
+deliver value in client projects. As part of the way we work, we focus on testing and best practices to ensure long-term
+performance, reliability, and results in all our code.
