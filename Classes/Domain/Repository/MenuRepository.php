@@ -56,10 +56,11 @@ class MenuRepository
         $queryBuilder = $this->connectionPool
             ->getQueryBuilderForTable('tt_content');
         $result = $queryBuilder
-            ->select("header")
+            ->select("header", "tx_menus_anchor_nav_title")
             ->from("tt_content")
             ->where($queryBuilder->expr()->eq("pid", $queryBuilder->createNamedParameter($pageId)))
             ->andWhere($queryBuilder->expr()->eq("deleted", 0))
+            ->andWhere($queryBuilder->expr()->eq("tx_menus_show_in_anchor_menu", 1))
             ->andWhere($queryBuilder->expr()->eq("CType", $queryBuilder->createNamedParameter("header")))
             ->orderBy("sorting")
             ->executeQuery();
@@ -67,8 +68,11 @@ class MenuRepository
         $menu = [];
         while ($row = $result->fetchAssociative()) {
             $tmp = [];
+            $navTitle = $row["tx_menus_anchor_nav_title"];
+
             $tmp["title"] = $row["header"];
             $tmp["id"] = HelperFunctions::getAnchorId($row["header"]);
+            $tmp["nav_title"] = $navTitle;
             $menu[] = $tmp;
         }
 
