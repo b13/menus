@@ -6,6 +6,7 @@ if ((\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Inform
     $GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'] = array_merge($GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'], [
         'TREEMENU' => \B13\Menus\ContentObject\TreeMenuContentObject::class,
         'LISTMENU' => \B13\Menus\ContentObject\ListMenuContentObject::class,
+        'ANCHORMENU' => \B13\Menus\ContentObject\AnchorMenuContentObject::class,
         'LANGUAGEMENU' => \B13\Menus\ContentObject\LanguageMenuContentObject::class,
         'BREADCRUMBS' => \B13\Menus\ContentObject\BreadcrumbsContentObject::class,
     ]);

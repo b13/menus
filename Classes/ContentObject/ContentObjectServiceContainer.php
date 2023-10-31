@@ -14,6 +14,7 @@ namespace B13\Menus\ContentObject;
 
 use B13\Menus\Compiler\LanguageMenuCompiler;
 use B13\Menus\Compiler\ListMenuCompiler;
+use B13\Menus\Compiler\AnchorMenuCompiler;
 use B13\Menus\Compiler\TreeMenuCompiler;
 use B13\Menus\Domain\Repository\MenuRepository;
 use TYPO3\CMS\Core\SingletonInterface;
@@ -26,17 +27,21 @@ class ContentObjectServiceContainer implements SingletonInterface
     protected LanguageMenuCompiler $languageMenuCompiler;
     protected MenuRepository $menuRepository;
     protected ListMenuCompiler $listMenuCompiler;
+    protected AnchorMenuCompiler $anchorMenuCompiler;
     protected TreeMenuCompiler $treeMenuCompiler;
 
     public function __construct(
         LanguageMenuCompiler $languageMenuCompiler,
-        MenuRepository $menuRepository,
-        ListMenuCompiler $listMenuCompiler,
-        TreeMenuCompiler $treeMenuCompiler
-    ) {
+        MenuRepository       $menuRepository,
+        ListMenuCompiler     $listMenuCompiler,
+        AnchorMenuCompiler   $anchorMenuCompiler,
+        TreeMenuCompiler     $treeMenuCompiler
+    )
+    {
         $this->languageMenuCompiler = $languageMenuCompiler;
         $this->menuRepository = $menuRepository;
         $this->listMenuCompiler = $listMenuCompiler;
+        $this->anchorMenuCompiler = $anchorMenuCompiler;
         $this->treeMenuCompiler = $treeMenuCompiler;
     }
 
@@ -53,6 +58,11 @@ class ContentObjectServiceContainer implements SingletonInterface
     public function getListMenuCompiler(): ListMenuCompiler
     {
         return $this->listMenuCompiler;
+    }
+
+    public function getAnchorMenuCompiler(): AnchorMenuCompiler
+    {
+        return $this->anchorMenuCompiler;
     }
 
     public function getTreeMenuCompiler(): TreeMenuCompiler
