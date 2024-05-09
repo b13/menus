@@ -60,6 +60,7 @@ class MenuRepository
             ->from("tt_content")
             ->where($queryBuilder->expr()->eq("pid", $queryBuilder->createNamedParameter($pageId)))
             ->andWhere($queryBuilder->expr()->eq("deleted", 0))
+            ->andWhere($queryBuilder->expr()->eq("hidden", 0))
             ->andWhere($queryBuilder->expr()->eq("tx_menus_show_in_anchor_menu", 1))
             ->andWhere($queryBuilder->expr()->eq("CType", $queryBuilder->createNamedParameter("header")))
             ->orderBy("sorting")
