@@ -11,9 +11,14 @@ namespace B13\Menus\Tests\Functional\Functional;
  */
 
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
-class BreadcrumbMenuFluidTest extends AbstractFrontendTest
+class BreadcrumbMenuFluidTest extends FunctionalTestCase
 {
+    protected array $testExtensionsToLoad = ['typo3conf/ext/menus'];
+    protected array $coreExtensionsToLoad = ['core', 'frontend'];
+    protected array $pathsToLinkInTestInstance = ['typo3conf/ext/menus/Build/sites' => 'typo3conf/sites'];
+
     /**
      * @test
      */
@@ -21,7 +26,7 @@ class BreadcrumbMenuFluidTest extends AbstractFrontendTest
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/pages.csv');
         $this->importCSVDataSet(__DIR__ . '/Fixtures/breadcrumb_menu_fluid_typoscript.csv');
-        $response = $this->executeFrontendRequestWrapper(new InternalRequest('http://localhost/'));
+        $response = $this->executeFrontendSubRequest(new InternalRequest('http://localhost/'));
         $expected = '<a href="/">root</a>';
         $body = (string)$response->getBody();
         self::assertStringContainsString($expected, $body);
@@ -34,7 +39,7 @@ class BreadcrumbMenuFluidTest extends AbstractFrontendTest
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/pages.csv');
         $this->importCSVDataSet(__DIR__ . '/Fixtures/breadcrumb_menu_fluid_typoscript.csv');
-        $response = $this->executeFrontendRequestWrapper(new InternalRequest('http://localhost/page-1'));
+        $response = $this->executeFrontendSubRequest(new InternalRequest('http://localhost/page-1'));
         $expected = '<a href="/">root</a><a href="/page-1">page-1</a>';
         $body = (string)$response->getBody();
         self::assertStringContainsString($expected, $body);

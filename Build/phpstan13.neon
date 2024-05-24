@@ -1,0 +1,27 @@
+parameters:
+  level: 5
+
+  paths:
+    - %currentWorkingDirectory%/Classes
+    - %currentWorkingDirectory%/Tests
+  excludePaths:
+    - %currentWorkingDirectory%/Tests/Unit/Domain/Repository/MenuRepositoryTest.php
+  ignoreErrors:
+    -
+      message: '#Call to an undefined method TYPO3\\CMS\\Core\\Site\\Entity\\SiteLanguage::getTwoLetterIsoCode\(\).#'
+      path: %currentWorkingDirectory%/Classes/Compiler/LanguageMenuCompiler.php
+    -
+      message: '#Access to undefined constant TYPO3\\CMS\\Core\\Domain\\Repository\\PageRepository::DOKTYPE_RECYCLER.#'
+      path: %currentWorkingDirectory%/Classes/Domain/Repository/MenuRepository.php
+    -
+      message: '#Access to undefined constant TYPO3\\CMS\\Core\\Domain\\Repository\\PageRepository::DOKTYPE_RECYCLER.#'
+      path: %currentWorkingDirectory%/Tests/Unit/Domain/Repository/MenuRepositoryTest.php
+    -
+      message: '#.*get_cache_timeout\(\).*#'
+      path: %currentWorkingDirectory%/Classes/CacheHelper.php
+    -
+      message: '#Call to an undefined static method TYPO3\\CMS\\Frontend\\ContentObject\\AbstractContentObject::__construct\(\).#'
+      path: %currentWorkingDirectory%/Classes/ContentObject/*
+    -
+      message: '#Property TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController::\$id \(int\) does not accept string.#'
+      path: %currentWorkingDirectory%/Tests/Functional/Compiler/LanguageMenuCompilerTest.php

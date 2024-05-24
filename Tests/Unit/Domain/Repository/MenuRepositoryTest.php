@@ -17,6 +17,8 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class MenuRepositoryTest extends UnitTestCase
@@ -38,9 +40,11 @@ class MenuRepositoryTest extends UnitTestCase
             ->getMock();
         $excludedDoktypes = [
             PageRepository::DOKTYPE_BE_USER_SECTION,
-            PageRepository::DOKTYPE_RECYCLER,
             PageRepository::DOKTYPE_SYSFOLDER,
         ];
+        if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() < 13) {
+            $excludedDoktypes[] = PageRepository::DOKTYPE_RECYCLER;
+        }
         $pageRepository->expects(self::once())->method('getMenu')
             ->with(1, '*', 'sorting', 'AND doktype NOT IN (' . implode(',', $excludedDoktypes) . ') ', false)
             ->willReturn([]);
@@ -63,9 +67,11 @@ class MenuRepositoryTest extends UnitTestCase
             ->getMock();
         $excludedDoktypes = [
             PageRepository::DOKTYPE_BE_USER_SECTION,
-            PageRepository::DOKTYPE_RECYCLER,
             PageRepository::DOKTYPE_SYSFOLDER,
         ];
+        if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() < 13) {
+            $excludedDoktypes[] = PageRepository::DOKTYPE_RECYCLER;
+        }
         $pageRepository->expects(self::once())->method('getMenu')
             ->with(1, '*', 'sorting', 'AND doktype NOT IN (' . implode(',', $excludedDoktypes) . ',99) ', false)
             ->willReturn([]);
@@ -88,20 +94,40 @@ class MenuRepositoryTest extends UnitTestCase
             ->getMock();
         $context->expects(self::once())->method('getAspect')->with('language')->willReturn($languageAspect);
 
-        $pageRepository = new class() extends PageRepository {
-            public function getPage($uid, $disableGroupAccessCheck = false)
-            {
-                if ($uid === 1) {
-                    // $rootLine[0]
-                    return ['uid' => 1, 'doktype' => 99, 'nav_hide'=> 0];
+        if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() < 13) {
+            $pageRepository = new class() extends PageRepository {
+                public function getPage($uid, $disableGroupAccessCheck = false)
+                {
+                    if ($uid === 1) {
+                        // $rootLine[0]
+                        return ['uid' => 1, 'doktype' => 99, 'nav_hide'=> 0];
+                    }
+                    if ($uid === 2) {
+                        // $rootLine[0]
+                        return ['uid' => 2, 'doktype' => 98, 'nav_hide'=> 0];
+                    }
+                    return [];
                 }
-                if ($uid === 2) {
-                    // $rootLine[0]
-                    return ['uid' => 2, 'doktype' => 98, 'nav_hide'=> 0];
+            };
+        } else {
+            $pageRepository = new class() extends PageRepository {
+                public function getPage(int $uid, bool $disableGroupAccessCheck = false): array
+                {
+                    if ($uid === 1) {
+                        // $rootLine[0]
+                        return ['uid' => 1, 'doktype' => 99, 'nav_hide'=> 0];
+                    }
+                    if ($uid === 2) {
+                        // $rootLine[0]
+                        return ['uid' => 2, 'doktype' => 98, 'nav_hide'=> 0];
+                    }
+                    return [];
                 }
-                return [];
-            }
-        };
+                protected function init(): void
+                {
+                }
+            };
+        }
 
         $menuRepository = $this->getMockBuilder(MenuRepository::class)
             ->onlyMethods(['populateAdditionalKeysForPage', 'isPageSuitableForLanguage'])

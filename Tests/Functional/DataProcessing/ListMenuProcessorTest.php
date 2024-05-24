@@ -19,12 +19,12 @@ use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
-class ListMenuProcessorTest extends DataProcessingTest
+class ListMenuProcessorTest extends DataProcessing
 {
     /**
      * @return array
      */
-    public function setupDataProvider()
+    public static function setupDataProvider()
     {
         return [
             [
@@ -335,7 +335,7 @@ class ListMenuProcessorTest extends DataProcessingTest
     /**
      * @return array
      */
-    public function cacheDataProvider()
+    public static function cacheDataProvider()
     {
         return [
             [

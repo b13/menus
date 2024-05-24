@@ -11,10 +11,10 @@ namespace B13\Menus\Tests\Functional\Hooks;
  */
 
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -44,11 +44,11 @@ class DataHandlerTest extends FunctionalTestCase
         $this->importCSVDataSet(__DIR__ . '/../Fixtures/caches.csv');
         $this->importCSVDataSet(__DIR__ . '/../Fixtures/be_users.csv');
         $this->backendUser = $GLOBALS['BE_USER'] = $this->setUpBackendUser(1);
-        Bootstrap::initializeLanguageObject();
+        $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageServiceFactory::class)->createFromUserPreferences($GLOBALS['BE_USER']);
         $this->dataHandler = GeneralUtility::makeInstance(DataHandler::class);
     }
 
-    public function cmdmapDataProvider(): array
+    public static function cmdmapDataProvider(): array
     {
         return [
             'copy page' => ['cmdmap' => ['pages' => [
@@ -104,7 +104,7 @@ class DataHandlerTest extends FunctionalTestCase
         }
         $rows = $queryBuilder->select('*')
             ->from('cache_pages')
-            ->execute()
+            ->executeQuery()
             ->fetchAllAssociative();
         self::assertSame(0, count($rows));
     }

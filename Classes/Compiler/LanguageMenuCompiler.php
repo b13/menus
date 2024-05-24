@@ -13,6 +13,8 @@ namespace B13\Menus\Compiler;
 
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspectFactory;
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
@@ -38,7 +40,7 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
             $context = clone GeneralUtility::makeInstance(Context::class);
             $pages = [];
             foreach ($site->getLanguages() as $language) {
-                if (in_array($language->getTwoLetterIsoCode(), $excludedLanguages, true)) {
+                if (in_array($this->getLanguageCode($language), $excludedLanguages, true)) {
                     continue;
                 }
                 if (in_array((string)$language->getLanguageId(), $excludedLanguages, true)) {
@@ -61,5 +63,13 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
             }
             return $pages;
         });
+    }
+
+    protected function getLanguageCode(SiteLanguage $language): string
+    {
+        if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() === 11) {
+            return $language->getTwoLetterIsoCode();
+        }
+        return $language->getLocale()->getLanguageCode();
     }
 }

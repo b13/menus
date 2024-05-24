@@ -16,17 +16,13 @@ jobs:
         php: [ '7.4', '8.0', '8.1' ]
         TYPO3: [ '11' ]
         include:
-          - TYPO3: '10'
-            php: '7.4'
           - TYPO3: '12'
             php: '8.1'
+          - TYPO3: '13'
+            php: '8.3'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Patch  10
-        if: matrix.TYPO3 == '10'
-        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -t ${{ matrix.TYPO3 }} -s patchV10
 
       - name: Install testing system
         run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -t ${{ matrix.TYPO3 }} -s composerInstall
