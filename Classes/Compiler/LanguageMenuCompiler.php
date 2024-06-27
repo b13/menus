@@ -23,7 +23,7 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
      */
     public function compile(ContentObjectRenderer $contentObjectRenderer, array $configuration): array
     {
-        $cacheIdentifier = $this->generateCacheIdentifierForMenu('list', $configuration);
+        $cacheIdentifier = $this->generateCacheIdentifierForMenu('language', $configuration);
 
         $excludedLanguages = $contentObjectRenderer->stdWrap($configuration['excludeLanguages'] ?? '', $configuration['excludeLanguages.'] ?? []);
         $excludedLanguages = GeneralUtility::trimExplode(',', $excludedLanguages, true);
