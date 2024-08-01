@@ -11,9 +11,14 @@ namespace B13\Menus\Tests\Functional\Functional;
  */
 
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
-class LanguageMenuContentObjectTest extends AbstractFrontendTest
+class LanguageMenuContentObjectTest extends FunctionalTestCase
 {
+    protected array $testExtensionsToLoad = ['typo3conf/ext/menus'];
+    protected array $coreExtensionsToLoad = ['core', 'frontend'];
+    protected array $pathsToLinkInTestInstance = ['typo3conf/ext/menus/Build/sites' => 'typo3conf/sites'];
+
     /**
      * @test
      */
@@ -22,7 +27,7 @@ class LanguageMenuContentObjectTest extends AbstractFrontendTest
         $this->importCSVDataSet(__DIR__ . '/Fixtures/pages.csv');
         $this->importCSVDataSet(__DIR__ . '/Fixtures/translated_pages.csv');
         $this->importCSVDataSet(__DIR__ . '/Fixtures/language_menu_content_object_typoscript.csv');
-        $response = $this->executeFrontendRequestWrapper(new InternalRequest('http://localhost/'));
+        $response = $this->executeFrontendSubRequest(new InternalRequest('http://localhost/'));
         $expected = '<a href="/" class="active">english</a><a href="/de/">german</a>';
         $body = (string)$response->getBody();
         self::assertStringContainsString($expected, $body);
@@ -36,7 +41,7 @@ class LanguageMenuContentObjectTest extends AbstractFrontendTest
         $this->importCSVDataSet(__DIR__ . '/Fixtures/pages.csv');
         $this->importCSVDataSet(__DIR__ . '/Fixtures/translated_pages.csv');
         $this->importCSVDataSet(__DIR__ . '/Fixtures/language_menu_content_object_typoscript.csv');
-        $response = $this->executeFrontendRequestWrapper(new InternalRequest('http://localhost/de/'));
+        $response = $this->executeFrontendSubRequest(new InternalRequest('http://localhost/de/'));
         $expected = '<a href="/">english</a><a href="/de/" class="active">german</a>';
         $body = (string)$response->getBody();
         self::assertStringContainsString($expected, $body);

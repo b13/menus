@@ -16,6 +16,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -31,7 +32,6 @@ class MenuRepository
     // Never show or query them.
     protected $excludedDoktypes = [
         PageRepository::DOKTYPE_BE_USER_SECTION,
-        PageRepository::DOKTYPE_RECYCLER,
         PageRepository::DOKTYPE_SYSFOLDER,
     ];
 
@@ -40,6 +40,9 @@ class MenuRepository
         $this->context = $context;
         $this->pageRepository = $pageRepository;
         $this->eventDispatcher = $eventDispatcher;
+        if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() < 13) {
+            $this->excludedDoktypes[] = PageRepository::DOKTYPE_RECYCLER;
+        }
     }
 
     public function getBreadcrumbsMenu(array $originalRootLine, array $configuration): array

@@ -4,3 +4,15 @@ parameters:
   paths:
     - %currentWorkingDirectory%/Classes
     - %currentWorkingDirectory%/Tests
+  excludePaths:
+    - %currentWorkingDirectory%/Tests/Unit/Domain/Repository/MenuRepositoryTest.php
+  ignoreErrors:
+    -
+      message: '#Cannot call method getLanguageCode\(\) on string.#'
+      path: %currentWorkingDirectory%/Classes/Compiler/LanguageMenuCompiler.php
+    -
+      message: '#Class TYPO3\\CMS\\Frontend\\Cache\\CacheLifetimeCalculator not found.#'
+      path: %currentWorkingDirectory%/Classes/CacheHelper.php
+    -
+      message: '#.*unknown class TYPO3\\CMS\\Core\\TypoScript\\FrontendTypoScript.#'
+      path: %currentWorkingDirectory%/Classes/CacheHelper.php

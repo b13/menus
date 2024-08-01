@@ -4,18 +4,17 @@
   "license": "GPL-2.0-or-later",
   "description": "Easy and fast menus for TYPO3 Frontends",
   "require": {
-    "php": "^7.4 || ~8.0",
-    "typo3/cms-core": "^10 || ^11 || ^12.4",
-    "typo3/cms-frontend": "^10 || ^11 || ^12.4"
+    "typo3/cms-core": "^11 || ^12.4 || ^13.1",
+    "typo3/cms-frontend": "^11 || ^12.4 || ^13.1"
   },
   "require-dev": {
-    "phpstan/phpstan": "^1.8.11",
-    "phpunit/phpunit": "^9.5",
-    "typo3/cms-fluid-styled-content": "^11.5",
-    "typo3/cms-install": "^11.5",
-    "typo3/coding-standards": "^0.5",
+    "typo3/cms-fluid-styled-content": "^11 || ^12.4 || ^13.1",
+    "typo3/cms-install": "^11 || ^12.4 || ^13.1",
+    "typo3/coding-standards": "^0.5.5",
+    "saschaegerer/phpstan-typo3": "^1.8",
     "typo3/tailor": "^1.0",
-    "typo3/testing-framework": "^7"
+    "typo3/testing-framework": "^7.0 || ^8.0",
+    "phpunit/phpunit": "9.6 || ^10.5"
   },
   "config": {
     "vendor-dir": ".Build/vendor",
@@ -35,9 +34,6 @@
     }
   },
   "scripts": {
-    "prepare-tests-10": [
-      "TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
-    ],
     "prepare-tests": [
        "if [ ! -e .Build/Web/typo3conf/sites -a -e .Build/Web/typo3conf ]; then cd .Build/Web/typo3conf && ln -s ../../../Build/sites && cd -; fi"
     ]

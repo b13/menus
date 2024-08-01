@@ -11,10 +11,15 @@ namespace B13\Menus;
  * of the License, or any later version.
  */
 
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\TypoScript\FrontendTypoScript;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\Cache\CacheLifetimeCalculator;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
@@ -27,9 +32,11 @@ class CacheHelper implements SingletonInterface
 {
     protected FrontendInterface $cache;
     protected bool $disableCaching = false;
+    protected Context $context;
 
     public function __construct(FrontendInterface $cache, Context $context)
     {
+        $this->context = $context;
         $this->cache = $cache;
         try {
             $this->disableCaching = $context->getPropertyFromAspect('workspace', 'id', 0) > 0;
@@ -63,7 +70,8 @@ class CacheHelper implements SingletonInterface
 
         // Calculate tags + lifetime
         $tags = $this->buildTagsAndAddThemToPageCache($pages);
-        $maximumLifeTime = $this->getMaxLifetimeOfPages($pages, $this->getFrontendController()->get_cache_timeout());
+        $defaultMaxLifeTime = $this->getDefaultMaxLifeTime();
+        $maximumLifeTime = $this->getMaxLifetimeOfPages($pages, $defaultMaxLifeTime);
         $this->cache->set($cacheIdentifier, $pages, $tags, $maximumLifeTime);
         return $pages;
     }
@@ -108,15 +116,58 @@ class CacheHelper implements SingletonInterface
         return $pageIds;
     }
 
+    protected function getDefaultMaxLifeTime(): int
+    {
+        if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() < 13) {
+            $maxLifetime = (int)$this->getFrontendController()->get_cache_timeout();
+        } else {
+            $request = $this->getServerRequest();
+            $pageInformation = $request->getAttribute('frontend.page.information');
+            /** @var ?FrontendTypoScript $typoScript */
+            $typoScript = $request->getAttribute('frontend.typoscript');
+            if ($typoScript === null || $pageInformation === null) {
+                return 0;
+            }
+            $typoScriptConfigArray = $typoScript->getConfigArray();
+            $maxLifetime = GeneralUtility::makeInstance(CacheLifetimeCalculator::class)
+                ->calculateLifetimeForPage(
+                    $pageInformation->getId(),
+                    $pageInformation->getPageRecord(),
+                    $typoScriptConfigArray,
+                    0,
+                    $this->context
+                );
+        }
+        return $maxLifetime;
+    }
+
     /**
      * pages.cache_timeout is not used here, as this is supposed to be relevant for content of a page, not the
      * metadata.
      */
-    protected function getMaxLifetimeOfPages(array $pages, int $maxLifetime = null): ?int
+    protected function getMaxLifetimeOfPages(array $pages, int $maxLifetime): int
     {
         foreach ($pages as $page) {
             if (!empty($page['endtime'])) {
-                $maxLifetimeOfPage = $page['endtime'] - $GLOBALS['EXEC_TIME'];
+                $maxLifetimeOfPage = (int)$page['endtime'] - $GLOBALS['EXEC_TIME'];
+                if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() === 13) {
+                    $request = $this->getServerRequest();
+                    /** @var ?FrontendTypoScript $typoScript */
+                    $typoScript = $request->getAttribute('frontend.typoscript');
+                    if ($typoScript === null) {
+                        $typoScriptConfigArray = [];
+                    } else {
+                        $typoScriptConfigArray = $typoScript->getConfigArray();
+                    }
+                    $maxLifetimeOfPage = GeneralUtility::makeInstance(CacheLifetimeCalculator::class)
+                        ->calculateLifetimeForPage(
+                            $page['uid'],
+                            $page,
+                            $typoScriptConfigArray,
+                            0,
+                            $this->context
+                        );
+                }
                 if ($maxLifetimeOfPage < $maxLifetime) {
                     $maxLifetime = $maxLifetimeOfPage;
                 }
@@ -126,6 +177,11 @@ class CacheHelper implements SingletonInterface
             }
         }
         return $maxLifetime;
+    }
+
+    protected function getServerRequest(): ServerRequestInterface
+    {
+        return $GLOBALS['TYPO3_REQUEST'];
     }
 
     protected function getFrontendController(): TypoScriptFrontendController

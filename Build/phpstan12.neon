@@ -4,7 +4,8 @@ parameters:
   paths:
     - %currentWorkingDirectory%/Classes
     - %currentWorkingDirectory%/Tests
-
+  excludePaths:
+    - %currentWorkingDirectory%/Tests/Unit/Domain/Repository/MenuRepositoryTest.php
   ignoreErrors:
     -
       message: '#Call to an undefined static method TYPO3\\CMS\\Frontend\\ContentObject\\AbstractContentObject::__construct\(\).#'
@@ -12,3 +13,6 @@ parameters:
     -
       message: '#Property TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController::\$id \(int\) does not accept string.#'
       path: %currentWorkingDirectory%/Tests/Functional/Compiler/LanguageMenuCompilerTest.php
+    -
+      message: '#Call to an undefined method TYPO3\\CMS\\Core\\TypoScript\\FrontendTypoScript::getConfigArray\(\).#'
+      path: %currentWorkingDirectory%/Classes/CacheHelper.php

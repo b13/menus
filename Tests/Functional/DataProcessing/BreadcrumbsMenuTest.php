@@ -16,12 +16,12 @@ use B13\Menus\DataProcessing\BreadcrumbsMenu;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
-class BreadcrumbsMenuTest extends DataProcessingTest
+class BreadcrumbsMenuTest extends DataProcessing
 {
     /**
      * @return array
      */
-    public function setupDataProvider()
+    public static function setupDataProvider()
     {
         return [
             [
