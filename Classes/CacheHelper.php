@@ -12,6 +12,7 @@ namespace B13\Menus;
  */
 
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\Cache\CacheTag;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
@@ -86,7 +87,13 @@ class CacheHelper implements SingletonInterface
         $tags = array_map(function ($pageId) {
             return 'menuId_' . $pageId;
         }, $usedPageIds);
-        $this->getFrontendController()->addCacheTags($tags);
+
+        if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() < 13) {
+            $this->getFrontendController()->addCacheTags($tags);
+        } else {
+            $cacheDataCollector = $this->getServerRequest()->getAttribute('frontend.cache.collector');
+            $cacheDataCollector->addCacheTags(...array_map(fn (string $tag) => new CacheTag($tag), $tags));
+        }
         return $tags;
     }
 

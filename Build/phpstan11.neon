@@ -16,3 +16,7 @@ parameters:
     -
       message: '#.*unknown class TYPO3\\CMS\\Core\\TypoScript\\FrontendTypoScript.#'
       path: %currentWorkingDirectory%/Classes/CacheHelper.php
+    -
+      message: '#Instantiated class TYPO3\\CMS\\Core\\Cache\\CacheDataCollector not found.#'
+    -
+      message: '#Instantiated class TYPO3\\CMS\\Core\\Cache\\CacheTag not found.#'
