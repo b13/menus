@@ -16,3 +16,7 @@ parameters:
     -
       message: '#Call to an undefined method TYPO3\\CMS\\Core\\TypoScript\\FrontendTypoScript::getConfigArray\(\).#'
       path: %currentWorkingDirectory%/Classes/CacheHelper.php
+    -
+      message: '#Instantiated class TYPO3\\CMS\\Core\\Cache\\CacheDataCollector not found.#'
+    -
+      message: '#Instantiated class TYPO3\\CMS\\Core\\Cache\\CacheTag not found.#'

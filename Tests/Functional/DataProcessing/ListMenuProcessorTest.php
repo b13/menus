@@ -13,8 +13,10 @@ namespace B13\Menus\Tests\Functional\DataProcessing;
  */
 
 use B13\Menus\DataProcessing\ListMenu;
+use TYPO3\CMS\Core\Cache\CacheDataCollector;
 use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\Http\ServerRequest;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -317,6 +319,10 @@ class ListMenuProcessorTest extends DataProcessing
         $request = GeneralUtility::makeInstance(ServerRequest::class);
         $request = $request->withAttribute('site', $site);
         $request = $request->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_FE);
+        if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() > 12) {
+            $cacheDataCollector = new CacheDataCollector();
+            $request = $request->withAttribute('frontend.cache.collector', $cacheDataCollector);
+        }
         $GLOBALS['TYPO3_REQUEST'] = $request;
 
         $GLOBALS['TSFE'] = $this->getTypoScriptFrontendController($site, $tsfe['id']);
@@ -371,6 +377,10 @@ class ListMenuProcessorTest extends DataProcessing
         $request = GeneralUtility::makeInstance(ServerRequest::class);
         $request = $request->withAttribute('site', $site);
         $request = $request->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_FE);
+        if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() > 12) {
+            $cacheDataCollector = new CacheDataCollector();
+            $request = $request->withAttribute('frontend.cache.collector', $cacheDataCollector);
+        }
         $GLOBALS['TYPO3_REQUEST'] = $request;
 
         $GLOBALS['TSFE'] = $this->getTypoScriptFrontendController($site, $tsfe['id']);
