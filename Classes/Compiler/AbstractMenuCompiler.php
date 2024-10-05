@@ -14,6 +14,7 @@ namespace B13\Menus\Compiler;
 use B13\Menus\CacheHelper;
 use B13\Menus\Domain\Repository\MenuRepository;
 use B13\Menus\Event\CacheIdentifierForMenuEvent;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Context\UserAspect;
