@@ -274,7 +274,7 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
                     $context,
                     $cacheHelper,
                     $menuRepository,
-                    $eventDispatcher
+                    $eventDispatcher,
                 ]
             )
             ->getMock();
