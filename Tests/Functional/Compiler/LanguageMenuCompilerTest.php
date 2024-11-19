@@ -256,6 +256,7 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
             ->getMock();
         $pageRepository = GeneralUtility::makeInstance(PageRepository::class);
         $menuRepository = GeneralUtility::makeInstance(MenuRepository::class, $context, $pageRepository, $this->createMock(EventDispatcherInterface::class));
+        $eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $cacheHelper = $this->getMockBuilder($this->buildAccessibleProxy(CacheHelper::class))
             ->onlyMethods([])
             ->disableOriginalConstructor()
@@ -273,6 +274,7 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
                     $context,
                     $cacheHelper,
                     $menuRepository,
+                    $eventDispatcher
                 ]
             )
             ->getMock();
