@@ -13,6 +13,8 @@ namespace B13\Menus\Compiler;
 
 use B13\Menus\CacheHelper;
 use B13\Menus\Domain\Repository\MenuRepository;
+use B13\Menus\Event\CacheIdentifierForMenuEvent;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Context\UserAspect;
@@ -30,12 +32,14 @@ abstract class AbstractMenuCompiler implements SingletonInterface
     protected MenuRepository $menuRepository;
     protected CacheHelper $cache;
     protected Context $context;
+    protected EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Context $context, CacheHelper $cache, MenuRepository $menuRepository)
+    public function __construct(Context $context, CacheHelper $cache, MenuRepository $menuRepository, EventDispatcherInterface $eventDispatcher)
     {
         $this->context = $context;
         $this->menuRepository = $menuRepository;
         $this->cache = $cache;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -67,6 +71,9 @@ abstract class AbstractMenuCompiler implements SingletonInterface
         $visibility = $visibilityAspect->includeHiddenPages() ? '-with-hidden' : '';
         $root = $this->getCurrentSite()->getRootPageId();
         $identifier = $prefix . '-root-' . $root . '-language-' . $language . '-groups-' . md5(implode('_', $groupIds)) . '-' . $visibility . '-' . substr(md5(json_encode($configuration)), 0, 10);
+        $event = new CacheIdentifierForMenuEvent($identifier);
+        $this->eventDispatcher->dispatch($event);
+        $identifier = $event->getIdentifier();
         return $identifier;
     }
 
