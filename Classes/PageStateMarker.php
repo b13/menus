@@ -27,7 +27,7 @@ class PageStateMarker
         self::markStates($page, $level);
     }
 
-    public static function markStates(array &$page, int $level = null): void
+    public static function markStates(array &$page, ?int $level = null): void
     {
         if ($level !== null) {
             $page['level'] = $level;
