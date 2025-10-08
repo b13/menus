@@ -46,12 +46,8 @@ class PageStateMarker
         if (!is_array($GLOBALS['TSFE']->rootLine)) {
             return false;
         }
-        foreach ($GLOBALS['TSFE']->rootLine as $pageInRootLine) {
-            if ((int)$pageInRootLine['uid'] === $pageId) {
-                return true;
-            }
-        }
-        return false;
+
+        return in_array($pageId, array_column($GLOBALS['TSFE']->rootLine, 'uid'));
     }
 
     private static function isCurrentPage(int $pageId): bool
