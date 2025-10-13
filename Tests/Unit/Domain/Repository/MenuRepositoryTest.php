@@ -30,8 +30,7 @@ class MenuRepositoryTest extends UnitTestCase
      */
     public function getSubPagesOfPageRestrictQueryToExcludeDoktypes(): void
     {
-        $languageAspect = $this->getMockBuilder(LanguageAspect::class)
-            ->getMock();
+        $languageAspect = new LanguageAspect();
         $context = $this->getMockBuilder(Context::class)
             ->getMock();
         $context->expects(self::once())->method('getAspect')->with('language')->willReturn($languageAspect);
@@ -57,8 +56,7 @@ class MenuRepositoryTest extends UnitTestCase
      */
     public function getSubPagesOfPageMergeExcludeDoktypesFromConfiguration(): void
     {
-        $languageAspect = $this->getMockBuilder(LanguageAspect::class)
-            ->getMock();
+        $languageAspect = new LanguageAspect();
         $context = $this->getMockBuilder(Context::class)
             ->getMock();
         $context->expects(self::once())->method('getAspect')->with('language')->willReturn($languageAspect);
@@ -88,8 +86,7 @@ class MenuRepositoryTest extends UnitTestCase
             ['uid' => 1, 'doktype' => 99, 'nav_hide'=> 0],
             ['uid' => 2, 'doktype' => 98, 'nav_hide'=> 0],
         ];
-        $languageAspect = $this->getMockBuilder(LanguageAspect::class)
-            ->getMock();
+        $languageAspect = new LanguageAspect();
         $context = $this->getMockBuilder(Context::class)
             ->getMock();
         $context->expects(self::once())->method('getAspect')->with('language')->willReturn($languageAspect);
