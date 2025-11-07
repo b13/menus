@@ -14,6 +14,8 @@ namespace B13\Menus\Hooks;
 
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * This hook is triggered before caches for a page get flushed.
@@ -42,6 +44,12 @@ class DataHandlerHook
         if ($parentPageId > 0) {
             $menuTags[] = 'menuId_' . $parentPageId;
         }
-        $this->cacheManager->flushCachesByTags($menuTags);
+        if ((GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() < 13)) {
+            $this->cacheManager->flushCachesByTags($menuTags);
+        } else {
+            foreach ($menuTags as $menuTag) {
+                $params['tags'][$menuTag] = true;
+            }
+        }
     }
 }
