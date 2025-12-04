@@ -11,10 +11,10 @@
     "typo3/cms-fluid-styled-content": "^11 || ^12.4 || ^13.1 || ^14",
     "typo3/cms-install": "^11 || ^12.4 || ^13.1 || ^14",
     "typo3/coding-standards": "^0.5.5",
-    "saschaegerer/phpstan-typo3": "^1.8",
+    "phpstan/phpstan": "^1.10",
     "typo3/tailor": "^1.0",
-    "typo3/testing-framework": "^7.0 || ^8.0",
-    "phpunit/phpunit": "9.6 || ^10.5"
+    "typo3/testing-framework": "^7.0 || ^8.0 || ^9.3",
+    "phpunit/phpunit": "9.6 || ^10.5 || ^11.3"
   },
   "config": {
     "vendor-dir": ".Build/vendor",

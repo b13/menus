@@ -88,6 +88,9 @@ services:
         elif [ ${TYPO3} -eq 12 ]; then
           composer require typo3/cms-install:^12.4 typo3/cms-fluid-styled-content:^12.4 --dev -W --no-progress --no-interaction
           composer prepare-tests
+        elif [ ${TYPO3} -eq 14 ]; then
+          composer require typo3/cms-install:^14 typo3/cms-fluid-styled-content:^14 --dev -W --no-progress --no-interaction
+          composer prepare-tests
         else
           composer install --no-progress --no-interaction
           composer prepare-tests
