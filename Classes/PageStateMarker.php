@@ -11,6 +11,8 @@ namespace B13\Menus;
  * of the License, or any later version.
  */
 
+use TYPO3\CMS\Frontend\Page\PageInformation;
+
 /**
  * Helper class to set additional properties for a page
  */
@@ -21,7 +23,7 @@ class PageStateMarker
         $page['level'] = $level;
         if (!empty($page['subpages'])) {
             foreach ($page['subpages'] as &$subPage) {
-                self::markStatesRecursively($subPage, $level+1);
+                self::markStatesRecursively($subPage, $level + 1);
             }
         }
         self::markStates($page, $level);
@@ -43,15 +45,21 @@ class PageStateMarker
 
     private static function isPageInCurrentRootLine(int $pageId): bool
     {
-        if (!is_array($GLOBALS['TSFE']->rootLine)) {
+        $request = $GLOBALS['TYPO3_REQUEST'];
+        /** @var PageInformation $pageInformation */
+        $pageInformation = $request->getAttribute('frontend.page.information');
+        if (!is_array($pageInformation->getRootLine())) {
             return false;
         }
 
-        return in_array($pageId, array_column($GLOBALS['TSFE']->rootLine, 'uid'));
+        return in_array($pageId, array_column($pageInformation->getRootLine(), 'uid'));
     }
 
     private static function isCurrentPage(int $pageId): bool
     {
-        return $pageId === $GLOBALS['TSFE']->id;
+        $request = $GLOBALS['TYPO3_REQUEST'];
+        /** @var PageInformation $pageInformation */
+        $pageInformation = $request->getAttribute('frontend.page.information');
+        return $pageId === $pageInformation->getId();
     }
 }
