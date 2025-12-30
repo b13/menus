@@ -190,9 +190,4 @@ class CacheHelper implements SingletonInterface
     {
         return $GLOBALS['TYPO3_REQUEST'];
     }
-
-    protected function getFrontendController(): TypoScriptFrontendController
-    {
-        return $GLOBALS['TSFE'];
-    }
 }
