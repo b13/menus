@@ -125,23 +125,29 @@ class CacheHelper implements SingletonInterface
 
     protected function getDefaultMaxLifeTime(): int
     {
-        if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() < 13) {
-            $maxLifetime = (int)$this->getFrontendController()->get_cache_timeout();
-        } else {
-            $request = $this->getServerRequest();
-            $pageInformation = $request->getAttribute('frontend.page.information');
-            /** @var ?FrontendTypoScript $typoScript */
-            $typoScript = $request->getAttribute('frontend.typoscript');
-            if ($typoScript === null || $pageInformation === null) {
-                return 0;
-            }
-            $typoScriptConfigArray = $typoScript->getConfigArray();
+        $request = $this->getServerRequest();
+        $pageInformation = $request->getAttribute('frontend.page.information');
+        /** @var ?FrontendTypoScript $typoScript */
+        $typoScript = $request->getAttribute('frontend.typoscript');
+        if ($typoScript === null || $pageInformation === null) {
+            return 0;
+        }
+        $typoScriptConfigArray = $typoScript->getConfigArray();
+        if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() === 13) {
             $maxLifetime = GeneralUtility::makeInstance(CacheLifetimeCalculator::class)
                 ->calculateLifetimeForPage(
                     $pageInformation->getId(),
                     $pageInformation->getPageRecord(),
                     $typoScriptConfigArray,
                     0,
+                    $this->context
+                );
+        } else {
+            $maxLifetime = GeneralUtility::makeInstance(CacheLifetimeCalculator::class)
+                ->calculateLifetimeForPage(
+                    $pageInformation->getId(),
+                    $pageInformation->getPageRecord(),
+                    $typoScriptConfigArray,
                     $this->context
                 );
         }
@@ -156,22 +162,29 @@ class CacheHelper implements SingletonInterface
     {
         foreach ($pages as $page) {
             if (!empty($page['endtime'])) {
-                $maxLifetimeOfPage = (int)$page['endtime'] - $GLOBALS['EXEC_TIME'];
+                $request = $this->getServerRequest();
+                /** @var ?FrontendTypoScript $typoScript */
+                $typoScript = $request->getAttribute('frontend.typoscript');
+                if ($typoScript === null) {
+                    $typoScriptConfigArray = [];
+                } else {
+                    $typoScriptConfigArray = $typoScript->getConfigArray();
+                }
                 if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() === 13) {
-                    $request = $this->getServerRequest();
-                    /** @var ?FrontendTypoScript $typoScript */
-                    $typoScript = $request->getAttribute('frontend.typoscript');
-                    if ($typoScript === null) {
-                        $typoScriptConfigArray = [];
-                    } else {
-                        $typoScriptConfigArray = $typoScript->getConfigArray();
-                    }
                     $maxLifetimeOfPage = GeneralUtility::makeInstance(CacheLifetimeCalculator::class)
                         ->calculateLifetimeForPage(
                             $page['uid'],
                             $page,
                             $typoScriptConfigArray,
                             0,
+                            $this->context
+                        );
+                } else {
+                    $maxLifetimeOfPage = GeneralUtility::makeInstance(CacheLifetimeCalculator::class)
+                        ->calculateLifetimeForPage(
+                            $page['uid'],
+                            $page,
+                            $typoScriptConfigArray,
                             $this->context
                         );
                 }
