@@ -13,8 +13,10 @@ namespace B13\Menus\DataProcessing;
 
 use B13\Menus\Domain\Repository\MenuRepository;
 use B13\Menus\PageStateMarker;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use TYPO3\CMS\Frontend\Page\PageInformation;
 
 /**
  * DataProcessor to retrieve a list of all pages of the current rootline to build a breadcrumb menu.
@@ -37,7 +39,8 @@ class BreadcrumbsMenu extends AbstractMenu
         if (isset($processorConfiguration['if.']) && !$cObj->checkIf($processorConfiguration['if.'])) {
             return $processedData;
         }
-        $pages = $this->menuRepository->getBreadcrumbsMenu($GLOBALS['TSFE']->rootLine, $processorConfiguration);
+        $rootLine = $this->getRootline($cObj);
+        $pages = $this->menuRepository->getBreadcrumbsMenu($rootLine, $processorConfiguration);
         $rootLevelCount = count($pages);
         foreach ($pages as &$page) {
             PageStateMarker::markStates($page, $rootLevelCount--);
@@ -48,5 +51,16 @@ class BreadcrumbsMenu extends AbstractMenu
         $targetVariableName = $cObj->stdWrapValue('as', $processorConfiguration, 'breadcrumbs');
         $processedData[$targetVariableName] = $pages;
         return $processedData;
+    }
+
+    protected function getRootline(ContentObjectRenderer $cObj): array
+    {
+        if ((new Typo3Version())->getMajorVersion() < 13) {
+            return $GLOBALS['TSFE']->rootLine;
+        }
+        $request = $cObj->getRequest();
+        /** @var PageInformation $pageInformation */
+        $pageInformation = $request->getAttribute('frontend.page.information');
+        return $pageInformation->getRootLine();
     }
 }

@@ -17,6 +17,7 @@ use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\AbstractContentObject;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use TYPO3\CMS\Frontend\Page\PageInformation;
 
 /**
  * Build a breadcrumbs navigation, no caching involved.
@@ -39,7 +40,8 @@ class BreadcrumbsContentObject extends AbstractContentObject
      */
     public function render($conf = [])
     {
-        $pages = $this->menuRepository->getBreadcrumbsMenu($GLOBALS['TSFE']->rootLine, $conf);
+        $rootLine = $this->getRootline();
+        $pages = $this->menuRepository->getBreadcrumbsMenu($rootLine, $conf);
         $content = '';
         $cObjForItems = GeneralUtility::makeInstance(ContentObjectRenderer::class);
         $rootLevelCount = count($pages);
@@ -49,5 +51,16 @@ class BreadcrumbsContentObject extends AbstractContentObject
             $content .= $cObjForItems->cObjGetSingle($conf['renderObj'] ?? '', $conf['renderObj.'] ?? []);
         }
         return $this->cObj->stdWrap($content, $conf);
+    }
+
+    protected function getRootline(): array
+    {
+        if ((new Typo3Version())->getMajorVersion() < 13) {
+            return $GLOBALS['TSFE']->rootLine;
+        }
+        $request = $this->cObj->getRequest();
+        /** @var PageInformation $pageInformation */
+        $pageInformation = $request->getAttribute('frontend.page.information');
+        return $pageInformation->getRootLine();
     }
 }

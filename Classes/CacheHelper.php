@@ -17,7 +17,6 @@ use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
 use TYPO3\CMS\Core\Information\Typo3Version;
-use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\TypoScript\FrontendTypoScript;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Cache\CacheLifetimeCalculator;
@@ -29,7 +28,7 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
  * The pure joy of this class is the get() method, which calculates tags and max lifetime based on the fetched
  * records. If found in cache, fetched directly.
  */
-class CacheHelper implements SingletonInterface
+class CacheHelper
 {
     protected FrontendInterface $cache;
     protected bool $disableCaching = false;
@@ -126,17 +125,18 @@ class CacheHelper implements SingletonInterface
     protected function getDefaultMaxLifeTime(): int
     {
         if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() < 13) {
-            $maxLifetime = (int)$this->getFrontendController()->get_cache_timeout();
-        } else {
-            $request = $this->getServerRequest();
-            $pageInformation = $request->getAttribute('frontend.page.information');
-            /** @var ?FrontendTypoScript $typoScript */
-            $typoScript = $request->getAttribute('frontend.typoscript');
-            if ($typoScript === null || $pageInformation === null) {
-                return 0;
-            }
-            $typoScriptConfigArray = $typoScript->getConfigArray();
-            $maxLifetime = GeneralUtility::makeInstance(CacheLifetimeCalculator::class)
+            return (int)$this->getFrontendController()->get_cache_timeout();
+        }
+        $request = $this->getServerRequest();
+        $pageInformation = $request->getAttribute('frontend.page.information');
+        /** @var ?FrontendTypoScript $typoScript */
+        $typoScript = $request->getAttribute('frontend.typoscript');
+        if ($typoScript === null || $pageInformation === null) {
+            return 0;
+        }
+        $typoScriptConfigArray = $typoScript->getConfigArray();
+        if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() < 14) {
+            return GeneralUtility::makeInstance(CacheLifetimeCalculator::class)
                 ->calculateLifetimeForPage(
                     $pageInformation->getId(),
                     $pageInformation->getPageRecord(),
@@ -145,7 +145,13 @@ class CacheHelper implements SingletonInterface
                     $this->context
                 );
         }
-        return $maxLifetime;
+        return GeneralUtility::makeInstance(CacheLifetimeCalculator::class)
+            ->calculateLifetimeForPage(
+                $pageInformation->getId(),
+                $pageInformation->getPageRecord(),
+                $typoScriptConfigArray,
+                $this->context
+            );
     }
 
     /**

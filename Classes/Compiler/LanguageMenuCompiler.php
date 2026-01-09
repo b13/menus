@@ -17,6 +17,7 @@ use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use TYPO3\CMS\Frontend\Page\PageInformation;
 
 class LanguageMenuCompiler extends AbstractMenuCompiler
 {
@@ -29,7 +30,7 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
 
         $excludedLanguages = $contentObjectRenderer->stdWrap($configuration['excludeLanguages'] ?? '', $configuration['excludeLanguages.'] ?? []);
         $excludedLanguages = GeneralUtility::trimExplode(',', $excludedLanguages, true);
-        $targetPage = $contentObjectRenderer->stdWrap($configuration['pointToPage'] ?? $GLOBALS['TSFE']->id, $configuration['pointToPage.'] ?? []);
+        $targetPage = $contentObjectRenderer->stdWrap($configuration['pointToPage'] ?? $this->getCurrentPageId($contentObjectRenderer), $configuration['pointToPage.'] ?? []);
         $targetPage = (int)$targetPage;
         $addAllSiteLanguages = isset($configuration['addAllSiteLanguages']) && (bool)$configuration['addAllSiteLanguages'] === true;
 
@@ -63,6 +64,17 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
             }
             return $pages;
         });
+    }
+
+    protected function getCurrentPageId(ContentObjectRenderer $cObj): int
+    {
+        if ((new Typo3Version())->getMajorVersion() < 13) {
+            return $GLOBALS['TSFE']->id;
+        }
+        $request = $cObj->getRequest();
+        /** @var PageInformation $pageInformation */
+        $pageInformation = $request->getAttribute('frontend.page.information');
+        return $pageInformation->getId();
     }
 
     protected function getLanguageCode(SiteLanguage $language): string

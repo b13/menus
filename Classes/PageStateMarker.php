@@ -11,6 +11,10 @@ namespace B13\Menus;
  * of the License, or any later version.
  */
 
+use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Frontend\Page\PageInformation;
+
 /**
  * Helper class to set additional properties for a page
  */
@@ -43,15 +47,39 @@ class PageStateMarker
 
     private static function isPageInCurrentRootLine(int $pageId): bool
     {
-        if (!is_array($GLOBALS['TSFE']->rootLine)) {
+        if ((new Typo3Version())->getMajorVersion() < 13) {
+            if (!is_array($GLOBALS['TSFE']->rootLine)) {
+                return false;
+            }
+            return in_array($pageId, array_column($GLOBALS['TSFE']->rootLine, 'uid'));
+        }
+        $pageInformation = self::getPageInformationFromRequest();
+        if ($pageInformation === null) {
             return false;
         }
-
-        return in_array($pageId, array_column($GLOBALS['TSFE']->rootLine, 'uid'));
+        return in_array($pageId, array_column($pageInformation->getRootLine(), 'uid'), true);
     }
 
     private static function isCurrentPage(int $pageId): bool
     {
-        return $pageId === $GLOBALS['TSFE']->id;
+        if ((new Typo3Version())->getMajorVersion() < 13) {
+            return $pageId === $GLOBALS['TSFE']->id;
+        }
+        $pageInformation = self::getPageInformationFromRequest();
+        if ($pageInformation === null) {
+            return false;
+        }
+        return $pageInformation->getId() === $pageId;
+    }
+
+    private static function getPageInformationFromRequest(): ?PageInformation
+    {
+        $request = $GLOBALS['TSFE'] ?? null;
+        if ($request instanceof ServerRequestInterface) {
+            /** @var ?PageInformation $pageInformation */
+            $pageInformation = $request->getAttribute('frontend.page.information');
+            return $pageInformation;
+        }
+        return null;
     }
 }
