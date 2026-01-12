@@ -50,9 +50,9 @@ Options:
             - postgres: use postgres
             - sqlite: use sqlite
 
-    -p <7.2|7.3|7.4|8.0|8.1>
+    -p <8.1|8.2|8.3|8.4>
         Specifies the PHP minor version to be used
-            - 7.4 (default): use PHP 7.4
+            - 8.3 (default): use PHP 8.3
 
     -e "<phpunit or codeception options>"
         Only with -s acceptance|functional|unit
@@ -88,11 +88,11 @@ Options:
         Show this help.
 
 Examples:
-    # Run unit tests using PHP 7.4
+    # Run unit tests using PHP 8.4
     ./Build/Scripts/runTests.sh
 
-    # Run unit tests using PHP 7.3
-    ./Build/Scripts/runTests.sh -p 7.3
+    # Run unit tests using PHP 8.3
+    ./Build/Scripts/runTests.sh -p 8.3
 EOF
 
 # Go to the directory this script is located, so everything else is relative
@@ -106,12 +106,12 @@ cd ../testing-docker || exit 1
 ROOT_DIR=`readlink -f ${PWD}/../../`
 TEST_SUITE="unit"
 DBMS="mariadb"
-PHP_VERSION="7.4"
+PHP_VERSION="8.3"
 PHP_XDEBUG_ON=0
 PHP_XDEBUG_PORT=9000
 EXTRA_TEST_OPTIONS=""
 SCRIPT_VERBOSE=0
-TYPO3="10"
+TYPO3="13"
 
 # Option parsing
 # Reset in case getopts has been used previously in the shell

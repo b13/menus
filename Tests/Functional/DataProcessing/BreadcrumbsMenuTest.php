@@ -13,8 +13,12 @@ namespace B13\Menus\Tests\Functional\DataProcessing;
  */
 
 use B13\Menus\DataProcessing\BreadcrumbsMenu;
+use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
+use TYPO3\CMS\Core\Http\ServerRequest;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use TYPO3\CMS\Frontend\Page\PageInformation;
 
 class BreadcrumbsMenuTest extends DataProcessing
 {
@@ -191,9 +195,19 @@ class BreadcrumbsMenuTest extends DataProcessing
      */
     public function processTest(array $tsfe, array $configuration, array $expected): void
     {
-        $GLOBALS['TSFE'] = new \stdClass();
-        $GLOBALS['TSFE']->rootLine = $tsfe['rootLine'];
-        $GLOBALS['TSFE']->id = $tsfe['id'];
+        if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() > 12) {
+            $request = GeneralUtility::makeInstance(ServerRequest::class);
+            $request = $request->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_FE);
+            $pageInformation = new PageInformation();
+            $pageInformation->setRootLine($tsfe['rootLine']);
+            $pageInformation->setId($tsfe['id']);
+            $GLOBALS['TYPO3_REQUEST'] = $request->withAttribute('frontend.page.information', $pageInformation);
+        } else {
+            $GLOBALS['TSFE'] = new \stdClass();
+            $GLOBALS['TSFE']->rootLine = $tsfe['rootLine'];
+            $GLOBALS['TSFE']->id = $tsfe['id'];
+        }
+
         $breadcrumbsMenuProcessor = GeneralUtility::makeInstance(BreadcrumbsMenu::class);
         $contentObjectRenderer = GeneralUtility::makeInstance(ContentObjectRenderer::class);
         $breadcrumbs = $breadcrumbsMenuProcessor->process($contentObjectRenderer, [], $configuration, []);

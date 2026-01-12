@@ -1,0 +1,91 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Call to an undefined method TYPO3\\\\CMS\\\\Core\\\\TypoScript\\\\FrontendTypoScript\\:\\:getConfigArray\\(\\)\\.$#"
+			count: 2
+			path: ../Classes/CacheHelper.php
+
+		-
+			message: "#^Instantiated class TYPO3\\\\CMS\\\\Core\\\\Cache\\\\CacheTag not found\\.$#"
+			count: 1
+			path: ../Classes/CacheHelper.php
+
+		-
+			message: "#^Method TYPO3\\\\CMS\\\\Frontend\\\\Cache\\\\CacheLifetimeCalculator\\:\\:calculateLifetimeForPage\\(\\) invoked with 4 parameters, 5 required\\.$#"
+			count: 1
+			path: ../Classes/CacheHelper.php
+
+		-
+			message: "#^Parameter \\#4 \\$defaultCacheTimoutInSeconds of method TYPO3\\\\CMS\\\\Frontend\\\\Cache\\\\CacheLifetimeCalculator\\:\\:calculateLifetimeForPage\\(\\) expects int, TYPO3\\\\CMS\\\\Core\\\\Context\\\\Context given\\.$#"
+			count: 1
+			path: ../Classes/CacheHelper.php
+
+		-
+			message: "#^Call to method getId\\(\\) on an unknown class TYPO3\\\\CMS\\\\Frontend\\\\Page\\\\PageInformation\\.$#"
+			count: 1
+			path: ../Classes/Compiler/LanguageMenuCompiler.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$pageInformation contains unknown class TYPO3\\\\CMS\\\\Frontend\\\\Page\\\\PageInformation\\.$#"
+			count: 1
+			path: ../Classes/Compiler/LanguageMenuCompiler.php
+
+		-
+			message: "#^Call to an undefined static method TYPO3\\\\CMS\\\\Frontend\\\\ContentObject\\\\AbstractContentObject\\:\\:__construct\\(\\)\\.$#"
+			count: 1
+			path: ../Classes/ContentObject/BreadcrumbsContentObject.php
+
+		-
+			message: "#^Call to method getRootLine\\(\\) on an unknown class TYPO3\\\\CMS\\\\Frontend\\\\Page\\\\PageInformation\\.$#"
+			count: 1
+			path: ../Classes/ContentObject/BreadcrumbsContentObject.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$pageInformation contains unknown class TYPO3\\\\CMS\\\\Frontend\\\\Page\\\\PageInformation\\.$#"
+			count: 1
+			path: ../Classes/ContentObject/BreadcrumbsContentObject.php
+
+		-
+			message: "#^Call to an undefined static method TYPO3\\\\CMS\\\\Frontend\\\\ContentObject\\\\AbstractContentObject\\:\\:__construct\\(\\)\\.$#"
+			count: 1
+			path: ../Classes/ContentObject/LanguageMenuContentObject.php
+
+		-
+			message: "#^Call to an undefined static method TYPO3\\\\CMS\\\\Frontend\\\\ContentObject\\\\AbstractContentObject\\:\\:__construct\\(\\)\\.$#"
+			count: 1
+			path: ../Classes/ContentObject/ListMenuContentObject.php
+
+		-
+			message: "#^Call to an undefined static method TYPO3\\\\CMS\\\\Frontend\\\\ContentObject\\\\AbstractContentObject\\:\\:__construct\\(\\)\\.$#"
+			count: 1
+			path: ../Classes/ContentObject/TreeMenuContentObject.php
+
+		-
+			message: "#^Call to method getRootLine\\(\\) on an unknown class TYPO3\\\\CMS\\\\Frontend\\\\Page\\\\PageInformation\\.$#"
+			count: 1
+			path: ../Classes/DataProcessing/BreadcrumbsMenu.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$pageInformation contains unknown class TYPO3\\\\CMS\\\\Frontend\\\\Page\\\\PageInformation\\.$#"
+			count: 1
+			path: ../Classes/DataProcessing/BreadcrumbsMenu.php
+
+		-
+			message: "#^Call to method getId\\(\\) on an unknown class TYPO3\\\\CMS\\\\Frontend\\\\Page\\\\PageInformation\\.$#"
+			count: 1
+			path: ../Classes/PageStateMarker.php
+
+		-
+			message: "#^Call to method getRootLine\\(\\) on an unknown class TYPO3\\\\CMS\\\\Frontend\\\\Page\\\\PageInformation\\.$#"
+			count: 1
+			path: ../Classes/PageStateMarker.php
+
+		-
+			message: "#^Method B13\\\\Menus\\\\PageStateMarker\\:\\:getPageInformationFromRequest\\(\\) has invalid return type TYPO3\\\\CMS\\\\Frontend\\\\Page\\\\PageInformation\\.$#"
+			count: 1
+			path: ../Classes/PageStateMarker.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$pageInformation contains unknown class TYPO3\\\\CMS\\\\Frontend\\\\Page\\\\PageInformation\\.$#"
+			count: 1
+			path: ../Classes/PageStateMarker.php

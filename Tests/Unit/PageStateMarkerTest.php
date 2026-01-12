@@ -13,6 +13,10 @@ namespace B13\Menus\Tests\Unit;
  */
 
 use B13\Menus\PageStateMarker;
+use TYPO3\CMS\Core\Http\ServerRequest;
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\Page\PageInformation;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class PageStateMarkerTest extends UnitTestCase
@@ -28,12 +32,21 @@ class PageStateMarkerTest extends UnitTestCase
                 ['uid' => 2],
             ],
         ];
-        $GLOBALS['TSFE'] = new \stdClass();
-        $GLOBALS['TSFE']->rootLine = [
+        $rootLine = [
             ['uid' => 1],
             ['uid' => 2],
         ];
-        $GLOBALS['TSFE']->id = 2;
+        if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() > 12) {
+            $pageInformation = new PageInformation();
+            $pageInformation->setRootLine($rootLine);
+            $pageInformation->setId(2);
+            $request = GeneralUtility::makeInstance(ServerRequest::class);
+            $GLOBALS['TYPO3_REQUEST'] = $request->withAttribute('frontend.page.information', $pageInformation);
+        } else {
+            $GLOBALS['TSFE'] = new \stdClass();
+            $GLOBALS['TSFE']->rootLine = $rootLine;
+            $GLOBALS['TSFE']->id = 2;
+        }
         PageStateMarker::markStatesRecursively($page, 1);
         self::assertTrue($page['isInRootLine']);
         self::assertTrue($page['subpages'][0]['isInRootLine']);
@@ -57,13 +70,23 @@ class PageStateMarkerTest extends UnitTestCase
                 ],
             ],
         ];
-        $GLOBALS['TSFE'] = new \stdClass();
-        $GLOBALS['TSFE']->rootLine = [
+
+        $rootLine = [
             ['uid' => 1],
             ['uid' => 2],
             ['uid' => 3],
         ];
-        $GLOBALS['TSFE']->id = 3;
+        if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() > 12) {
+            $pageInformation = new PageInformation();
+            $pageInformation->setRootLine($rootLine);
+            $pageInformation->setId(3);
+            $request = GeneralUtility::makeInstance(ServerRequest::class);
+            $GLOBALS['TYPO3_REQUEST'] = $request->withAttribute('frontend.page.information', $pageInformation);
+        } else {
+            $GLOBALS['TSFE'] = new \stdClass();
+            $GLOBALS['TSFE']->rootLine = $rootLine;
+            $GLOBALS['TSFE']->id = 3;
+        }
         PageStateMarker::markStatesRecursively($page, 1);
         self::assertTrue($page['isInRootLine']);
         self::assertTrue($page['subpages'][0]['isInRootLine']);

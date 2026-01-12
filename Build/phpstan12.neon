@@ -1,22 +1,7 @@
+includes:
+  - phpstan-baseline12.neon
 parameters:
   level: 5
 
   paths:
     - %currentWorkingDirectory%/Classes
-    - %currentWorkingDirectory%/Tests
-  excludePaths:
-    - %currentWorkingDirectory%/Tests/Unit/Domain/Repository/MenuRepositoryTest.php
-  ignoreErrors:
-    -
-      message: '#Call to an undefined static method TYPO3\\CMS\\Frontend\\ContentObject\\AbstractContentObject::__construct\(\).#'
-      path: %currentWorkingDirectory%/Classes/ContentObject/*
-    -
-      message: '#Property TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController::\$id \(int\) does not accept string.#'
-      path: %currentWorkingDirectory%/Tests/Functional/Compiler/LanguageMenuCompilerTest.php
-    -
-      message: '#Call to an undefined method TYPO3\\CMS\\Core\\TypoScript\\FrontendTypoScript::getConfigArray\(\).#'
-      path: %currentWorkingDirectory%/Classes/CacheHelper.php
-    -
-      message: '#Instantiated class TYPO3\\CMS\\Core\\Cache\\CacheDataCollector not found.#'
-    -
-      message: '#Instantiated class TYPO3\\CMS\\Core\\Cache\\CacheTag not found.#'

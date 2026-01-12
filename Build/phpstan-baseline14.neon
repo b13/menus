@@ -1,0 +1,56 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Call to method addCacheTags\\(\\) on an unknown class TYPO3\\\\CMS\\\\Frontend\\\\Controller\\\\TypoScriptFrontendController\\.$#"
+			count: 1
+			path: ../Classes/CacheHelper.php
+
+		-
+			message: "#^Call to method get_cache_timeout\\(\\) on an unknown class TYPO3\\\\CMS\\\\Frontend\\\\Controller\\\\TypoScriptFrontendController\\.$#"
+			count: 1
+			path: ../Classes/CacheHelper.php
+
+		-
+			message: "#^Method B13\\\\Menus\\\\CacheHelper\\:\\:getFrontendController\\(\\) has invalid return type TYPO3\\\\CMS\\\\Frontend\\\\Controller\\\\TypoScriptFrontendController\\.$#"
+			count: 1
+			path: ../Classes/CacheHelper.php
+
+		-
+			message: "#^Method TYPO3\\\\CMS\\\\Frontend\\\\Cache\\\\CacheLifetimeCalculator\\:\\:calculateLifetimeForPage\\(\\) invoked with 5 parameters, 4 required\\.$#"
+			count: 2
+			path: ../Classes/CacheHelper.php
+
+		-
+			message: "#^Parameter \\#4 \\$context of method TYPO3\\\\CMS\\\\Frontend\\\\Cache\\\\CacheLifetimeCalculator\\:\\:calculateLifetimeForPage\\(\\) expects TYPO3\\\\CMS\\\\Core\\\\Context\\\\Context, int given\\.$#"
+			count: 2
+			path: ../Classes/CacheHelper.php
+
+		-
+			message: "#^Call to an undefined method TYPO3\\\\CMS\\\\Core\\\\Site\\\\Entity\\\\SiteLanguage\\:\\:getTwoLetterIsoCode\\(\\)\\.$#"
+			count: 1
+			path: ../Classes/Compiler/LanguageMenuCompiler.php
+
+		-
+			message: "#^Call to an undefined static method TYPO3\\\\CMS\\\\Frontend\\\\ContentObject\\\\AbstractContentObject\\:\\:__construct\\(\\)\\.$#"
+			count: 1
+			path: ../Classes/ContentObject/BreadcrumbsContentObject.php
+
+		-
+			message: "#^Call to an undefined static method TYPO3\\\\CMS\\\\Frontend\\\\ContentObject\\\\AbstractContentObject\\:\\:__construct\\(\\)\\.$#"
+			count: 1
+			path: ../Classes/ContentObject/LanguageMenuContentObject.php
+
+		-
+			message: "#^Call to an undefined static method TYPO3\\\\CMS\\\\Frontend\\\\ContentObject\\\\AbstractContentObject\\:\\:__construct\\(\\)\\.$#"
+			count: 1
+			path: ../Classes/ContentObject/ListMenuContentObject.php
+
+		-
+			message: "#^Call to an undefined static method TYPO3\\\\CMS\\\\Frontend\\\\ContentObject\\\\AbstractContentObject\\:\\:__construct\\(\\)\\.$#"
+			count: 1
+			path: ../Classes/ContentObject/TreeMenuContentObject.php
+
+		-
+			message: "#^Access to undefined constant TYPO3\\\\CMS\\\\Core\\\\Domain\\\\Repository\\\\PageRepository\\:\\:DOKTYPE_RECYCLER\\.$#"
+			count: 1
+			path: ../Classes/Domain/Repository/MenuRepository.php

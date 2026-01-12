@@ -74,7 +74,7 @@ class PageStateMarker
 
     private static function getPageInformationFromRequest(): ?PageInformation
     {
-        $request = $GLOBALS['TSFE'] ?? null;
+        $request = $GLOBALS['TYPO3_REQUEST'] ?? null;
         if ($request instanceof ServerRequestInterface) {
             /** @var ?PageInformation $pageInformation */
             $pageInformation = $request->getAttribute('frontend.page.information');
