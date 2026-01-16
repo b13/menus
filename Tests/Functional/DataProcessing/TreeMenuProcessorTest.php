@@ -14,12 +14,14 @@ namespace B13\Menus\Tests\Functional\DataProcessing;
 
 use B13\Menus\DataProcessing\TreeMenu;
 use TYPO3\CMS\Core\Cache\CacheDataCollector;
+use TYPO3\CMS\Core\Cache\CacheTag;
 use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use TYPO3\CMS\Frontend\Page\PageInformation;
 
 class TreeMenuProcessorTest extends DataProcessing
 {
@@ -406,12 +408,16 @@ class TreeMenuProcessorTest extends DataProcessing
         if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() > 12) {
             $cacheDataCollector = new CacheDataCollector();
             $request = $request->withAttribute('frontend.cache.collector', $cacheDataCollector);
+            $pageInformation = new PageInformation();
+            $pageInformation->setRootLine($tsfe['rootLine']);
+            $pageInformation->setId($tsfe['id']);
+            $request = $request->withAttribute('frontend.page.information', $pageInformation);
+        } else {
+            $GLOBALS['TSFE'] = $this->getTypoScriptFrontendController($site, $tsfe['id']);
+            $GLOBALS['TSFE']->rootLine = $tsfe['rootLine'];
+            $GLOBALS['TSFE']->id = $tsfe['id'];
         }
         $GLOBALS['TYPO3_REQUEST'] = $request;
-
-        $GLOBALS['TSFE'] = $this->getTypoScriptFrontendController($site, $tsfe['id']);
-        $GLOBALS['TSFE']->rootLine = $tsfe['rootLine'];
-        $GLOBALS['TSFE']->id = $tsfe['id'];
 
         $treeMenuProccessor = GeneralUtility::makeInstance(TreeMenu::class);
         $contentObjectRenderer = GeneralUtility::makeInstance(ContentObjectRenderer::class);
@@ -475,18 +481,28 @@ class TreeMenuProcessorTest extends DataProcessing
         if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() > 12) {
             $cacheDataCollector = new CacheDataCollector();
             $request = $request->withAttribute('frontend.cache.collector', $cacheDataCollector);
+            $pageInformation = new PageInformation();
+            $pageInformation->setRootLine($tsfe['rootLine']);
+            $pageInformation->setId($tsfe['id']);
+            $request = $request->withAttribute('frontend.page.information', $pageInformation);
+        } else {
+            $GLOBALS['TSFE'] = $this->getTypoScriptFrontendController($site, $tsfe['id']);
+            $GLOBALS['TSFE']->rootLine = $tsfe['rootLine'];
+            $GLOBALS['TSFE']->id = $tsfe['id'];
         }
         $GLOBALS['TYPO3_REQUEST'] = $request;
 
-        $GLOBALS['TSFE'] = $this->getTypoScriptFrontendController($site, $tsfe['id']);
-        $GLOBALS['TSFE']->rootLine = $tsfe['rootLine'];
-        $GLOBALS['TSFE']->id = $tsfe['id'];
         $configuration = ['as' => 'my-tree', 'entryPoints' => $entryPoints, 'depth' => 2];
 
         $treeMenuProccessor = GeneralUtility::makeInstance(TreeMenu::class);
         $contentObjectRenderer = GeneralUtility::makeInstance(ContentObjectRenderer::class);
         $treeMenuProccessor->process($contentObjectRenderer, [], $configuration, []);
-        $pageCacheTags = $GLOBALS['TSFE']->getPageCacheTags();
+        if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() > 12) {
+            $pageCacheTags = array_map(fn (CacheTag $cacheTag) => $cacheTag->name, $cacheDataCollector->getCacheTags());
+        } else {
+            $pageCacheTags = $GLOBALS['TSFE']->getPageCacheTags();
+        }
+
         self::assertSame(count($expectedTags), count($pageCacheTags));
         foreach ($expectedTags as $expectedTag) {
             self::assertTrue(in_array($expectedTag, $pageCacheTags, true));

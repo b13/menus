@@ -18,6 +18,8 @@ use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\LinkHandling\PageTypeLinkResolver;
+use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
@@ -108,6 +110,10 @@ class MenuRepositoryTest extends UnitTestCase
             };
         } else {
             $pageRepository = new class() extends PageRepository {
+                public function __construct(?Context $context = null, ?TcaSchemaFactory $tcaSchemaFactory = null, ?PageTypeLinkResolver $pageTypeLinkResolver = null)
+                {
+                }
+
                 public function getPage(int $uid, bool $disableGroupAccessCheck = false): array
                 {
                     if ($uid === 1) {
@@ -119,9 +125,6 @@ class MenuRepositoryTest extends UnitTestCase
                         return ['uid' => 2, 'doktype' => 98, 'nav_hide'=> 0];
                     }
                     return [];
-                }
-                protected function init(): void
-                {
                 }
             };
         }

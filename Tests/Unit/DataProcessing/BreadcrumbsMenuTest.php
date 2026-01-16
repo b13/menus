@@ -14,8 +14,12 @@ namespace B13\Menus\Tests\Unit\DataProcessing;
 
 use B13\Menus\DataProcessing\BreadcrumbsMenu;
 use B13\Menus\Domain\Repository\MenuRepository;
+use TYPO3\CMS\Core\Http\ServerRequest;
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use TYPO3\CMS\Frontend\Page\PageInformation;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class BreadcrumbsMenuTest extends UnitTestCase
@@ -30,16 +34,25 @@ class BreadcrumbsMenuTest extends UnitTestCase
             ['uid' => 2],
 
         ];
-        $GLOBALS['TSFE'] = new \stdClass();
-        $GLOBALS['TSFE']->rootLine = [
+        $rootLine = [
             ['uid' => 1],
             ['uid' => 2],
         ];
-        $GLOBALS['TSFE']->id = 2;
+        if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() > 12) {
+            $pageInformation = new PageInformation();
+            $pageInformation->setRootLine($rootLine);
+            $pageInformation->setId(2);
+            $request = GeneralUtility::makeInstance(ServerRequest::class);
+            $GLOBALS['TYPO3_REQUEST'] = $request->withAttribute('frontend.page.information', $pageInformation);
+        } else {
+            $GLOBALS['TSFE'] = new \stdClass();
+            $GLOBALS['TSFE']->rootLine = $rootLine;
+            $GLOBALS['TSFE']->id = 2;
+        }
         $menuRepository = $this->getMockBuilder(MenuRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $menuRepository->expects(self::once())->method('getBreadcrumbsMenu')->with($GLOBALS['TSFE']->rootLine, [])->willReturn($pages);
+        $menuRepository->expects(self::once())->method('getBreadcrumbsMenu')->with($rootLine, [])->willReturn($pages);
         $contentDataProcessor = $this->getMockBuilder(ContentDataProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -48,9 +61,10 @@ class BreadcrumbsMenuTest extends UnitTestCase
             ->getMock();
         $contentObjectRenderer->expects(self::once())->method('stdWrapValue')->with('as', [], 'breadcrumbs')->willReturn('breadcrumbs');
         $breadcrumbsMenuDataProcessor = $this->getMockBuilder(BreadcrumbsMenu::class)
-            ->onlyMethods(['processAdditionalDataProcessors'])
+            ->onlyMethods(['processAdditionalDataProcessors', 'getRootline'])
             ->setConstructorArgs([$contentDataProcessor, $menuRepository])
             ->getMock();
+        $breadcrumbsMenuDataProcessor->expects(self::once())->method('getRootline')->willReturn($rootLine);
         $processedData = $breadcrumbsMenuDataProcessor->process($contentObjectRenderer, [], [], []);
         self::assertTrue($processedData['breadcrumbs'][0]['isInRootLine']);
         self::assertTrue($processedData['breadcrumbs'][1]['isInRootLine']);

@@ -13,13 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [ '7.4', '8.0', '8.1' ]
-        TYPO3: [ '11' ]
-        include:
-          - TYPO3: '12'
-            php: '8.1'
-          - TYPO3: '13'
-            php: '8.3'
+        php: [  '8.2', '8.3' ]
+        TYPO3: [ '12', '13', '14' ]
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2

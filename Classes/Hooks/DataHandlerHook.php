@@ -12,6 +12,7 @@ namespace B13\Menus\Hooks;
  * of the License, or any later version.
  */
 
+use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Information\Typo3Version;
@@ -40,7 +41,11 @@ class DataHandlerHook
 
         $menuTags = ['menuId_' . $pageId];
         // Clear caches of the parent page as well (needed when moving records)
-        $parentPageId = $dataHandler->getPID('pages', $pageId);
+        $record = BackendUtility::getRecord('pages', $pageId);
+        if ($record == null) {
+            return;
+        }
+        $parentPageId = $record['pid'] ?? 0;
         if ($parentPageId > 0) {
             $menuTags[] = 'menuId_' . $parentPageId;
         }

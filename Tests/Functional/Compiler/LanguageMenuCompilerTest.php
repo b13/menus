@@ -19,11 +19,13 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
+use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use TYPO3\CMS\Frontend\Page\PageInformation;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 class LanguageMenuCompilerTest extends FunctionalTestCase
@@ -239,17 +241,26 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
         foreach ($pageDataset as $page) {
             $connection->insert('pages', $page);
         }
-        $controller = $this->getMockBuilder($this->buildAccessibleProxy(TypoScriptFrontendController::class))
-            ->onlyMethods(['get_cache_timeout'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $GLOBALS['TSFE'] = $controller;
-        if ((GeneralUtility::makeInstance(Typo3Version::class))->getMajorVersion() < 12) {
-            $GLOBALS['TSFE']->id = '1';
-        } else {
+        if ((GeneralUtility::makeInstance(Typo3Version::class))->getMajorVersion() < 13) {
+            $controller = $this->getMockBuilder($this->buildAccessibleProxy(TypoScriptFrontendController::class))
+                ->onlyMethods(['get_cache_timeout'])
+                ->disableOriginalConstructor()
+                ->getMock();
+            $GLOBALS['TSFE'] = $controller;
             $GLOBALS['TSFE']->id = 1;
+            $contentObjectRenderer = new ContentObjectRenderer();
+        } else {
+            $request = GeneralUtility::makeInstance(ServerRequest::class);
+            $pageInformation = new PageInformation();
+            $pageInformation->setId(1);
+            $request = $request->withAttribute('frontend.page.information', $pageInformation);
+            $contentObjectRenderer = $this->getMockBuilder(ContentObjectRenderer::class)
+                ->disableOriginalConstructor()
+                ->onlyMethods([])
+                ->getMock();
+            $contentObjectRenderer->setRequest($request);
         }
-        $contentObjectRenderer = new ContentObjectRenderer();
+
         $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
         $site = $siteFinder->getSiteByIdentifier('main');
         $context = $this->getMockBuilder(Context::class)

@@ -3,9 +3,6 @@ parameters:
 
   paths:
     - %currentWorkingDirectory%/Classes
-    - %currentWorkingDirectory%/Tests
-  excludePaths:
-    - %currentWorkingDirectory%/Tests/Unit/Domain/Repository/MenuRepositoryTest.php
   ignoreErrors:
     -
       message: '#Cannot call method getLanguageCode\(\) on string.#'
