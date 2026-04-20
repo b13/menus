@@ -50,7 +50,7 @@ Options:
             - postgres: use postgres
             - sqlite: use sqlite
 
-    -p <8.1|8.2|8.3|8.4>
+    -p <8.3|8.4|8.5>
         Specifies the PHP minor version to be used
             - 8.3 (default): use PHP 8.3
 

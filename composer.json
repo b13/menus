@@ -2,19 +2,19 @@
   "name": "b13/menus",
   "type": "typo3-cms-extension",
   "license": "GPL-2.0-or-later",
-  "description": "Easy and fast menus for TYPO3 Frontends",
+  "description": "Menus - Easy and fast menus for TYPO3 Frontends",
   "require": {
-    "typo3/cms-core": "^11 || ^12.4 || ^13.1 || ^14",
-    "typo3/cms-frontend": "^11 || ^12.4 || ^13.1 || ^14"
+    "php": "^8.3",
+    "typo3/cms-core": "^12.4 || ^13.4 || ^14.3",
+    "typo3/cms-frontend": "^12.4 || ^13.4 || ^14.3"
   },
   "require-dev": {
-    "typo3/cms-fluid-styled-content": "^11 || ^12.4 || ^13.1 || ^14",
-    "typo3/cms-install": "^11 || ^12.4 || ^13.1 || ^14",
+    "typo3/cms-fluid-styled-content": "^12.4 || ^13.4 || ^14.3",
+    "typo3/cms-install": "^12.4 || ^13.4 || ^14.3",
     "typo3/coding-standards": "^0.5.5",
     "phpstan/phpstan": "^1.10",
     "typo3/tailor": "^1.0",
-    "typo3/testing-framework": "^7.0 || ^8.0 || ^9.3",
-    "phpunit/phpunit": "9.6 || ^10.5 || ^11.3"
+    "typo3/testing-framework": "^8.3 || ^9.5"
   },
   "config": {
     "vendor-dir": ".Build/vendor",
@@ -30,7 +30,11 @@
       "extension-key": "menus",
       "cms-package-dir": "{$vendor-dir}/typo3/cms",
       "app-dir": ".Build",
-      "web-dir": ".Build/Web"
+      "web-dir": ".Build/Web",
+      "version": "2.0.0",
+      "Package": {
+        "providesPackages": {}
+      }
     }
   },
   "scripts": {

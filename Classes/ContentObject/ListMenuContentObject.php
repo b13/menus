@@ -48,6 +48,7 @@ class ListMenuContentObject extends AbstractContentObject
     {
         $content = '';
         $cObjForItems = GeneralUtility::makeInstance(ContentObjectRenderer::class);
+        $cObjForItems->setRequest($this->request);
         foreach ($pages as $page) {
             PageStateMarker::markStates($page);
             $cObjForItems->start($page, 'pages');

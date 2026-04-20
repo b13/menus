@@ -13,6 +13,8 @@ namespace B13\Menus\Tests\Functional\DataProcessing;
  */
 
 use B13\Menus\DataProcessing\BreadcrumbsMenu;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Information\Typo3Version;
@@ -189,19 +191,18 @@ class BreadcrumbsMenuTest extends DataProcessing
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider setupDataProvider
-     */
+    #[Test]
+    #[DataProvider('setupDataProvider')]
     public function processTest(array $tsfe, array $configuration, array $expected): void
     {
+        $request = GeneralUtility::makeInstance(ServerRequest::class);
         if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() > 12) {
-            $request = GeneralUtility::makeInstance(ServerRequest::class);
             $request = $request->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_FE);
             $pageInformation = new PageInformation();
             $pageInformation->setRootLine($tsfe['rootLine']);
             $pageInformation->setId($tsfe['id']);
-            $GLOBALS['TYPO3_REQUEST'] = $request->withAttribute('frontend.page.information', $pageInformation);
+            $request = $request->withAttribute('frontend.page.information', $pageInformation);
+            $GLOBALS['TYPO3_REQUEST'] = $request;
         } else {
             $GLOBALS['TSFE'] = new \stdClass();
             $GLOBALS['TSFE']->rootLine = $tsfe['rootLine'];
@@ -210,6 +211,7 @@ class BreadcrumbsMenuTest extends DataProcessing
 
         $breadcrumbsMenuProcessor = GeneralUtility::makeInstance(BreadcrumbsMenu::class);
         $contentObjectRenderer = GeneralUtility::makeInstance(ContentObjectRenderer::class);
+        $contentObjectRenderer->setRequest($request);
         $breadcrumbs = $breadcrumbsMenuProcessor->process($contentObjectRenderer, [], $configuration, []);
         self::assertIsArray($breadcrumbs['breadcrumbs']);
         $reduced = $this->reduceResults($breadcrumbs['breadcrumbs']);

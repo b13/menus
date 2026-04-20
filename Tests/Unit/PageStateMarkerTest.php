@@ -13,6 +13,7 @@ namespace B13\Menus\Tests\Unit;
  */
 
 use B13\Menus\PageStateMarker;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -21,9 +22,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class PageStateMarkerTest extends UnitTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function markStatesRecursiveMarksLevel2Pages(): void
     {
         $page = [
@@ -52,9 +51,7 @@ class PageStateMarkerTest extends UnitTestCase
         self::assertTrue($page['subpages'][0]['isInRootLine']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function markStatesRecursiveMarksLevel3Pages(): void
     {
         $page = [

@@ -11,6 +11,7 @@ namespace B13\Menus\DataProcessing;
  * of the License, or any later version.
  */
 
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -21,23 +22,21 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  */
 abstract class AbstractMenu implements DataProcessorInterface
 {
-    protected ContentDataProcessor $contentDataProcessor;
-
-    public function __construct(ContentDataProcessor $contentDataProcessor)
+    public function __construct(protected ContentDataProcessor $contentDataProcessor)
     {
-        $this->contentDataProcessor = $contentDataProcessor;
     }
 
-    protected function processAdditionalDataProcessors(array &$page, array $processorConfiguration): array
+    protected function processAdditionalDataProcessors(array &$page, array $processorConfiguration, ServerRequestInterface $request): array
     {
         if (isset($page['subpages']) && is_array($page['subpages'])) {
             foreach ($page['subpages'] as &$item) {
-                $this->processAdditionalDataProcessors($item, $processorConfiguration);
+                $this->processAdditionalDataProcessors($item, $processorConfiguration, $request);
             }
         }
 
         /** @var ContentObjectRenderer $recordContentObjectRenderer */
         $recordContentObjectRenderer = GeneralUtility::makeInstance(ContentObjectRenderer::class);
+        $recordContentObjectRenderer->setRequest($request);
         $recordContentObjectRenderer->start($page, 'pages');
         $page = $this->contentDataProcessor->process($recordContentObjectRenderer, $processorConfiguration, $page);
         return $page;

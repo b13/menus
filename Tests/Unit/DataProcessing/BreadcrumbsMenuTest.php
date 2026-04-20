@@ -14,6 +14,7 @@ namespace B13\Menus\Tests\Unit\DataProcessing;
 
 use B13\Menus\DataProcessing\BreadcrumbsMenu;
 use B13\Menus\Domain\Repository\MenuRepository;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -24,9 +25,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class BreadcrumbsMenuTest extends UnitTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function processMarksPageStates(): void
     {
         $pages = [

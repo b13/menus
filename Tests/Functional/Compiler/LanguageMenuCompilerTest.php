@@ -15,6 +15,7 @@ namespace B13\Menus\Tests\Functional\Compiler;
 use B13\Menus\CacheHelper;
 use B13\Menus\Compiler\LanguageMenuCompiler;
 use B13\Menus\Domain\Repository\MenuRepository;
+use PHPUnit\Framework\Attributes\Test;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -59,9 +60,7 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
         ],
     ];
 
-    /**
-     * @test
-     */
+    #[Test]
     public function allPagesTranslatedTest(): void
     {
         $pageDataset = $this->defaultPageDataSet;
@@ -73,9 +72,7 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function dePageNavHideAllSiteLanguages(): void
     {
         $pageDataset = $this->defaultPageDataSet;
@@ -92,9 +89,7 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function dePageNavHide(): void
     {
         $pageDataset = $this->defaultPageDataSet;
@@ -107,9 +102,7 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function dePageNotTranslatedAllSiteLanguages(): void
     {
         $pageDataset = $this->defaultPageDataSet;
@@ -126,9 +119,7 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function dePageNotTranslated(): void
     {
         $pageDataset = $this->defaultPageDataSet;
@@ -141,9 +132,7 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hideDefaultLanguageOfPageAllSiteLanguages(): void
     {
         $pageDataset = $this->defaultPageDataSet;
@@ -160,9 +149,7 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hideDefaultLanguageOfPage(): void
     {
         $pageDataset = $this->defaultPageDataSet;
@@ -175,9 +162,7 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function frFallbackTest(): void
     {
         $pageDataset = $this->defaultPageDataSet;
@@ -195,9 +180,7 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function deIsExcludedLanguageAllSiteLanguages(): void
     {
         $pageDataset = $this->defaultPageDataSet;
@@ -205,9 +188,7 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
         self::assertSame(2, count($menu), 'only two pages should be included in menu');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function deIsExcludedLanguage(): void
     {
         $pageDataset = $this->defaultPageDataSet;
@@ -215,9 +196,7 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
         self::assertSame(2, count($menu), 'only two pages should be included in menu');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function deAsIdIsExcludedLanguageAllSiteLanguages(): void
     {
         $pageDataset = $this->defaultPageDataSet;
@@ -225,9 +204,7 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
         self::assertSame(2, count($menu), 'only two pages should be included in menu');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function deAsIdIsExcludedLanguage(): void
     {
         $pageDataset = $this->defaultPageDataSet;
@@ -237,6 +214,7 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
 
     protected function compileMenu(array $pageDataset, array $configuration = []): array
     {
+        $request = GeneralUtility::makeInstance(ServerRequest::class);
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('pages');
         foreach ($pageDataset as $page) {
             $connection->insert('pages', $page);
@@ -249,8 +227,8 @@ class LanguageMenuCompilerTest extends FunctionalTestCase
             $GLOBALS['TSFE'] = $controller;
             $GLOBALS['TSFE']->id = 1;
             $contentObjectRenderer = new ContentObjectRenderer();
+            $contentObjectRenderer->setRequest($request);
         } else {
-            $request = GeneralUtility::makeInstance(ServerRequest::class);
             $pageInformation = new PageInformation();
             $pageInformation->setId(1);
             $request = $request->withAttribute('frontend.page.information', $pageInformation);

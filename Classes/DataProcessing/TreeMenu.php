@@ -21,11 +21,8 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  */
 class TreeMenu extends AbstractMenu
 {
-    protected TreeMenuCompiler $treeMenuCompiler;
-
-    public function __construct(ContentDataProcessor $contentDataProcessor, TreeMenuCompiler $treeMenuCompiler)
+    public function __construct(ContentDataProcessor $contentDataProcessor, protected TreeMenuCompiler $treeMenuCompiler)
     {
-        $this->treeMenuCompiler = $treeMenuCompiler;
         parent::__construct($contentDataProcessor);
     }
 
@@ -42,7 +39,7 @@ class TreeMenu extends AbstractMenu
             PageStateMarker::markStatesRecursively($page, 1);
         }
         foreach ($pages as &$page) {
-            $this->processAdditionalDataProcessors($page, $processorConfiguration);
+            $this->processAdditionalDataProcessors($page, $processorConfiguration, $cObj->getRequest());
         }
         $targetVariableName = $cObj->stdWrapValue('as', $processorConfiguration);
         $processedData[$targetVariableName] = $pages;

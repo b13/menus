@@ -13,6 +13,8 @@ namespace B13\Menus\Tests\Functional\DataProcessing;
  */
 
 use B13\Menus\DataProcessing\TreeMenu;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\Core\Cache\CacheDataCollector;
 use TYPO3\CMS\Core\Cache\CacheTag;
 use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
@@ -395,10 +397,8 @@ class TreeMenuProcessorTest extends DataProcessing
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider setupDataProvider
-     */
+    #[Test]
+    #[DataProvider('setupDataProvider')]
     public function processTest(array $tsfe, array $configuration, array $expected): void
     {
         $site = GeneralUtility::makeInstance(Site::class, 'main', $tsfe['id'], []);
@@ -421,6 +421,7 @@ class TreeMenuProcessorTest extends DataProcessing
 
         $treeMenuProccessor = GeneralUtility::makeInstance(TreeMenu::class);
         $contentObjectRenderer = GeneralUtility::makeInstance(ContentObjectRenderer::class);
+        $contentObjectRenderer->setRequest($request);
         $treeMenu = $treeMenuProccessor->process($contentObjectRenderer, [], $configuration, []);
         $this->reduceResultsRecursive($treeMenu['my-tree']);
         self::assertSame($expected, $treeMenu['my-tree']);
@@ -468,10 +469,8 @@ class TreeMenuProcessorTest extends DataProcessing
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider cacheDataProvider
-     */
+    #[Test]
+    #[DataProvider('cacheDataProvider')]
     public function menuIdTagsAreAddedToPageCache(array $tsfe, int $entryPoints, array $expectedTags): void
     {
         $site = GeneralUtility::makeInstance(Site::class, 'main', $tsfe['id'], []);
@@ -496,6 +495,7 @@ class TreeMenuProcessorTest extends DataProcessing
 
         $treeMenuProccessor = GeneralUtility::makeInstance(TreeMenu::class);
         $contentObjectRenderer = GeneralUtility::makeInstance(ContentObjectRenderer::class);
+        $contentObjectRenderer->setRequest($request);
         $treeMenuProccessor->process($contentObjectRenderer, [], $configuration, []);
         if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() > 12) {
             $pageCacheTags = array_map(fn (CacheTag $cacheTag) => $cacheTag->name, $cacheDataCollector->getCacheTags());

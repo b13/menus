@@ -10,10 +10,11 @@ namespace B13\Menus\Tests\Functional\Hooks;
  * of the License, or any later version.
  */
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
@@ -69,9 +70,7 @@ class DataHandlerTest extends FunctionalTestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function editPageRemovesPageCacheWhereMenuIsUsed(): void
     {
         $datamap = [
@@ -84,10 +83,8 @@ class DataHandlerTest extends FunctionalTestCase
         $this->assertCacheIsEmpty();
     }
 
-    /**
-     * @test
-     * @dataProvider cmdmapDataProvider
-     */
+    #[Test]
+    #[DataProvider('cmdmapDataProvider')]
     public function pageCacheIsClearedAfterCmdmap(array $cmdmap): void
     {
         $this->dataHandler->start([], $cmdmap, $this->backendUser);
@@ -97,11 +94,7 @@ class DataHandlerTest extends FunctionalTestCase
 
     protected function assertCacheIsEmpty(): void
     {
-        if ((new Typo3Version())->getMajorVersion() < 10) {
-            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('cache_pages');
-        } else {
-            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
-        }
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
         $rows = $queryBuilder->select('*')
             ->from('cache_pages')
             ->executeQuery()

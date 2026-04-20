@@ -13,6 +13,7 @@ namespace B13\Menus\Tests\Unit\Domain\Repository;
  */
 
 use B13\Menus\Domain\Repository\MenuRepository;
+use PHPUnit\Framework\Attributes\Test;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
@@ -27,9 +28,7 @@ class MenuRepositoryTest extends UnitTestCase
 {
     protected bool $resetSingletonInstances = true;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getSubPagesOfPageRestrictQueryToExcludeDoktypes(): void
     {
         $languageAspect = new LanguageAspect();
@@ -53,9 +52,7 @@ class MenuRepositoryTest extends UnitTestCase
         $menuRepository->getSubPagesOfPage(1, 1, []);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getSubPagesOfPageMergeExcludeDoktypesFromConfiguration(): void
     {
         $languageAspect = new LanguageAspect();
@@ -79,9 +76,7 @@ class MenuRepositoryTest extends UnitTestCase
         $menuRepository->getSubPagesOfPage(1, 1, ['excludeDoktypes' => 99]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getBreadcrumbsMenuRespectConfiguredExcludeDoktypes(): void
     {
         $rootLine = [

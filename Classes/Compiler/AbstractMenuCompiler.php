@@ -15,6 +15,7 @@ use B13\Menus\CacheHelper;
 use B13\Menus\Domain\Repository\MenuRepository;
 use B13\Menus\Event\CacheIdentifierForMenuEvent;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Context\UserAspect;
@@ -23,23 +24,21 @@ use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Site\Entity\SiteInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use TYPO3\CMS\Frontend\ContentObject\Exception\ContentRenderingException;
 
 /**
  * MenuCompiler sorts out all relevant parts in the constructor which most menu compilers need.
  */
 abstract class AbstractMenuCompiler implements SingletonInterface
 {
-    protected MenuRepository $menuRepository;
-    protected CacheHelper $cache;
-    protected Context $context;
-    protected EventDispatcherInterface $eventDispatcher;
+    protected ?ServerRequestInterface $request = null;
 
-    public function __construct(Context $context, CacheHelper $cache, MenuRepository $menuRepository, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->context = $context;
-        $this->menuRepository = $menuRepository;
-        $this->cache = $cache;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        protected Context $context,
+        protected CacheHelper $cache,
+        protected MenuRepository $menuRepository,
+        protected EventDispatcherInterface $eventDispatcher
+    ) {
     }
 
     /**
@@ -77,9 +76,25 @@ abstract class AbstractMenuCompiler implements SingletonInterface
         return $identifier;
     }
 
+    public function setRequest(ServerRequestInterface $request): void
+    {
+        $this->request = $request;
+    }
+
+    public function getRequest(): ServerRequestInterface
+    {
+        if ($this->request instanceof ServerRequestInterface) {
+            return $this->request;
+        }
+        throw new ContentRenderingException(
+            'PSR-7 request is missing in ContentObjectRenderer. Call setRequest() after object instantiation.',
+            1776751007
+        );
+    }
+
     protected function getCurrentSite(): ?SiteInterface
     {
-        return $GLOBALS['TYPO3_REQUEST']->getAttribute('site');
+        return $this->getRequest()->getAttribute('site');
     }
 
     /**
@@ -87,7 +102,9 @@ abstract class AbstractMenuCompiler implements SingletonInterface
      */
     public function parseStdWrap(string $content, array $configuration): string
     {
-        $return = GeneralUtility::makeInstance(ContentObjectRenderer::class)->stdWrap($content, $configuration);
+        $localCObj = GeneralUtility::makeInstance(ContentObjectRenderer::class);
+        $localCObj->setRequest($this->getRequest());
+        $return = $localCObj->stdWrap($content, $configuration);
         if ($return !== null) {
             return $return;
         }
