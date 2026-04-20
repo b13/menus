@@ -26,6 +26,7 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
      */
     public function compile(ContentObjectRenderer $contentObjectRenderer, array $configuration): array
     {
+        $this->setRequest($contentObjectRenderer->getRequest());
         $cacheIdentifier = $this->generateCacheIdentifierForMenu('language', $configuration);
 
         $excludedLanguages = $contentObjectRenderer->stdWrap($configuration['excludeLanguages'] ?? '', $configuration['excludeLanguages.'] ?? []);
@@ -71,9 +72,8 @@ class LanguageMenuCompiler extends AbstractMenuCompiler
         if ((new Typo3Version())->getMajorVersion() < 13) {
             return $GLOBALS['TSFE']->id;
         }
-        $request = $cObj->getRequest();
         /** @var PageInformation $pageInformation */
-        $pageInformation = $request->getAttribute('frontend.page.information');
+        $pageInformation = $this->getRequest()->getAttribute('frontend.page.information');
         return $pageInformation->getId();
     }
 

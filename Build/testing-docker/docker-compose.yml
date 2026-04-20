@@ -1,4 +1,3 @@
-version: '2.3'
 services:
   chrome:
     image: selenium/standalone-chrome:91.0
@@ -28,7 +27,7 @@ services:
     - /var/lib/postgresql/data:rw,noexec,nosuid
 
   web:
-    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
+    image: ghcr.io/typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
     user: ${HOST_UID}
     stop_grace_period: 1s
     volumes:
@@ -53,7 +52,7 @@ services:
       "
 
   cgl:
-    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
+    image: ghcr.io/typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
     user: "${HOST_UID}"
     volumes:
       - ${ROOT_DIR}:${ROOT_DIR}
@@ -68,7 +67,7 @@ services:
       "
 
   composer_install:
-    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
+    image: ghcr.io/typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
     user: ${HOST_UID}
     volumes:
     - ${ROOT_DIR}:${ROOT_DIR}
@@ -95,7 +94,7 @@ services:
       "
 
   composer_validate:
-    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
+    image: ghcr.io/typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
     user: ${HOST_UID}
     volumes:
     - ${ROOT_DIR}:${ROOT_DIR}
@@ -113,7 +112,7 @@ services:
       "
 
   functional_mariadb10:
-    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
+    image: ghcr.io/typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
     user: ${HOST_UID}
     links:
     - mariadb10
@@ -151,7 +150,7 @@ services:
         fi
       "
   lint:
-    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
+    image: ghcr.io/typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
     user: ${HOST_UID}
     volumes:
     - ${ROOT_DIR}:${ROOT_DIR}
@@ -168,7 +167,7 @@ services:
       "
 
   phpstan:
-    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
+    image: ghcr.io/typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
     user: ${HOST_UID}
     volumes:
       - ${ROOT_DIR}:${ROOT_DIR}
@@ -186,7 +185,7 @@ services:
       "
 
   unit:
-    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
+    image: ghcr.io/typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
     user: ${HOST_UID}
     volumes:
       - ${ROOT_DIR}:${ROOT_DIR}

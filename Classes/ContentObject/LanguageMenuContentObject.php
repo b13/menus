@@ -49,6 +49,7 @@ class LanguageMenuContentObject extends AbstractContentObject
     {
         $content = '';
         $cObjForItems = GeneralUtility::makeInstance(ContentObjectRenderer::class);
+        $cObjForItems->setRequest($this->request);
         $currentLanguage = $this->getCurrentSiteLanguage();
         foreach ($pages as $page) {
             PageStateMarker::markStates($page);
@@ -65,6 +66,6 @@ class LanguageMenuContentObject extends AbstractContentObject
 
     protected function getCurrentSiteLanguage(): ?SiteLanguage
     {
-        return $GLOBALS['TYPO3_REQUEST']->getAttribute('language');
+        return $this->request->getAttribute('language');
     }
 }

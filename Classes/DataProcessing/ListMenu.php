@@ -21,11 +21,8 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  */
 class ListMenu extends AbstractMenu
 {
-    protected ListMenuCompiler $listMenuCompiler;
-
-    public function __construct(ContentDataProcessor $contentDataProcessor, ListMenuCompiler $listMenuCompiler)
+    public function __construct(ContentDataProcessor $contentDataProcessor, protected ListMenuCompiler $listMenuCompiler)
     {
-        $this->listMenuCompiler = $listMenuCompiler;
         parent::__construct($contentDataProcessor);
     }
 
@@ -43,7 +40,7 @@ class ListMenu extends AbstractMenu
             PageStateMarker::markStates($page);
         }
         foreach ($pages as &$page) {
-            $this->processAdditionalDataProcessors($page, $processorConfiguration);
+            $this->processAdditionalDataProcessors($page, $processorConfiguration, $cObj->getRequest());
         }
         $targetVariableName = $cObj->stdWrapValue('as', $processorConfiguration);
         $processedData[$targetVariableName] = $pages;

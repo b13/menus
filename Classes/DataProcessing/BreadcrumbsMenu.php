@@ -23,12 +23,9 @@ use TYPO3\CMS\Frontend\Page\PageInformation;
  */
 class BreadcrumbsMenu extends AbstractMenu
 {
-    protected MenuRepository $menuRepository;
-
-    public function __construct(ContentDataProcessor $contentDataProcessor, MenuRepository $menuRepository)
+    public function __construct(ContentDataProcessor $contentDataProcessor, protected MenuRepository $menuRepository)
     {
         parent::__construct($contentDataProcessor);
-        $this->menuRepository = $menuRepository;
     }
 
     /**
@@ -46,7 +43,7 @@ class BreadcrumbsMenu extends AbstractMenu
             PageStateMarker::markStates($page, $rootLevelCount--);
         }
         foreach ($pages as &$page) {
-            $this->processAdditionalDataProcessors($page, $processorConfiguration);
+            $this->processAdditionalDataProcessors($page, $processorConfiguration, $cObj->getRequest());
         }
         $targetVariableName = $cObj->stdWrapValue('as', $processorConfiguration, 'breadcrumbs');
         $processedData[$targetVariableName] = $pages;
@@ -58,9 +55,8 @@ class BreadcrumbsMenu extends AbstractMenu
         if ((new Typo3Version())->getMajorVersion() < 13) {
             return $GLOBALS['TSFE']->rootLine;
         }
-        $request = $cObj->getRequest();
         /** @var PageInformation $pageInformation */
-        $pageInformation = $request->getAttribute('frontend.page.information');
+        $pageInformation = $cObj->getRequest()->getAttribute('frontend.page.information');
         return $pageInformation->getRootLine();
     }
 }

@@ -10,6 +10,7 @@ namespace B13\Menus\Tests\Functional\Functional;
  * of the License, or any later version.
  */
 
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -19,9 +20,7 @@ class ListMenuContentObjectTest extends FunctionalTestCase
     protected array $coreExtensionsToLoad = ['core', 'frontend'];
     protected array $pathsToLinkInTestInstance = ['typo3conf/ext/menus/Build/sites' => 'typo3conf/sites'];
 
-    /**
-     * @test
-     */
+    #[Test]
     public function menuOnRootPage(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/pages.csv');
@@ -32,9 +31,7 @@ class ListMenuContentObjectTest extends FunctionalTestCase
         self::assertStringContainsString($expected, $body);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function menuOnSubpage(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/pages.csv');

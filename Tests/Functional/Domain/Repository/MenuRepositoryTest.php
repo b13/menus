@@ -11,6 +11,7 @@ namespace B13\Menus\Tests\Functional\Domain\Repository;
  */
 
 use B13\Menus\Domain\Repository\MenuRepository;
+use PHPUnit\Framework\Attributes\Test;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
@@ -22,9 +23,7 @@ class MenuRepositoryTest extends FunctionalTestCase
 {
     protected array $testExtensionsToLoad = ['typo3conf/ext/menus'];
 
-    /**
-     * @test
-     */
+    #[Test]
     public function translatedPageIsNotInMenuIfNavHideIsSet(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/translated_page_with_nav_hide.csv');
@@ -39,9 +38,7 @@ class MenuRepositoryTest extends FunctionalTestCase
         self::assertSame([], $pageInLanguage);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function translatedPageIsInMenuIfNavHideAndIgnoreNavHideIsSet(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/translated_page_with_nav_hide.csv');
@@ -66,10 +63,6 @@ class MenuRepositoryTest extends FunctionalTestCase
         self::assertSame($expectedPage, $pageInLanguage);
     }
 
-    /**
-     * @param array $results
-     * @return array
-     */
     protected function reduceResults(array $results): array
     {
         $keys = ['uid', 'pid', 'sys_language_uid', 'l10n_parent', 'nav_hide'];

@@ -13,11 +13,9 @@ namespace B13\Menus\Tests\Functional\DataProcessing;
  */
 
 use TYPO3\CMS\Core\Context\Context;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Routing\PageArguments;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
@@ -58,9 +56,6 @@ abstract class DataProcessing extends FunctionalTestCase
 
     protected function getTypoScriptFrontendController(Site $site, int $pageId): TypoScriptFrontendController
     {
-        if ((new Typo3Version())->getMajorVersion() < 11) {
-            return GeneralUtility::makeInstance(TypoScriptFrontendController::class, null, $site, $site->getLanguageById(0));
-        }
         $context = $this->getMockBuilder(Context::class)
             ->getMock();
         $context->expects(self::any())->method('hasAspect')->with('frontend.preview')->willReturn(false);

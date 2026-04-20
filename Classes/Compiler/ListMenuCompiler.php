@@ -21,6 +21,7 @@ class ListMenuCompiler extends AbstractMenuCompiler
      */
     public function compile(ContentObjectRenderer $contentObjectRenderer, array $configuration): array
     {
+        $this->setRequest($contentObjectRenderer->getRequest());
         $cacheIdentifier = $this->generateCacheIdentifierForMenu('list', $configuration);
 
         $pageIds = $contentObjectRenderer->stdWrap($configuration['pages'] ?? $this->getCurrentSite()->getRootPageId(), $configuration['pages.'] ?? []);

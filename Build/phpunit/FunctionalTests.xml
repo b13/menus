@@ -4,16 +4,13 @@
     backupGlobals="true"
     bootstrap="FunctionalTestsBootstrap.php"
     colors="true"
-    convertErrorsToExceptions="true"
-    convertWarningsToExceptions="true"
-    forceCoversAnnotation="false"
     stopOnError="false"
     stopOnFailure="false"
     stopOnIncomplete="false"
     stopOnSkipped="false"
-    verbose="false"
     beStrictAboutTestsThatDoNotTestAnything="false"
     failOnWarning="true"
+    failOnDeprecation="true"
 >
     <testsuites>
         <testsuite name="Functional tests">

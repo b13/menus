@@ -21,6 +21,7 @@ class TreeMenuCompiler extends AbstractMenuCompiler
      */
     public function compile(ContentObjectRenderer $contentObjectRenderer, array $configuration): array
     {
+        $this->setRequest($contentObjectRenderer->getRequest());
         $cacheIdentifier = $this->generateCacheIdentifierForMenu('tree', $configuration);
 
         $includeStartPageIds = $contentObjectRenderer->stdWrap($configuration['includeRootPages'] ?? false, $configuration['includeRootPages.'] ?? []);

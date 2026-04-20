@@ -44,6 +44,7 @@ class BreadcrumbsContentObject extends AbstractContentObject
         $pages = $this->menuRepository->getBreadcrumbsMenu($rootLine, $conf);
         $content = '';
         $cObjForItems = GeneralUtility::makeInstance(ContentObjectRenderer::class);
+        $cObjForItems->setRequest($this->request);
         $rootLevelCount = count($pages);
         foreach ($pages as $page) {
             PageStateMarker::markStates($page, $rootLevelCount--);

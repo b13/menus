@@ -13,7 +13,6 @@ namespace B13\Menus\DataProcessing;
 
 use B13\Menus\Compiler\LanguageMenuCompiler;
 use B13\Menus\PageStateMarker;
-use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 use TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
@@ -22,11 +21,8 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  */
 class LanguageMenu extends AbstractMenu
 {
-    protected $languageMenuCompliler;
-
-    public function __construct(ContentDataProcessor $contentDataProcessor, LanguageMenuCompiler $languageMenuCompiler)
+    public function __construct(ContentDataProcessor $contentDataProcessor, protected LanguageMenuCompiler $languageMenuCompiler)
     {
-        $this->languageMenuCompliler = $languageMenuCompiler;
         parent::__construct($contentDataProcessor);
     }
 
@@ -38,8 +34,8 @@ class LanguageMenu extends AbstractMenu
         if (isset($processorConfiguration['if.']) && !$cObj->checkIf($processorConfiguration['if.'])) {
             return $processedData;
         }
-        $pages = $this->languageMenuCompliler->compile($cObj, $processorConfiguration);
-        $currentLanguage = $this->getCurrentSiteLanguage();
+        $pages = $this->languageMenuCompiler->compile($cObj, $processorConfiguration);
+        $currentLanguage = $cObj->getRequest()->getAttribute('language');
         foreach ($pages as &$page) {
             PageStateMarker::markStates($page);
             if ((int)$page['language']['languageId'] === $currentLanguage->getLanguageId()) {
@@ -49,15 +45,10 @@ class LanguageMenu extends AbstractMenu
             }
         }
         foreach ($pages as &$page) {
-            $this->processAdditionalDataProcessors($page, $processorConfiguration);
+            $this->processAdditionalDataProcessors($page, $processorConfiguration, $cObj->getRequest());
         }
         $targetVariableName = $cObj->stdWrapValue('as', $processorConfiguration);
         $processedData[$targetVariableName] = $pages;
         return $processedData;
-    }
-
-    protected function getCurrentSiteLanguage(): ?SiteLanguage
-    {
-        return $GLOBALS['TYPO3_REQUEST']->getAttribute('language');
     }
 }
