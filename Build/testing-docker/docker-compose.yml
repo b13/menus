@@ -81,10 +81,7 @@ services:
           set -x
         fi
         php -v | grep '^PHP';
-        if [ ${TYPO3} -eq 12 ]; then
-          composer require typo3/cms-install:^12.4 typo3/cms-fluid-styled-content:^12.4 --dev -W --no-progress --no-interaction
-          composer prepare-tests
-        elif [ ${TYPO3} -eq 13 ]; then
+        if [ ${TYPO3} -eq 13 ]; then
           composer require typo3/cms-install:^13.4 typo3/cms-fluid-styled-content:^13.4 --dev -W --no-progress --no-interaction
           composer prepare-tests
         else
