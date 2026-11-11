@@ -45,5 +45,18 @@ languages:
     flag: fr
     languageId: '2'
 rootPageId: 1
+routeEnhancers:
+  Detail:
+    type: Simple
+    limitToPages:
+      - 2
+    routePath: '/detail/{item}'
+    _arguments:
+      item: 'tx_menus_test/item'
+    aspects:
+      item:
+        type: StaticRangeMapper
+        start: '1'
+        end: '100'
 routes: {  }
 websiteTitle: 'Testing'
