@@ -437,35 +437,34 @@ class TreeMenuProcessorTest extends DataProcessing
             [
                 'tsfe' => ['id' => 1, 'rootLine' => [['uid' => 1]]],
                 'entryPoints' => 2,
-                'expectedTags' => ['menuId_2'],
+                'expectedTags' => ['menuId_2', 'menuId_3'],
             ],
             [
                 'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2]]],
                 'entryPoints' => 2,
-                'expectedTags' => ['menuId_2'],
+                'expectedTags' => ['menuId_2', 'menuId_3'],
             ],
             [
                 'tsfe' => ['id' => 3, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 3]]],
                 'entryPoints' => 2,
-                'expectedTags' => ['menuId_2'],
+                'expectedTags' => ['menuId_2', 'menuId_3'],
             ],
             // entry point 1
             [
                 'tsfe' => ['id' => 1, 'rootLine' => [['uid' => 1]]],
                 'entryPoints' => 1,
-                'expectedTags' => ['menuId_1', 'menuId_2'],
+                'expectedTags' => ['menuId_1', 'menuId_2', 'menuId_3', 'menuId_4'],
             ],
             [
                 'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2]]],
                 'entryPoints' => 1,
-                'expectedTags' => ['menuId_1', 'menuId_2'],
+                'expectedTags' => ['menuId_1', 'menuId_2', 'menuId_3', 'menuId_4'],
             ],
             [
                 'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 3]]],
                 'entryPoints' => 1,
-                'expectedTags' => ['menuId_1', 'menuId_2'],
+                'expectedTags' => ['menuId_1', 'menuId_2', 'menuId_3', 'menuId_4'],
             ],
-            // menuId_3 and menuId_4 are never added to tags, because they are leaves
         ];
     }
 

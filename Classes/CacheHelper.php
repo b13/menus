@@ -99,8 +99,9 @@ class CacheHelper
     /**
      * Fetch all IDs of a tree recursively, in order to tag the cache entries properly.
      *
-     * Only pages which have subpages are included, as the "leave pages" are detected on cache flush.
-     * This reduces the amount of tags in the cache.
+     * Each page is tagged with its own ID and the ID of its parent page. The DataHandler hook
+     * flushes both tags of a modified page, so the menu is also rebuilt when a page that is
+     * currently not part of the menu (e.g. due to nav_hide) changes.
      *
      * @param array $pages
      * @return int[] a flat array with only the IDs (as integer)
@@ -112,11 +113,10 @@ class CacheHelper
             if (!isset($page['uid'])) {
                 continue;
             }
+            $pageIds[] = (int)$page['uid'];
+            $pageIds[] = (int)$page['pid'];
             if (!empty($page['subpages'])) {
-                $pageIds[] = (int)$page['uid'];
                 $pageIds = array_merge($pageIds, $this->getAllPageIdsFromItems($page['subpages']));
-            } else {
-                $pageIds[] = (int)$page['pid'];
             }
         }
         return $pageIds;

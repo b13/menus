@@ -1,0 +1,7 @@
+"pages"
+,"uid","pid","title","slug","nav_hide"
+,1,0,"root","/",0
+,2,1,"page-a","/page-a",0
+,3,1,"page-b","/page-b",0
+,4,2,"page-a-1","/page-a/page-a-1",0
+,5,3,"page-b-1","/page-b/page-b-1",0

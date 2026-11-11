@@ -1,0 +1,11 @@
+"sys_template"
+,"uid","pid","root","config"
+,1,1,1,"page = PAGE
+page.config.disableAllHeaderCode = 1
+page.20 = TREEMENU
+page.20.depth = 2
+page.20.renderObj.level0 = TEXT
+page.20.renderObj.level0.dataWrap = <li>{field:title}</li>{field:subpageContent}
+page.20.renderObj.level1 < page.20.renderObj.level0
+page.20.renderObj.level2 < page.20.renderObj.level0
+"
