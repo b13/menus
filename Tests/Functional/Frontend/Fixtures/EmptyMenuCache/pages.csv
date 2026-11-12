@@ -1,0 +1,19 @@
+"pages"
+,"uid","pid","title","slug","sys_language_uid","l10n_parent","hidden"
+,1,0,"root","/",0,0,0
+,10,1,"section","/section",0,0,0
+,11,10,"subpage","/section/subpage",0,0,0
+,12,1,"section-de","/section",1,10,1
+,13,10,"subpage-de","/section/subpage",1,11,0
+"sys_template"
+,"uid","pid","root","config"
+,1,1,1,"page = PAGE
+page.config.disableAllHeaderCode = 1
+page.20 = TREEMENU
+page.20.entryPoints = 10
+page.20.includeRootPages = 1
+page.20.depth = 2
+page.20.renderObj.level0 = TEXT
+page.20.renderObj.level0.dataWrap = <li>{field:title}</li>{field:subpageContent}
+page.20.renderObj.level1 < page.20.renderObj.level0
+"

@@ -354,22 +354,22 @@ class ListMenuProcessorTest extends DataProcessing
             [
                 'tsfe' => ['id' => 2, 'rootLine' => [['uid' => 1], ['uid' => 2]]],
                 'configuration' => ['as' => 'my-list', 'pages' => '2,4,6'],
-                'expectedTags' => ['menuId_1'],
+                'expectedTags' => ['menuId_1', 'menuId_2', 'menuId_4', 'menuId_6'],
             ],
             [
                 'tsfe' => ['id' => 4, 'rootLine' => [['uid' => 1], ['uid' => 4]]],
                 'configuration' => ['as' => 'my-list', 'pages' => '2,4,6'],
-                'expectedTags' => ['menuId_1'],
+                'expectedTags' => ['menuId_1', 'menuId_2', 'menuId_4', 'menuId_6'],
             ],
             [
                 'tsfe' => ['id' => 4, 'rootLine' => [['uid' => 1], ['uid' => 4]]],
                 'configuration' => ['as' => 'my-list', 'pages' => '2,4,3,5,6'],
-                'expectedTags' => ['menuId_1', 'menuId_2'],
+                'expectedTags' => ['menuId_1', 'menuId_2', 'menuId_3', 'menuId_4', 'menuId_5', 'menuId_6'],
             ],
             [
                 'tsfe' => ['id' => 3, 'rootLine' => [['uid' => 1], ['uid' => 2], ['uid' => 3]]],
                 'configuration' => ['as' => 'my-list', 'pages' => '2,4,3,5,6'],
-                'expectedTags' => ['menuId_1', 'menuId_2'],
+                'expectedTags' => ['menuId_1', 'menuId_2', 'menuId_3', 'menuId_4', 'menuId_5', 'menuId_6'],
             ],
         ];
     }

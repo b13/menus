@@ -38,6 +38,6 @@ class ListMenuCompiler extends AbstractMenuCompiler
                 }
             }
             return $pages;
-        });
+        }, $pageIds);
     }
 }
