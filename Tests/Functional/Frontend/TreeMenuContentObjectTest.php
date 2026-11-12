@@ -41,4 +41,15 @@ class TreeMenuContentObjectTest extends FunctionalTestCase
         $body = (string)$response->getBody();
         self::assertStringContainsString($expected, $body);
     }
+
+    #[Test]
+    public function eachLevelIsRenderedWithItsOwnConfiguration(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/pages_with_subpages.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/tree_menu_content_object_levels_typoscript.csv');
+        $response = $this->executeFrontendSubRequest(new InternalRequest('http://localhost/'));
+        $expected = '<li>page-a<ul><li class=\'sub\'>page-a-1</li></ul></li><li>page-b<ul><li class=\'sub\'>page-b-1</li></ul></li>';
+        $body = (string)$response->getBody();
+        self::assertSame($expected, $body);
+    }
 }

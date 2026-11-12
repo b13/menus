@@ -83,6 +83,12 @@ Pure TypoScript-based solution:
     page.10.renderObj.level0.typolink.ATagParams = class="active"
     page.10.renderObj.level0.typolink.ATagParams.if.isTrue.field = isInRootLine
     page.10.renderObj.level0.dataWrap = <li class="firstLevel">|<ul>{field:subpageContent}</ul></li>
+    page.10.renderObj.level1 = TEXT
+    page.10.renderObj.level1.typolink.parameter.data = field:uid
+    page.10.renderObj.level1.dataWrap = <li class="secondLevel">|<ul>{field:subpageContent}</ul></li>
+
+Each level is rendered with its own `renderObj.level<n>` (starting with `level0`), the rendered subpages
+are available in `field:subpageContent`. Levels without a configuration are not rendered.
 
 Fluid-based solution:
 

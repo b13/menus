@@ -56,7 +56,7 @@ class TreeMenuContentObject extends AbstractContentObject
         foreach ($pages as $page) {
             PageStateMarker::markStates($page, $level);
             if ($page['hasSubpages']) {
-                $page['subpageContent'] = $this->renderItems($page['subpages'], $level++, $renderConfiguration);
+                $page['subpageContent'] = $this->renderItems($page['subpages'], $level + 1, $renderConfiguration);
             }
             $cObjForItems->start($page, 'pages');
             $content .= $cObjForItems->cObjGetSingle($renderConfiguration['level' . $level] ?? '', $renderConfiguration['level' . $level . '.'] ?? []);
