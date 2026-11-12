@@ -10,5 +10,6 @@ page.20.renderObj.typolink.ATagParams.if.isTrue.field = isActiveLanguage
 page.20.renderObj.typolink.additionalParams.data = field:language|languageId
 page.20.renderObj.typolink.additionalParams.intval = 1
 page.20.renderObj.typolink.additionalParams.wrap = &L=|
+page.20.renderObj.typolink.addQueryString = 1
 page.20.renderObj.data = field:language|title // field:language|twoLetterIsoCode
 "

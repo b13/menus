@@ -43,4 +43,16 @@ class LanguageMenuFluidTest extends FunctionalTestCase
         $body = (string)$response->getBody();
         self::assertStringContainsString($expected, $body);
     }
+
+    #[Test]
+    public function menuKeepsRouteArgumentsOfCurrentPage(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/pages.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/translated_pages.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/language_menu_fluid_typoscript.csv');
+        $response = $this->executeFrontendSubRequest(new InternalRequest('http://localhost/page-1/detail/5'));
+        $expected = '<a class="active" href="/page-1/detail/5">english</a><a href="/de/page-1/detail/5">german</a>';
+        $body = (string)$response->getBody();
+        self::assertStringContainsString($expected, $body);
+    }
 }
