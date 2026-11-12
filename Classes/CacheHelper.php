@@ -54,14 +54,14 @@ class CacheHelper
      * Looks up the items inside the cache, if it exists, takes the cached entry, otherwise computes the data
      * via the $loader().
      */
-    public function get(string $cacheIdentifier, callable $loader): array
+    public function get(string $cacheIdentifier, callable $loader, array $entryPointIds = []): array
     {
         if ($this->disableCaching) {
             return $loader();
         }
         $pages = $this->cache->get($cacheIdentifier);
         if (is_array($pages)) {
-            $this->buildTagsAndAddThemToPageCache($pages);
+            $this->buildTagsAndAddThemToPageCache($pages, $entryPointIds);
             return $pages;
         }
 
@@ -69,7 +69,7 @@ class CacheHelper
         $pages = $loader();
 
         // Calculate tags + lifetime
-        $tags = $this->buildTagsAndAddThemToPageCache($pages);
+        $tags = $this->buildTagsAndAddThemToPageCache($pages, $entryPointIds);
         $defaultMaxLifeTime = $this->getDefaultMaxLifeTime();
         $maximumLifeTime = $this->getMaxLifetimeOfPages($pages, $defaultMaxLifeTime);
         $this->cache->set($cacheIdentifier, $pages, $tags, $maximumLifeTime);
@@ -78,11 +78,12 @@ class CacheHelper
 
     /**
      * @param mixed[] $pages
+     * @param int[] $entryPointIds
      * @return string[]
      */
-    protected function buildTagsAndAddThemToPageCache(array $pages): array
+    protected function buildTagsAndAddThemToPageCache(array $pages, array $entryPointIds = []): array
     {
-        $usedPageIds = array_unique($this->getAllPageIdsFromItems($pages));
+        $usedPageIds = array_values(array_unique(array_merge($this->getAllPageIdsFromItems($pages), $entryPointIds)));
         $tags = array_map(function ($pageId) {
             return 'menuId_' . $pageId;
         }, $usedPageIds);
